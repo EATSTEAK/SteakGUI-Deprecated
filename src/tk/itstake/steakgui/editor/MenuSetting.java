@@ -82,7 +82,7 @@ public class MenuSetting implements Listener {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e) {
         if(e.getPlayer().hasMetadata("titleEdit")) {
-            if(e.getMessage().length() <= 16) {
+            if(e.getMessage().length() <= 16 && !e.getMessage().equals("cancel") && !e.getMessage().equals("취소")) {
                 new MessageHandler().sendMessage(e.getPlayer(), "&b매뉴 이름이 &r" + e.getMessage() + "&b 으로 저장되었습니다.");
                 e.setCancelled(true);
                 Menu targetmenu = MenuFileHandler.loadMenu(e.getPlayer().getMetadata("titleEdit").get(0).asString());

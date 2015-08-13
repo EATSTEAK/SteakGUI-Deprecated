@@ -54,7 +54,6 @@ public class EditorMain {
 
         @Override
         public void onItemClick(ItemClickEvent event) {
-            new MessageHandler().sendConsoleMessage("&bDebug: &f" + t);
             if(t == 0) {
                 new MenuSetting().show(menu, player, menuname);
             } else if(t == 1) {

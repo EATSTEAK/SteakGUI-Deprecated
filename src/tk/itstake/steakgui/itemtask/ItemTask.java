@@ -15,11 +15,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import tk.itstake.steakgui.SteakGUI;
 import tk.itstake.steakgui.gui.Menu;
-import tk.itstake.steakgui.util.ItemStackConverter;
-import tk.itstake.steakgui.util.ItemTaskConverter;
-import tk.itstake.steakgui.util.VaultHooker;
+import tk.itstake.steakgui.util.*;
 import tk.itstake.util.BukkitUtil;
-import tk.itstake.steakgui.util.MenuFileHandler;
 import tk.itstake.util.MessageHandler;
 import tk.itstake.util.LanguageHandler;
 
@@ -275,6 +272,8 @@ public class ItemTask {
                         ItemTaskConverter.convert(json).runTask(event, MENU);
                     }
                 }
+            } else {
+                SteakGUIPlugin.runTask(TYPE, DATA, event, MENU);
             }
         }
     }

@@ -49,7 +49,7 @@ public class GiveTaskEditor {
             setting.setItem(9, new ItemTaskItem(menu, menuname, player, task, 7, 1,  slot, SteakGUI.convertMessage("&b아이템 선택"), Material.EXP_BOTTLE, new String[]{SteakGUI.convertMessage("&b구매하게 될 아이템을 손에서 선택합니다.")}));
         }
         setting.setItem(18, new ItemTaskItem(menu, menuname, player, task, 8, 1,  slot, SteakGUI.convertMessage("&b작업 종류 변경"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&b작업 종류를 변경 합니다.")}));
-        setting.setItem(19, new ItemTaskItem(menu, menuname, player, task, 9, 1,  slot, SteakGUI.convertMessage("&b작업 삭제"), Material.BARRIER, new String[]{SteakGUI.convertMessage("&b작업을 삭제합니다.")}));
+        setting.setItem(19, new ItemTaskItem(menu, menuname, player, task, 9, 1,  slot, SteakGUI.convertMessage("&b작업 삭제"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&b작업을 삭제합니다.")}));
         setting.setItem(20, new ItemTaskItem(menu, menuname, player, task, 99, 1, slot, SteakGUI.convertMessage("&c돌아가기"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&c이전 매뉴로 돌아갑니다.")}));
         setting.open(player);
     }

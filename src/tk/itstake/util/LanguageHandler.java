@@ -59,6 +59,15 @@ public class LanguageHandler {
                     FileReader fr = new FileReader(langlist[0]);
                     JSONParser jp = new JSONParser();
                     language = (JSONObject) jp.parse(fr);
+                    boolean notupdated = false;
+                    for(Object key:language.keySet()) {
+                        if(!getDefaultLanguage().containsKey(key)) {
+                            notupdated = true;
+                        }
+                    }
+                    if(notupdated) {
+                        updateFile();
+                    }
                     fr.close();
                 } catch (Exception e) {
                     language = getDefaultLanguage();
@@ -69,6 +78,29 @@ public class LanguageHandler {
                 language = getDefaultLanguage();
                 makeDefaultFile();
             }
+        }
+    }
+
+    private void updateFile() {
+        // If Can't Load Language File
+        plugin = Bukkit.getPluginManager().getPlugin("SteakGUI");
+        File langfolder = new File(plugin.getDataFolder().toString() + File.separator + "lang");
+        File langfile = new File(langfolder.toString() + File.separator + "ko_KR.json");
+        // Write New File
+        try {
+            FileWriter fw = new FileWriter(langfile);
+            JSONObject defaultlang = getDefaultLanguage();
+            for(Object key:defaultlang.keySet()) {
+                if(language.containsKey(key)) {
+                    defaultlang.put(key, language.get(key));
+                }
+            }
+            fw.write(JSONUtil.getPretty(defaultlang.toJSONString()));
+            language = defaultlang;
+            fw.flush();
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -125,6 +157,7 @@ public class LanguageHandler {
         defaultlang.put("menu.noitemtask", "&c아이템 작업이 없습니다. \n&b/sg setting <메뉴 이름> &c을 이용해 수정하세요.");
         defaultlang.put("menufile.wannahelp", "파일을 직접 수정하고 싶으신가요?\n그렇다면 http://wiki.itstake.tk/index.php?title=SteakGUI/직접_설정 문서를 참고해 보세요.");
         defaultlang.put("existpermission", "&c이미 존재하는 펄미션입니다!");
+        defaultlang.put("notmatchedformat", "&c매뉴 이름엔 한글을 사용할 수 없습니다! 일단 영어로 매뉴를 만드신 후, /sg setting 을 이용하여 매뉴 제목을 수정하세요!");
         // TO-DO: Language Insert
         return defaultlang;
     }

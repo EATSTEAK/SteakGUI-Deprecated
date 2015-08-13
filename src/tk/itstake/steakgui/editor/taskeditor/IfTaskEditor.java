@@ -35,7 +35,7 @@ public class IfTaskEditor {
         ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4수정:&c" + title), ItemMenu.Size.TWO_LINE, (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
         setting.setItem(0, new ItemTaskItem(menu, menuname, player, task, 0, 1,  slot, SteakGUI.convertMessage("&cIF문의 GUI 수정은 다음 버전에 지원될 예정입니다."), Material.PAPER, new String[]{SteakGUI.convertMessage("&b이 아이템을 클릭하면 뜨는 링크를 이용하여 자세히 알아보세요.")}));
         setting.setItem(9, new ItemTaskItem(menu, menuname, player, task, 1, 1,  slot, SteakGUI.convertMessage("&b작업 종류 변경"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&b작업 종류를 변경 합니다.")}));
-        setting.setItem(10, new ItemTaskItem(menu, menuname, player, task, 2, 1,  slot, SteakGUI.convertMessage("&b작업 삭제"), Material.BARRIER, new String[]{SteakGUI.convertMessage("&b작업을 삭제합니다.")}));
+        setting.setItem(10, new ItemTaskItem(menu, menuname, player, task, 2, 1,  slot, SteakGUI.convertMessage("&b작업 삭제"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&b작업을 삭제합니다.")}));
         setting.setItem(11, new ItemTaskItem(menu, menuname, player, task, 99, 1, slot, SteakGUI.convertMessage("&c돌아가기"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&c이전 매뉴로 돌아갑니다.")}));
         setting.open(player);
     }

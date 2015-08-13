@@ -37,7 +37,7 @@ public class ItemEditor implements Listener {
         ItemStack slotItem = menu.getItemArray().get(slot).getItemStack();
         ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4수정:&c" + title), ItemMenu.Size.THREE_LINE, (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
         setting.setItem(9, new ItemEditorItem(menu, menuname, player, 0, slot, SteakGUI.convertMessage("&b손에서 아이템 가져오기"), Material.HOPPER, new String[]{SteakGUI.convertMessage("&b손에서 아이템을 가져옵니다.")}));
-        setting.setItem(11, new ItemEditorItem(menu, menuname, player, 1, slot, SteakGUI.convertMessage("&b아이템 삭제"), Material.BARRIER, new String[]{SteakGUI.convertMessage("&c아이템을 삭제합니다.")}));
+        setting.setItem(11, new ItemEditorItem(menu, menuname, player, 1, slot, SteakGUI.convertMessage("&b아이템 삭제"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&c아이템을 삭제합니다.")}));
         String permission = menu.getItemArray().get(slot).getPermission();
         if(permission.equals("")) {
             permission = "없음";

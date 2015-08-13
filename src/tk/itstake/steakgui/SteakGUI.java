@@ -21,6 +21,7 @@ import tk.itstake.util.LanguageHandler;
 import tk.itstake.util.MessageHandler;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by bexco on 2015-07-24.
@@ -28,6 +29,14 @@ import java.io.File;
 public class SteakGUI extends JavaPlugin implements Listener {
 
     MessageHandler mh = new MessageHandler();
+    private ArrayList<String> pluginList = new ArrayList<>();
+    public void addToPluginList(String name) {
+        pluginList.add(name);
+    }
+
+    public ArrayList<String> getPluginList() {
+        return pluginList;
+    }
     public static LanguageHandler lh = new LanguageHandler();
     @Override
     public void onEnable() {

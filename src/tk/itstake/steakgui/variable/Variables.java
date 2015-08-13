@@ -8,7 +8,9 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import tk.itstake.steakgui.SteakGUI;
 import tk.itstake.steakgui.gui.Menu;
+import tk.itstake.steakgui.util.SteakGUIPlugin;
 import tk.itstake.steakgui.util.VaultHooker;
+import tk.itstake.util.BukkitUtil;
 import tk.itstake.util.MessageHandler;
 
 import java.util.ArrayList;
@@ -45,8 +47,8 @@ public class Variables {
         return convert(placeholder, strarray, menu, player);
     }
 
-    public String convert(String placeholder, String[] data, Menu menu, Player player) {
-        switch(placeholder) {
+    public String convert(String var, String[] data, Menu menu, Player player) {
+        switch(var) {
             case "player":
                 return player.getName();
             case "playerdisplay":
@@ -169,9 +171,21 @@ public class Variables {
                         return null;
                     }
                 }
+            case "maxplayers":
+                return Bukkit.getServer().getMaxPlayers() + "";
+            case "currentplayers":
+                return BukkitUtil.allPlayers().length + "";
+            case "emoji":
+                if(data.length == 1) {
+                    return emojiVar(data[0]);
+                }
             default:
-                return null;
+                return SteakGUIPlugin.getVariables(var, data, menu, player);
         }
+    }
+
+    private String emojiVar(String s) {
+        return null;
     }
 
 

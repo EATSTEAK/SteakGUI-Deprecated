@@ -101,16 +101,20 @@ public class MainCommand {
 
     private static void createCmd(CommandSender sender, String name, String arg) {
         if((sender instanceof Player && sender.hasPermission("steakgui.setting")) || !(sender instanceof Player)) {
-            HashMap<Integer, GUIItem> itemarray = new HashMap<>();
-            ItemStack defaultitem = new ItemStack(Material.STONE, 1);
-            ItemMeta defaultitemmeta = defaultitem.getItemMeta();
-            defaultitemmeta.setDisplayName(lh.getLanguage("menu.nodisplayname"));
-            defaultitemmeta.setLore(Arrays.asList(lh.getLanguage("menu.nolore").split("\n")));
-            defaultitem.setItemMeta(defaultitemmeta);
-            itemarray.put(0, new GUIItem(defaultitem, "", new ItemTask(ItemTask.MESSAGE, new String[]{lh.getLanguage("menu.noitemtask")})));
-            Menu newmenu = new Menu((JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"), arg, 1, itemarray);
-            MenuFileHandler.saveMenu(newmenu, arg);
-            mh.sendMessage(sender, lh.getLanguage("menucreated", new String[]{arg}));
+            if(arg.matches("[a-zA-Z1-9_]")) {
+                HashMap<Integer, GUIItem> itemarray = new HashMap<>();
+                ItemStack defaultitem = new ItemStack(Material.STONE, 1);
+                ItemMeta defaultitemmeta = defaultitem.getItemMeta();
+                defaultitemmeta.setDisplayName(lh.getLanguage("menu.nodisplayname"));
+                defaultitemmeta.setLore(Arrays.asList(lh.getLanguage("menu.nolore").split("\n")));
+                defaultitem.setItemMeta(defaultitemmeta);
+                itemarray.put(0, new GUIItem(defaultitem, "", new ItemTask(ItemTask.MESSAGE, new String[]{lh.getLanguage("menu.noitemtask")})));
+                Menu newmenu = new Menu((JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"), arg, 1, itemarray);
+                MenuFileHandler.saveMenu(newmenu, arg);
+                mh.sendMessage(sender, lh.getLanguage("menucreated", new String[]{arg}));
+            } else {
+                mh.sendMessage(sender, lh.getLanguage("notmatchformat"));
+            }
         } else {
             mh.sendMessage(sender, lh.getLanguage("nopermission"));
         }
