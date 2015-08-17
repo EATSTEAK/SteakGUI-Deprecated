@@ -14,6 +14,7 @@ import tk.itstake.steakgui.editor.ItemEditor;
 import tk.itstake.steakgui.editor.MenuSetting;
 import tk.itstake.steakgui.editor.taskeditor.*;
 import tk.itstake.steakgui.gui.Menu;
+import tk.itstake.steakgui.util.UpdateChecker;
 import tk.itstake.steakgui.util.VaultHooker;
 import tk.itstake.steakgui.variable.VariableConverter;
 import tk.itstake.util.Blacklist;
@@ -55,6 +56,9 @@ public class SteakGUI extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new MessageTaskEditor(), this);
         getServer().getPluginManager().registerEvents(new SoundTaskEditor(), this);
         getServer().getPluginManager().registerEvents(new BroadcastTaskEditor(), this);
+        UpdateChecker update = new UpdateChecker();
+        update.updateCheck();
+        getServer().getPluginManager().registerEvents(update, this);
     }
 
     @Override
