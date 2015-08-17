@@ -101,7 +101,7 @@ public class MainCommand {
 
     private static void createCmd(CommandSender sender, String name, String arg) {
         if((sender instanceof Player && sender.hasPermission("steakgui.setting")) || !(sender instanceof Player)) {
-            if(arg.matches("[a-zA-Z1-9_]")) {
+            if(arg.matches("^[a-zA-Z1-9_]*$")) {
                 HashMap<Integer, GUIItem> itemarray = new HashMap<>();
                 ItemStack defaultitem = new ItemStack(Material.STONE, 1);
                 ItemMeta defaultitemmeta = defaultitem.getItemMeta();
@@ -113,7 +113,7 @@ public class MainCommand {
                 MenuFileHandler.saveMenu(newmenu, arg);
                 mh.sendMessage(sender, lh.getLanguage("menucreated", new String[]{arg}));
             } else {
-                mh.sendMessage(sender, lh.getLanguage("notmatchformat"));
+                mh.sendMessage(sender, lh.getLanguage("notmatchedformat"));
             }
         } else {
             mh.sendMessage(sender, lh.getLanguage("nopermission"));

@@ -1,6 +1,6 @@
 package tk.itstake.steakgui.itemtask;
 
-import com.github.lyokofirelyte.VariableTriggers.VariableTriggers;
+
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

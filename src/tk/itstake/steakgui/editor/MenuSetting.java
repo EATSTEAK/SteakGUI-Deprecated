@@ -35,7 +35,7 @@ public class MenuSetting implements Listener {
             title = ChatColor.stripColor(SteakGUI.convertMessage(menu.getTitle(), menu, p)).substring(0, 11) + "..";
         }
         ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4수정:&c" + title), ItemMenu.Size.THREE_LINE, (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
-        setting.setItem(10, new MenuSettingItem(menu, menuName, p, 0, SteakGUI.convertMessage("&b매뉴 제목 수정"), Material.NAME_TAG, new String[]{SteakGUI.convertMessage("&b매뉴 제목을 수정합니다."), SteakGUI.convertMessage("&c현재 제목:" + menu.getTitle())}));
+        setting.setItem(10, new MenuSettingItem(menu, menuName, p, 0, SteakGUI.convertMessage("&b매뉴 제목 수정"), Material.MAP, new String[]{SteakGUI.convertMessage("&b매뉴 제목을 수정합니다."), SteakGUI.convertMessage("&c현재 제목:" + menu.getTitle())}));
         setting.setItem(12, new MenuSettingItem(menu, menuName, p, 1, SteakGUI.convertMessage("&b매뉴 줄 수 수정"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b매뉴의 줄 수를 수정합니다."), SteakGUI.convertMessage("&c현재 줄 수:" + menu.getSize()/9)}));
         setting.setItem(14, new MenuSettingItem(menu, menuName, p, 2, SteakGUI.convertMessage("&b체스트에서 가져오기"), Material.ENDER_CHEST, new String[]{SteakGUI.convertMessage("&b체스트에서 매뉴의 아이템을 가져옵니다."), SteakGUI.convertMessage("&3<클릭> 으로 원래 아이템을 지우지 않고 가져옴"), SteakGUI.convertMessage("&2<쉬프트+클릭> 으로 원래 아이템도 지우고 가져옴")}));
         setting.setItem(16, new MenuSettingItem(menu, menuName, p, 3, SteakGUI.convertMessage("&c돌아가기"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&c이전 매뉴로 돌아갑니다.")}));

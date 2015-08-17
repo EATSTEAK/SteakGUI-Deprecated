@@ -1,7 +1,5 @@
 package tk.itstake.steakgui.variable;
 
-import com.github.lyokofirelyte.VariableTriggers.VTVars;
-import com.github.lyokofirelyte.VariableTriggers.VariableTriggers;
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -152,40 +150,13 @@ public class Variables {
                 } else {
                     return null;
                 }
-            case "vt":
-                if(data.length == 1) {
-                    if(Bukkit.getPluginManager().getPlugin("VariableTriggers") != null) {
-                        com.github.lyokofirelyte.VariableTriggers.VTVars vtvar = ((VariableTriggers)Bukkit.getPluginManager().getPlugin("VariableTriggers")).vars;
-                        return vtvar.getStr(SteakGUI.convertMessage(data[0], menu, player));
-                    } else {
-                        return null;
-                    }
-                } else {
-                    return null;
-                }
-            case "skript":
-                if(data.length == 1) {
-                    if(Bukkit.getPluginManager().getPlugin("Skript") != null) {
-                        return (String)ch.njol.skript.variables.Variables.getVariable(data[0], null, false);
-                    } else {
-                        return null;
-                    }
-                }
             case "maxplayers":
                 return Bukkit.getServer().getMaxPlayers() + "";
             case "currentplayers":
                 return BukkitUtil.allPlayers().length + "";
-            case "emoji":
-                if(data.length == 1) {
-                    return emojiVar(data[0]);
-                }
             default:
                 return SteakGUIPlugin.getVariables(var, data, menu, player);
         }
-    }
-
-    private String emojiVar(String s) {
-        return null;
     }
 
 
