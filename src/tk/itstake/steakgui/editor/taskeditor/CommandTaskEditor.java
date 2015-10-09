@@ -82,6 +82,7 @@ public class CommandTaskEditor implements Listener {
                 new NewTaskSelector().show(menu, player, slot, task);
             } else if(t == 5) {
                 menu.getItemArray().get(slot).delTask(task);
+                new ItemTaskEditor().show(menu, player, slot);
             } else {
                 new ItemTaskEditor().show(menu, player, slot);
             }

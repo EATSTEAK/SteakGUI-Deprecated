@@ -62,6 +62,7 @@ public class CloseMenuTaskEditor {
                 new NewTaskSelector().show(menu, player, slot, task);
             } else if(t == 1) {
                 menu.getItemArray().get(slot).delTask(task);
+                new ItemTaskEditor().show(menu, player, slot);
             } else {
                 new ItemTaskEditor().show(menu, player, slot);
             }

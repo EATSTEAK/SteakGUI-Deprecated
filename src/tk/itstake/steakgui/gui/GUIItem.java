@@ -76,7 +76,13 @@ public class GUIItem {
         TASK.remove(index);
     }
 
-    public void setTask(int index, ItemTask task) { TASK.add(index, task); }
+    public void setTask(int index, ItemTask task) {
+        if(index >= TASK.size()) {
+            TASK.add(task);
+        } else {
+            TASK.set(index, task);
+        }
+    }
 
     class CustomMenuItem extends MenuItem {
 

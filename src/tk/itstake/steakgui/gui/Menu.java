@@ -81,7 +81,7 @@ public class Menu {
             }
             menu.open(player);
         } catch (Exception e) {
-            new MessageHandler().sendMessage(player, "&c¸Å´º¿¡ ¹®Á¦°¡ ÀÖ½À´Ï´Ù. ¼­¹ö °ü¸®ÀÚ¿¡°Ô ¹®ÀÇÇÏ¼¼¿ä.");
+            new MessageHandler().sendMessage(player, "&cë§¤ë‰´ì— ë¬¸ì œê°€ ìˆìŠµë‹ˆë‹¤. ì„œë²„ ê´€ë¦¬ìì—ê²Œ ë¬¸ì˜í•˜ì„¸ìš”.");
         }
     }
 

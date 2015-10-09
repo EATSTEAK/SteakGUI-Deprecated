@@ -94,7 +94,7 @@ public class ItemEditor implements Listener {
             if(e.getItem() != null) {
                 new MessageHandler().sendMessage(e.getPlayer(), "&b아이템을 성공적으로 가져왔습니다!");
                 Menu menu = MenuFileHandler.loadMenu((String) ((Object[]) e.getPlayer().getMetadata("itemChange").get(0).value())[0]);
-                ItemStack stack = e.getItem();
+                ItemStack stack = e.getItem().clone();
                 ItemMeta itemmeta = stack.getItemMeta();
                 if (itemmeta.getDisplayName() == null) {
                     itemmeta.setDisplayName(SteakGUI.lh.getLanguage("menu.nodisplayname"));
