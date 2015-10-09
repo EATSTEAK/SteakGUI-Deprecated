@@ -1,11 +1,10 @@
 name: SteakGUI
 main: tk.itstake.steakgui.SteakGUI
-version: 1.0.7
+version: 1.0.7.1
 description: GUI Maker for Minecraft
 author: ITSTAKE
 website: http://itstake.tk/steakgui
 depend: [Vault]
-softdepend: [VariableTriggers, Skript]
 commands:
   steakgui:
     description: Master Command

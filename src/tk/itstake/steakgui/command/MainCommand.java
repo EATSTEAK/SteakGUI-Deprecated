@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import tk.itstake.steakgui.editor.EditorMain;
 import tk.itstake.steakgui.editor.MenuEditor;
 import tk.itstake.steakgui.gui.GUIItem;
 import tk.itstake.steakgui.gui.Menu;
@@ -122,7 +123,7 @@ public class MainCommand {
     private static void settingCmd(CommandSender sender, String name, String arg) {
         if(sender instanceof Player && sender.hasPermission("steakgui.setting")) {
             if(MenuFileHandler.listMenu().contains(arg)) {
-                new MenuEditor().show(MenuFileHandler.loadMenu(name), (Player)sender);
+                new EditorMain().show(MenuFileHandler.loadMenu(arg), (Player)sender);
             } else {
                 mh.sendMessage(sender, lh.getLanguage("notexistmenu"));
             }
