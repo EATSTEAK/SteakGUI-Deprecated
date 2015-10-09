@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.steakgui.command.MainCommand;
 import tk.itstake.steakgui.editor.ItemEditor;
@@ -21,7 +22,6 @@ import tk.itstake.util.Blacklist;
 import tk.itstake.util.LanguageHandler;
 import tk.itstake.util.MessageHandler;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -39,8 +39,10 @@ public class SteakGUI extends JavaPlugin implements Listener {
         return pluginList;
     }
     public static LanguageHandler lh = new LanguageHandler();
+    public static Plugin p = null;
     @Override
     public void onEnable() {
+        p = this;
         if(!this.getDataFolder().exists()) {
             this.getDataFolder().mkdir();
         }

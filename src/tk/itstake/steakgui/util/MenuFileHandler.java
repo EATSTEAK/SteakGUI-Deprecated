@@ -8,9 +8,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import tk.itstake.steakgui.SteakGUI;
 import tk.itstake.steakgui.gui.GUIItem;
 import tk.itstake.steakgui.itemtask.ItemTask;
 import tk.itstake.steakgui.gui.Menu;
+import tk.itstake.steakgui.variable.VariableConverter;
 import tk.itstake.util.JSONUtil;
 import tk.itstake.util.LanguageHandler;
 
@@ -24,7 +26,8 @@ import java.util.HashMap;
 public class MenuFileHandler {
 
     private static HashMap<String, Menu> loadedmenu = new HashMap<>();
-    public static void saveMenu(Menu menu, String name) {
+
+    public static void saveMenu(Menu menu) {
         JSONObject menuConfig = new JSONObject();
         menuConfig.put("dummyhelp", new LanguageHandler().getLanguage("menufile.wannahelp"));
         menuConfig.put("title", menu.getTitle());
@@ -55,7 +58,7 @@ public class MenuFileHandler {
             menuFolder.mkdir();
         }
         try {
-            FileWriter fw = new FileWriter(new File(menuFolder.toString() + File.separator + name + ".json"));
+            FileWriter fw = new FileWriter(new File(menuFolder.toString() + File.separator + menu.getName() + ".json"));
             fw.write(JSONUtil.getPretty(menuConfig.toJSONString()));
             fw.flush();
             fw.close();
@@ -107,8 +110,7 @@ public class MenuFileHandler {
 
     public static Menu loadMenu(String name, boolean forcereload) {
         if(!loadedmenu.containsKey(name) || forcereload) {
-            Plugin plugin = Bukkit.getPluginManager().getPlugin("SteakGUI");
-            File dataFolder = plugin.getDataFolder();
+            File dataFolder = SteakGUI.p.getDataFolder();
             if (dataFolder.exists() && dataFolder.isDirectory()) {
                 dataFolder.mkdir();
             }
@@ -135,7 +137,7 @@ public class MenuFileHandler {
                     GUIItem guiitem = new GUIItem(item, (String) guiarray.get("perm"), taskarray);
                     slotmap.put(Integer.parseInt((String) slot), guiitem);
                 }
-                Menu menu = new Menu((JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"), (String) menujson.get("title"), (int) (long) menujson.get("size"), slotmap);
+                Menu menu = new Menu(name, (String) menujson.get("title"), (int) (long) menujson.get("size"), slotmap);
                 fr.close();
                 loadedmenu.put(name, menu);
                 return menu;

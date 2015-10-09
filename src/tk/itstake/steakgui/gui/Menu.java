@@ -18,21 +18,24 @@ import java.util.HashMap;
  */
 public class Menu {
     String TITLE = "";
+    String NAME = "";
     int SIZE = 0;
     HashMap<Integer, GUIItem> ITEM_ARRAY = null;
     JavaPlugin PLUGIN = null;
-    public Menu(JavaPlugin p, String title, int size, HashMap<Integer, GUIItem> itemarray) {
-        PLUGIN = p;
+    public Menu(String name, String title, int size, HashMap<Integer, GUIItem> itemarray) {
+        PLUGIN = (JavaPlugin)SteakGUI.p;
         TITLE = title;
         SIZE = size;
         ITEM_ARRAY = itemarray;
+        NAME = name;
     }
 
-    public Menu(JavaPlugin p, String title, HashMap<Integer, GUIItem> itemarray) {
-        PLUGIN = p;
+    public Menu(String name, String title, HashMap<Integer, GUIItem> itemarray) {
+        PLUGIN = (JavaPlugin)SteakGUI.p;
         TITLE = title;
         SIZE = itemarray.size();
         ITEM_ARRAY = itemarray;
+        NAME = name;
     }
 
     public void setTitle(String title) {
@@ -68,13 +71,18 @@ public class Menu {
     }
 
     public void open(final Player player) {
-        final ItemMenu menu = new ItemMenu(SteakGUI.convertMessage(TITLE, this, player), ItemMenu.Size.fit(SIZE), PLUGIN);
-        for(Integer key:ITEM_ARRAY.keySet()) {
-            if(canInclude(player, ITEM_ARRAY.get(key))) {
-                menu.setItem(key, ITEM_ARRAY.get(key).getMenuItem(this, player));
+        final ItemMenu menu;
+        try {
+            menu = new ItemMenu(SteakGUI.convertMessage(TITLE, this, player), ItemMenu.Size.fit(Integer.parseInt(SteakGUI.convertMessage(SIZE + "", this, player))), PLUGIN);
+            for(Integer key:ITEM_ARRAY.keySet()) {
+                if(canInclude(player, ITEM_ARRAY.get(key))) {
+                    menu.setItem(key, ITEM_ARRAY.get(key).getMenuItem(this, player));
+                }
             }
+            menu.open(player);
+        } catch (Exception e) {
+            new MessageHandler().sendMessage(player, "&c매뉴에 문제가 있습니다. 서버 관리자에게 문의하세요.");
         }
-        menu.open(player);
     }
 
     public void update(final Player player) {
@@ -85,7 +93,7 @@ public class Menu {
             }
         }
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Runnable() {
+        scheduler.scheduleSyncDelayedTask(SteakGUI.p, new Runnable() {
             @Override
             public void run() {
                 menu.update(player);
@@ -113,5 +121,7 @@ public class Menu {
     public HashMap<Integer, GUIItem> getItemArray() {
         return ITEM_ARRAY;
     }
+
+    public String getName() { return NAME; }
 
 }

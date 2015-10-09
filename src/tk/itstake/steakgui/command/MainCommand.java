@@ -8,13 +8,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-import tk.itstake.steakgui.editor.EditorMain;
+import tk.itstake.steakgui.editor.MenuEditor;
 import tk.itstake.steakgui.gui.GUIItem;
-import tk.itstake.steakgui.itemtask.ItemTask;
 import tk.itstake.steakgui.gui.Menu;
-import tk.itstake.util.LanguageHandler;
+import tk.itstake.steakgui.itemtask.ItemTask;
 import tk.itstake.steakgui.util.MenuFileHandler;
+import tk.itstake.util.LanguageHandler;
 import tk.itstake.util.MessageHandler;
 
 import java.util.Arrays;
@@ -109,8 +108,8 @@ public class MainCommand {
                 defaultitemmeta.setLore(Arrays.asList(lh.getLanguage("menu.nolore").split("\n")));
                 defaultitem.setItemMeta(defaultitemmeta);
                 itemarray.put(0, new GUIItem(defaultitem, "", new ItemTask(ItemTask.MESSAGE, new String[]{lh.getLanguage("menu.noitemtask")})));
-                Menu newmenu = new Menu((JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"), arg, 1, itemarray);
-                MenuFileHandler.saveMenu(newmenu, arg);
+                Menu newmenu = new Menu(arg, arg, 1, itemarray);
+                MenuFileHandler.saveMenu(newmenu);
                 mh.sendMessage(sender, lh.getLanguage("menucreated", new String[]{arg}));
             } else {
                 mh.sendMessage(sender, lh.getLanguage("notmatchedformat"));
@@ -123,7 +122,7 @@ public class MainCommand {
     private static void settingCmd(CommandSender sender, String name, String arg) {
         if(sender instanceof Player && sender.hasPermission("steakgui.setting")) {
             if(MenuFileHandler.listMenu().contains(arg)) {
-                new EditorMain().show(MenuFileHandler.loadMenu(arg), (Player) sender, arg);
+                new MenuEditor().show(MenuFileHandler.loadMenu(name), (Player)sender);
             } else {
                 mh.sendMessage(sender, lh.getLanguage("notexistmenu"));
             }

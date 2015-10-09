@@ -26,13 +26,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.util.MessageHandler;
+
+import java.lang.ClassNotFoundException;
 
 /**
  * Passes inventory click events to their menus for handling.
@@ -61,13 +62,6 @@ public class MenuListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onInventoryDrag(InventoryDragEvent event) {
-        if (event.getWhoClicked() instanceof Player && event.getInventory().getHolder() instanceof MenuHolder) {
-            event.setCancelled(true);
-        }
-    }
-
     /**
      * Registers the events of the {@link ninja.amp.ampmenus.MenuListener} to a plugin.
      *
@@ -76,6 +70,12 @@ public class MenuListener implements Listener {
     public void register(JavaPlugin plugin) {
         if (!isRegistered(plugin)) {
             plugin.getServer().getPluginManager().registerEvents(INSTANCE, plugin);
+            try {
+                Class.forName("org.bukkit.event.inventory.InventoryDragEvent");
+                plugin.getServer().getPluginManager().registerEvents(new DragListener(), plugin);
+            } catch (ClassNotFoundException e) {
+                System.out.println("InventoryDragEvent not founded");
+            }
             this.plugin = plugin;
         }
     }

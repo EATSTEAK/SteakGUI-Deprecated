@@ -112,7 +112,6 @@ public class Variables {
                     return null;
                 }
             case "if":
-                new MessageHandler().sendConsoleMessage("&bDebug: &r" + data.length);
                 if(data.length == 3) {
                     String first = VariableConverter.convert(data[0], menu, player);
                     String sec = VariableConverter.convert(data[1], menu, player);

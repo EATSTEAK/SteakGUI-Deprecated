@@ -24,20 +24,20 @@ import tk.itstake.util.MessageHandler;
  * Created by ITSTAKE on 2015-08-12.
  */
 public class ItemTaskEditor {
-    public void show(Menu menu, Player player, String menuname, int s) {
+    public void show(Menu menu, Player player, int s) {
         String title = menu.getTitle();
         if(title.length() > 10) {
-            title = ChatColor.stripColor(SteakGUI.convertMessage(menu.getTitle(), menu, player)).substring(0, 11) + "..";
+            title = ChatColor.stripColor(SteakGUI.convertMessage(menu.getTitle(), menu, player)).substring(0, 11) + "";
         }
         GUIItem slotItem = menu.getItemArray().get(s);
         ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4수정:&c" + title), ItemMenu.Size.fit(slotItem.getTasks().size()+9), (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
         int i = 0;
         for(ItemTask task:slotItem.getTasks()) {
-            setting.setItem(i, new ItemTaskItem(menu, menuname, player, i, s, SteakGUI.convertMessage("&b작업 " + i), Material.PISTON_BASE, new String[]{SteakGUI.convertMessage("&c작업 종류: &f" + task.getType())}));
+            setting.setItem(i, new ItemTaskItem(menu,  player, i, s, SteakGUI.convertMessage("&b작업 " + i), Material.PISTON_BASE, new String[]{SteakGUI.convertMessage("&c작업 종류: &f" + task.getType())}));
             i++;
         }
-        setting.setItem(i, new ItemTaskItem(menu, menuname, player, i, s, SteakGUI.convertMessage("&b작업 추가"), Material.PISTON_STICKY_BASE, new String[]{SteakGUI.convertMessage("&c작업을 추가합니다.")}));
-        setting.setItem(setting.getSize().getSize()-1, new ItemTaskItem(menu, menuname, player, 99, s, SteakGUI.convertMessage("&c돌아가기"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&c이전 매뉴로 돌아갑니다.")}));
+        setting.setItem(i, new ItemTaskItem(menu, player, i, s, SteakGUI.convertMessage("&b작업 추가"), Material.PISTON_STICKY_BASE, new String[]{SteakGUI.convertMessage("&c작업을 추가합니다.")}));
+        setting.setItem(setting.getSize().getSize()-1, new ItemTaskItem(menu, player, 99, s, SteakGUI.convertMessage("&c돌아가기"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&c이전 매뉴로 돌아갑니다.")}));
         setting.open(player);
     }
 
@@ -45,50 +45,48 @@ public class ItemTaskEditor {
         int task = 0;
         int slot = 0;
         Menu menu = null;
-        String menuname = null;
         Player player = null;
-        public ItemTaskItem(Menu lmenu, String menuName, Player p, int tasknum, int s, String displayName, Material icon, String... lore) {
+        public ItemTaskItem(Menu lmenu, Player p, int tasknum, int s, String displayName, Material icon, String... lore) {
             super(displayName, new ItemStack(icon, tasknum), lore);
             slot = s;
             task = tasknum;
             menu = lmenu;
-            menuname = menuName;
             player = p;
         }
 
         @Override
         public void onItemClick(ItemClickEvent event) {
             if(task == 99) {
-                new ItemEditor().show(menu, player, menuname, slot);
+                new ItemEditor().show(menu, player, slot);
             } else if(menu.getItemArray().get(slot).getTasks().size() <= task) {
-                new NewTaskSelector().show(menu, player, menuname, slot, task);
+                new NewTaskSelector().show(menu, player, slot, task);
             } else {
                 ItemTask editTask = menu.getItemArray().get(slot).getTask(task);
                 if(editTask.getType().equals(ItemTask.COMMAND)) {
-                    new CommandTaskEditor().show(menu, player, menuname, slot, task);
+                    new CommandTaskEditor().show(menu, player, slot, task);
                 } else if(editTask.getType().equals(ItemTask.OPEN_MENU)) {
-                    new OpenMenuTaskEditor().show(menu, player, menuname, slot, task);
+                    new OpenMenuTaskEditor().show(menu, player, slot, task);
                 }
                 else if(editTask.getType().equals(ItemTask.BUY)) {
-                    new BuyTaskEditor().show(menu, player, menuname, slot, task);
+                    new BuyTaskEditor().show(menu, player,slot, task);
                 }
                 else if(editTask.getType().equals(ItemTask.SELL)) {
-                    new SellTaskEditor().show(menu, player, menuname, slot, task);
+                    new SellTaskEditor().show(menu, player, slot, task);
                 }
                 else if(editTask.getType().equals(ItemTask.MESSAGE)) {
-                    new MessageTaskEditor().show(menu, player, menuname, slot, task);
+                    new MessageTaskEditor().show(menu, player, slot, task);
                 }
                 else if(editTask.getType().equals(ItemTask.GIVE)) {
-                    new GiveTaskEditor().show(menu, player, menuname, slot, task);
+                    new GiveTaskEditor().show(menu, player, slot, task);
                 }
                 else if(editTask.getType().equals(ItemTask.SOUND)) {
-                    new SoundTaskEditor().show(menu, player, menuname, slot, task);
+                    new SoundTaskEditor().show(menu, player, slot, task);
                 }
                 else if(editTask.getType().equals(ItemTask.BROADCAST)) {
-                    new BroadcastTaskEditor().show(menu, player, menuname, slot, task);
+                    new BroadcastTaskEditor().show(menu, player, slot, task);
                 }
                 else if(editTask.getType().equals(ItemTask.IF)) {
-                    new IfTaskEditor().show(menu, player, menuname, slot, task);
+                    new IfTaskEditor().show(menu, player, slot, task);
                 }
 
             }

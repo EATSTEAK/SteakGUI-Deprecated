@@ -18,10 +18,10 @@ import tk.itstake.steakgui.util.MenuFileHandler;
  */
 public class MenuEditor {
 
-    public void show(Menu menu, Player p, String menuName) {
+    public void show(Menu menu, Player p) {
         String title = menu.getTitle();
         if(title.length() > 10) {
-            title = ChatColor.stripColor(SteakGUI.convertMessage(menu.getTitle(), menu, p)).substring(0, 11) + "..";
+            title = ChatColor.stripColor(SteakGUI.convertMessage(menu.getTitle(), menu, p)).substring(0, 11) + "";
         }
         ItemMenu menuEditor = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4수정:&c" + title), ItemMenu.Size.fit(menu.getSize()), (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
         for(Integer key:menu.getItemArray().keySet()) {
@@ -32,7 +32,7 @@ public class MenuEditor {
                 lorearray[i] = SteakGUI.convertMessage(lore);
                 i++;
             }
-            menuEditor.setItem(key, new MenuEditorItem(menu, menuName, p, key, SteakGUI.convertMessage(item.getItemMeta().getDisplayName()), item, lorearray));
+            menuEditor.setItem(key, new MenuEditorItem(menu, p, key, SteakGUI.convertMessage(item.getItemMeta().getDisplayName()), item, lorearray));
         }
         menuEditor.open(p);
     }
@@ -41,20 +41,18 @@ public class MenuEditor {
     class MenuEditorItem extends MenuItem {
         int t = 0;
         Menu menu = null;
-        String menuname = null;
         Player player = null;
-        public MenuEditorItem(Menu lmenu, String menuName, Player p, int slot, String displayName, ItemStack icon, String... lore) {
+        public MenuEditorItem(Menu lmenu,  Player p, int slot, String displayName, ItemStack icon, String... lore) {
             super(displayName, icon, lore);
             t = slot;
             menu = lmenu;
-            menuname = menuName;
             player = p;
         }
 
         @Override
         public void onItemClick(ItemClickEvent event) {
             if(menu.hasItem(event.getEvent().getSlot())) {
-                new ItemEditor().show(menu, player, menuname, event.getEvent().getSlot());
+                new ItemEditor().show(menu, player, event.getEvent().getSlot());
             }
         }
     }

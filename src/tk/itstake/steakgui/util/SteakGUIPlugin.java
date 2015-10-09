@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class SteakGUIPlugin {
     public static void runTask(String type, Object[] data, ItemClickEvent event, Menu MENU) {
-        SteakGUI p = (SteakGUI)Bukkit.getPluginManager().getPlugin("SteakGUI");
+        SteakGUI p = (SteakGUI) SteakGUI.p;
         for(String plugin:p.getPluginList()) {
             if(Bukkit.getPluginManager().getPlugin(plugin) != null) {
                 try {
@@ -28,7 +28,7 @@ public class SteakGUIPlugin {
     }
 
     public static String getVariables(String var, String[] data, Menu menu, Player player) {
-        SteakGUI p = (SteakGUI)Bukkit.getPluginManager().getPlugin("SteakGUI");
+        SteakGUI p = (SteakGUI) SteakGUI.p;
         ArrayList<String> varlist = new ArrayList<>();
         for(String plugin:p.getPluginList()) {
             if(Bukkit.getPluginManager().getPlugin(plugin) != null) {
