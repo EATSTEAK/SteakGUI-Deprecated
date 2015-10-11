@@ -94,7 +94,7 @@ public class CommandTaskEditor implements Listener {
         if(e.getPlayer().hasMetadata("cmdSet")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 명령어가 성공적으로 등록되었습니다!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("cmdSet").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String)metadata[0]);
+            Menu menu = MenuFileHandler.loadMenu((String)metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[1] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
             new CommandTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);

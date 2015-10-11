@@ -65,6 +65,7 @@ public class MenuFileHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        loadMenu(menu.getName(), true);
     }
 
     public static ArrayList<String> listMenu() {

@@ -31,6 +31,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.java.JavaPlugin;
+import tk.itstake.util.BukkitUtil;
 import tk.itstake.util.MessageHandler;
 
 import java.lang.ClassNotFoundException;
@@ -109,7 +110,7 @@ public class MenuListener implements Listener {
      * Closes all {@link ninja.amp.ampmenus.menus.ItemMenu}s currently open.
      */
     public static void closeOpenMenus() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (Player player : BukkitUtil.allPlayers()) {
             if (player.getOpenInventory() != null) {
                 Inventory inventory = player.getOpenInventory().getTopInventory();
                 if (inventory.getHolder() instanceof MenuHolder) {

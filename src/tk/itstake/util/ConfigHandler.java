@@ -52,7 +52,7 @@ public class ConfigHandler {
     }
 
     private static void makeDefaultFile() {
-        // If Can't Load Language File
+        // If Can't Load Config File
         plugin = Bukkit.getPluginManager().getPlugin("SteakGUI");
         File conffile = new File(plugin.getDataFolder().toString() + File.separator + "config.json");
         // Write New File
@@ -69,7 +69,7 @@ public class ConfigHandler {
 
     private static JSONObject getDefaultConfig() {
         JSONObject defaultconf = new JSONObject();
-        // TO-DO: Language Insert
+        defaultconf.put("lang", "ko_KR");
         return defaultconf;
     }
 
@@ -85,6 +85,24 @@ public class ConfigHandler {
             config = getDefaultConfig();
         }
         return config.containsKey(path);
+    }
+
+    public static void setConfig(String path, String value) {
+        if(config == null) {
+            config = getDefaultConfig();
+        }
+        config.put(path, value);
+        plugin = Bukkit.getPluginManager().getPlugin("SteakGUI");
+        File conffile = new File(plugin.getDataFolder().toString() + File.separator + "config.json");
+        // Write New File
+        try {
+            FileWriter fw = new FileWriter(conffile);
+            fw.write(JSONUtil.getPretty(config.toJSONString()));
+            fw.flush();
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

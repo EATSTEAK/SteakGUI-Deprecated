@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import sun.security.krb5.Config;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -35,8 +36,8 @@ public class LanguageHandler {
         }
         // Get Current Selected Language
         final String sellang;
-        if (ConfigHandler.hasConfig("language")) {
-            sellang = ConfigHandler.getConfig("language").toString();
+        if (ConfigHandler.hasConfig("lang")) {
+            sellang = ConfigHandler.getConfig("lang").toString();
         } else {
             sellang = "ko_KR";
         }
@@ -77,6 +78,7 @@ public class LanguageHandler {
                 // If Can't Detect Language File
                 language = getDefaultLanguage();
                 makeDefaultFile();
+                ConfigHandler.setConfig("lang", "ko_KR");
             }
         }
     }
@@ -124,40 +126,36 @@ public class LanguageHandler {
     private JSONObject getDefaultLanguage() {
         JSONObject defaultlang = new JSONObject();
         defaultlang.put("editorhelp", "언어 파일을 수정하시려고 하시나요? 도움말은 http://wiki.itstake.tk/index.php?title=SteakGUI/언어 에서 찾아보세요!");
-        defaultlang.put("console.onenable", "&a소고기구이(SteakGUI) v%0% 이 활성화 되었습니다!");
-        defaultlang.put("console.useblacklist", "&a소고기구이(SteakGUI) 는 Efe 님의 플러그인, horyu1234 님의 플러그인과 연동되는 블랙리스트를 사용합니다!");
-        defaultlang.put("console.ondisable", "&a소고기구이(SteakGUI) v%0% 이 비활성화 되었습니다. 사용해 주셔서 감사합니다.");
-        defaultlang.put("console.detectblacklist", "&c블랙리스트 사용자가 감지되었습니다. 차단을 실행합니다.");
-        defaultlang.put("command.wronguse", "&c사용법:%0%");
-        defaultlang.put("command.help.intro", "&b소고기구이(SteakGUI) %0% 도움말 -----");
-        defaultlang.put("command.help.open", "&c/%0% open <메뉴 이름> - 메뉴를 엽니다.");
+        defaultlang.put("console.onenable", "&c[&2SteakGUI&c] &6소고기구이(SteakGUI) v%0% 이 활성화 되었습니다!");
+        defaultlang.put("console.ondisable", "&c[&2SteakGUI&c] &6소고기구이(SteakGUI) v%0% 이 비활성화 되었습니다. 사용해 주셔서 감사합니다.");
+        defaultlang.put("command.wronguse", "&c[&2SteakGUI&c] &c사용법:%0%");
+        defaultlang.put("command.help.intro", "&c[&2SteakGUI&c] &b소고기구이(SteakGUI) %0% 도움말 -----");
+        defaultlang.put("command.help.open", "&c[&2SteakGUI&c] &6/%0% open <메뉴 이름> &e- 메뉴를 엽니다.");
         defaultlang.put("command.wronghelp.arg.player", "플레이어");
         defaultlang.put("command.wronghelp.arg.menu", "메뉴 이름");
-        defaultlang.put("command.help.open", "&c/%0% open <메뉴 이름> - 메뉴를 엽니다.");
-        defaultlang.put("command.help.open.others", "&c/%0% open <메뉴 이름> [플레이어] - 메뉴를 엽니다. 플레이어 이름을 입력한 경우 그 플레이어에게 메뉴를 엽니다.");
-        defaultlang.put("command.help.open.console", "&c/%0% open <메뉴 이름> <플레이어> - 메뉴를 엽니다. 플레이어 이름을 입력한 경우 그 플레이어에게 메뉴를 엽니다.");
-        defaultlang.put("command.help.setting", "&c/%0% setting <메뉴 이름> - 메뉴를 수정합니다.");
-        defaultlang.put("command.help.create", "&c/%0% create <메뉴 이름> - 메뉴를 만듭니다.");
-        defaultlang.put("command.help.delete", "&c/%0% delete <메뉴 이름> - 메뉴를 삭제합니다.");
-        defaultlang.put("command.help.list", "&c/%0% list - 메뉴의 목록을 봅니다.");
-        defaultlang.put("command.help.reload", "&c/%0% reload - 메뉴 혹은 설정 파일을 리로드합니다.");
-        defaultlang.put("command.list.intro", "&b메뉴 목록---------");
-        defaultlang.put("command.list.format", "&c%0%");
-        defaultlang.put("command.list.nomenu", "&c메뉴가 없습니다!");
-        defaultlang.put("command.reloaded", "&c소고기구이가 리로드 되었습니다.");
-        defaultlang.put("nopermission", "&c권한이 없습니다!");
-        defaultlang.put("noconsole", "&c콘솔에서는 사용할 수 없는 명령어입니다!");
-        defaultlang.put("menudeleted", "&cMenu %0% Deleted");
-        defaultlang.put("menucreated", "&cMenu %0% Created");
-        defaultlang.put("notexistmenu", "&cNot Exist Menu!");
-        defaultlang.put("offlineplayer", "&cOffline Player!");
+        defaultlang.put("command.help.open", "&c[&2SteakGUI&c] &6/%0% open <메뉴 이름> &e- 메뉴를 엽니다.");
+        defaultlang.put("command.help.open.others", "&c[&2SteakGUI&c] &6/%0% open <메뉴 이름> [플레이어] &e- 메뉴를 엽니다. 플레이어 이름을 입력한 경우 그 플레이어에게 메뉴를 엽니다.");
+        defaultlang.put("command.help.open.console", "&c[&2SteakGUI&c] &6/%0% open <메뉴 이름> <플레이어> &e- 메뉴를 엽니다. 플레이어 이름을 입력한 경우 그 플레이어에게 메뉴를 엽니다.");
+        defaultlang.put("command.help.setting", "&c[&2SteakGUI&c] &6/%0% setting <메뉴 이름> &e- 메뉴를 수정합니다.");
+        defaultlang.put("command.help.create", "&c[&2SteakGUI&c] &6/%0% create <메뉴 이름> &e- 메뉴를 만듭니다.");
+        defaultlang.put("command.help.delete", "&c[&2SteakGUI&c] &6/%0% delete <메뉴 이름> &e- 메뉴를 삭제합니다.");
+        defaultlang.put("command.help.list", "&c[&2SteakGUI&c] &6/%0% list &e- 메뉴의 목록을 봅니다.");
+        defaultlang.put("command.help.reload", "&c[&2SteakGUI&c] &6/%0% reload &e- 메뉴 혹은 설정 파일을 리로드합니다.");
+        defaultlang.put("command.list.intro", "&c[&2SteakGUI&c] &b메뉴 목록---------");
+        defaultlang.put("command.list.format", "&c[&2SteakGUI&c] &6%0%");
+        defaultlang.put("command.list.nomenu", "&c[&2SteakGUI&c] &c메뉴가 없습니다!");
+        defaultlang.put("command.reloaded", "&c[&2SteakGUI&c] &6소고기구이가 리로드 되었습니다.");
+        defaultlang.put("nopermission", "&c[&2SteakGUI&c] &c권한이 없습니다!");
+        defaultlang.put("noconsole", "&c[&2SteakGUI&c] &c콘솔에서는 사용할 수 없는 명령어입니다!");
+        defaultlang.put("menu.deleted", "&c[&2SteakGUI&c] &c메뉴 %0% 이 삭제되었습니다!");
+        defaultlang.put("menu.created", "&c[&2SteakGUI&c] &6메뉴 %0% 이 만들어졌습니다!");
+        defaultlang.put("menu.notexist", "&c[&2SteakGUI&c] &c메뉴가 존재하지 않습니다!");
+        defaultlang.put("offlineplayer", "&c[&2SteakGUI&c] &c오프라인인 플레이어 입니다!");
         defaultlang.put("command.help.author", "&6소고기구이(SteakGUI) v%0%, 제작자: ITSTAKE(http://itstake.tk), 번역자: ITSTAKE(http://itstake.tk)");
-        defaultlang.put("menu.nodisplayname", "&c아이템 이름 없음, 설정해 주세요.");
-        defaultlang.put("menu.nolore", "&c아이템 설명이 없습니다.\n설정해 주세요.");
         defaultlang.put("menu.noitemtask", "&c아이템 작업이 없습니다. \n&b/sg setting <메뉴 이름> &c을 이용해 수정하세요.");
-        defaultlang.put("menufile.wannahelp", "파일을 직접 수정하고 싶으신가요?\n그렇다면 http://wiki.itstake.tk/index.php?title=SteakGUI/직접_설정 문서를 참고해 보세요.");
-        defaultlang.put("existpermission", "&c이미 존재하는 펄미션입니다!");
-        defaultlang.put("notmatchedformat", "&c매뉴 이름엔 한글을 사용할 수 없습니다! 일단 영어로 매뉴를 만드신 후, /sg setting 을 이용하여 매뉴 제목을 수정하세요!");
+        defaultlang.put("menufile.wannahelp", "&c[&2SteakGUI&c] &6파일을 직접 수정하고 싶으신가요?\n그렇다면 http://wiki.itstake.tk/index.php?title=SteakGUI/직접_설정 문서를 참고해 보세요.");
+        defaultlang.put("existpermission", "&c[&2SteakGUI&c] &c이미 존재하는 펄미션입니다!");
+        defaultlang.put("command.notmatchedformat", "&c[&2SteakGUI&c] &c매뉴 이름엔 한글을 사용할 수 없습니다! 일단 영어로 매뉴를 만드신 후, /sg setting 을 이용하여 매뉴 제목을 수정하세요!");
         // TO-DO: Language Insert
         return defaultlang;
     }

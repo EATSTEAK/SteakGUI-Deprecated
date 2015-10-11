@@ -5,20 +5,19 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.steakgui.command.MainCommand;
 import tk.itstake.steakgui.editor.ItemEditor;
+import tk.itstake.steakgui.editor.ItemStackEditor;
 import tk.itstake.steakgui.editor.MenuSetting;
 import tk.itstake.steakgui.editor.taskeditor.*;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.util.UpdateChecker;
 import tk.itstake.steakgui.util.VaultHooker;
 import tk.itstake.steakgui.variable.VariableConverter;
-import tk.itstake.util.Blacklist;
+import tk.itstake.util.ConfigHandler;
 import tk.itstake.util.LanguageHandler;
 import tk.itstake.util.MessageHandler;
 
@@ -46,11 +45,11 @@ public class SteakGUI extends JavaPlugin implements Listener {
         if(!this.getDataFolder().exists()) {
             this.getDataFolder().mkdir();
         }
+        ConfigHandler.loadConfig();
         lh.languageLoad();
         mh.sendConsoleMessage(lh.getLanguage("console.onenable", new String[]{this.getDescription().getVersion()}));
         MenuListener.getInstance().register(this);
         new VaultHooker();
-        Blacklist.init();
         getServer().getPluginManager().registerEvents(new MenuSetting(), this);
         getServer().getPluginManager().registerEvents(new ItemEditor(), this);
         getServer().getPluginManager().registerEvents(new CommandTaskEditor(), this);
@@ -58,6 +57,7 @@ public class SteakGUI extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new MessageTaskEditor(), this);
         getServer().getPluginManager().registerEvents(new SoundTaskEditor(), this);
         getServer().getPluginManager().registerEvents(new BroadcastTaskEditor(), this);
+        getServer().getPluginManager().registerEvents(new ItemStackEditor(), this);
         UpdateChecker update = new UpdateChecker();
         update.updateCheck();
         getServer().getPluginManager().registerEvents(update, this);
@@ -73,14 +73,6 @@ public class SteakGUI extends JavaPlugin implements Listener {
         return MainCommand.runCmd(sender, cmd, label, args);
     }
 
-    @EventHandler
-    public void onPlayerLogin(PlayerLoginEvent e)
-    {
-        if (Blacklist.contains(e.getPlayer())) {
-            e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-            e.setKickMessage(Blacklist.kick(e.getPlayer()));
-        }
-    }
     public static String convertMessage(String message) {
         return convertMessage(message, null, null);
     }

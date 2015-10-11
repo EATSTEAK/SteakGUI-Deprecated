@@ -37,7 +37,7 @@ public class ItemTaskEditor {
             i++;
         }
         setting.setItem(i, new ItemTaskItem(menu, player, i, s, SteakGUI.convertMessage("&b작업 추가"), Material.PISTON_STICKY_BASE, new String[]{SteakGUI.convertMessage("&c작업을 추가합니다.")}));
-        setting.setItem(setting.getSize().getSize()-1, new ItemTaskItem(menu, player, 99, s, SteakGUI.convertMessage("&c돌아가기"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&c이전 매뉴로 돌아갑니다.")}));
+        setting.setItem(setting.getSize().getSize()-1, new ItemTaskItem(menu, player, 999, s, SteakGUI.convertMessage("&c돌아가기"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&c이전 매뉴로 돌아갑니다.")}));
         setting.open(player);
     }
 
@@ -56,7 +56,7 @@ public class ItemTaskEditor {
 
         @Override
         public void onItemClick(ItemClickEvent event) {
-            if(task == 99) {
+            if(task == 999) {
                 new ItemEditor().show(menu, player, slot);
             } else if(menu.getItemArray().get(slot).getTasks().size() <= task) {
                 new NewTaskSelector().show(menu, player, slot, task);

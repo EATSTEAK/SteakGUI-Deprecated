@@ -22,6 +22,8 @@ public class JSONUtil {
                     for (int j = 0; j < indentDepth; j++) {
                         prettyJsonSb.append(INDENT);
                     }
+                } else {
+                    prettyJsonSb.append(targetString);
                 }
             }
             else if(targetString.equals("}")||targetString.equals("]")) {
@@ -31,6 +33,8 @@ public class JSONUtil {
                     for (int j = 0; j < indentDepth; j++) {
                         prettyJsonSb.append(INDENT);
                     }
+                    prettyJsonSb.append(targetString);
+                } else {
                     prettyJsonSb.append(targetString);
                 }
             }

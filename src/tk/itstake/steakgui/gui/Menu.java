@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class Menu {
     String TITLE = "";
     String NAME = "";
-    int SIZE = 0;
+    int SIZE = 9;
     HashMap<Integer, GUIItem> ITEM_ARRAY = null;
     JavaPlugin PLUGIN = null;
     public Menu(String name, String title, int size, HashMap<Integer, GUIItem> itemarray) {
@@ -72,17 +72,15 @@ public class Menu {
 
     public void open(final Player player) {
         final ItemMenu menu;
-        try {
             menu = new ItemMenu(SteakGUI.convertMessage(TITLE, this, player), ItemMenu.Size.fit(Integer.parseInt(SteakGUI.convertMessage(SIZE + "", this, player))), PLUGIN);
             for(Integer key:ITEM_ARRAY.keySet()) {
                 if(canInclude(player, ITEM_ARRAY.get(key))) {
-                    menu.setItem(key, ITEM_ARRAY.get(key).getMenuItem(this, player));
+                    if(key < ItemMenu.Size.fit(Integer.parseInt(SteakGUI.convertMessage(SIZE + "", this, player))).getSize()) {
+                        menu.setItem(key, ITEM_ARRAY.get(key).getMenuItem(this, player));
+                    }
                 }
             }
             menu.open(player);
-        } catch (Exception e) {
-            new MessageHandler().sendMessage(player, "&c매뉴에 문제가 있습니다. 서버 관리자에게 문의하세요.");
-        }
     }
 
     public void update(final Player player) {

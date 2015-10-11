@@ -44,7 +44,8 @@ public class ItemEditor implements Listener {
         }
         setting.setItem(13, new ItemEditorItem(menu, player, 2, slot, SteakGUI.convertMessage("&b펄미션 설정"), Material.REDSTONE_TORCH_ON, new String[]{SteakGUI.convertMessage("&c현재 설정된 펄미션:" + permission), SteakGUI.convertMessage("&b어떤 펄미션이 있어야 보일지 설정합니다."), SteakGUI.convertMessage("&3<클릭> 으로 펄미션 설정"), SteakGUI.convertMessage("&2<버리기 키> 로 설정된 펄미션 삭제")}));
         setting.setItem(15, new ItemEditorItem(menu, player, 3, slot, SteakGUI.convertMessage("&c작업 설정"), Material.REDSTONE_BLOCK, new String[]{SteakGUI.convertMessage("&c이 아이템의 작업을 설정합니다.")}));
-        setting.setItem(17, new ItemEditorItem(menu, player, 4, slot, SteakGUI.convertMessage("&c돌아가기"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&c이전 매뉴로 돌아갑니다.")}));
+        setting.setItem(17, new ItemEditorItem(menu, player, 4, slot, SteakGUI.convertMessage("&c아이템 정보 설정"), Material.ENCHANTED_BOOK, new String[]{SteakGUI.convertMessage("&c아이템의 이름과 로어를 설정합니다.")}));
+        setting.setItem(26, new ItemEditorItem(menu, player, 5, slot, SteakGUI.convertMessage("&c돌아가기"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&c이전 매뉴로 돌아갑니다.")}));
         setting.open(player);
     }
 
@@ -70,6 +71,9 @@ public class ItemEditor implements Listener {
             } else if(t == 1) {
                 menu.removeItem(s);
                 new MessageHandler().sendMessage(player, "&c아이템이 성공적으로 삭제되었습니다!");
+                MenuFileHandler.saveMenu(menu);
+                menu = MenuFileHandler.loadMenu(menu.getName(), true);
+                new MenuEditor().show(menu, player);
             } else if(t == 2) {
                 if(!(event.getClick().equals(ClickType.DROP) || event.getClick().equals(ClickType.CONTROL_DROP))) {
                     player.setMetadata("permSet", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), s}));
@@ -78,11 +82,15 @@ public class ItemEditor implements Listener {
                 } else {
                     new MessageHandler().sendMessage(player, "&c펄미션이 삭제되었습니다.");
                     menu.getItemArray().get(s).setPermission("");
+                    MenuFileHandler.saveMenu(menu);
+                    menu = MenuFileHandler.loadMenu(menu.getName(), true);
                     new ItemEditor().show(menu, player, s);
                 }
             } else if(t == 3) {
                 new ItemTaskEditor().show(menu, player, s);
             } else if(t == 4) {
+                new ItemStackEditor().show(menu, player, s);
+            } else if(t == 5) {
                 new MenuEditor().show(menu, player);
             }
         }
@@ -93,19 +101,15 @@ public class ItemEditor implements Listener {
         if(e.getPlayer().hasMetadata("itemChange")) {
             if(e.getItem() != null) {
                 new MessageHandler().sendMessage(e.getPlayer(), "&b아이템을 성공적으로 가져왔습니다!");
-                Menu menu = MenuFileHandler.loadMenu((String) ((Object[]) e.getPlayer().getMetadata("itemChange").get(0).value())[0]);
-                ItemStack stack = e.getItem().clone();
-                ItemMeta itemmeta = stack.getItemMeta();
-                if (itemmeta.getDisplayName() == null) {
-                    itemmeta.setDisplayName(SteakGUI.lh.getLanguage("menu.nodisplayname"));
-                }
-                if (itemmeta.getLore() == null) {
-                    itemmeta.setLore(Arrays.asList(SteakGUI.lh.getLanguage("menu.nolore").split("\n")));
-                }
-                stack.setItemMeta(itemmeta);
-                menu.setItem((int) ((Object[]) e.getPlayer().getMetadata("itemChange").get(0).value())[1], new GUIItem(stack, "", new ItemTask(ItemTask.MESSAGE, new String[]{SteakGUI.lh.getLanguage("menu.noitemtask")})));
+                Menu menu = MenuFileHandler.loadMenu((String) ((Object[]) e.getPlayer().getMetadata("itemChange").get(0).value())[0], true);
+                ItemStack s = e.getItem();
+                ItemStack stack = new ItemStack(s.getType(), s.getAmount(), s.getDurability());
+                stack.setData(s.getData());
+                stack.setItemMeta(s.getItemMeta());
+                menu.setItem((int) ((Object[]) e.getPlayer().getMetadata("itemChange").get(0).value())[1], new GUIItem(stack, "", menu.getItemArray().get((int) ((Object[]) e.getPlayer().getMetadata("itemChange").get(0).value())[1]).getTasks()));
                 MenuFileHandler.saveMenu(menu);
                 e.setCancelled(true);
+                menu = MenuFileHandler.loadMenu(menu.getName(), true);
                 new ItemEditor().show(menu, e.getPlayer(), (int) ((Object[]) e.getPlayer().getMetadata("itemChange").get(0).value())[1]);
                 e.getPlayer().removeMetadata("itemChange", Bukkit.getPluginManager().getPlugin("SteakGUI"));
             } else {
@@ -122,15 +126,16 @@ public class ItemEditor implements Listener {
             if(!e.getMessage().equals("cancel") && !e.getMessage().equals("취소")) {
                 new MessageHandler().sendMessage(e.getPlayer(), "&b펄미션이 " + e.getMessage() + " 로 설정되었습니다.");
                 e.setCancelled(true);
-                Menu targetmenu = MenuFileHandler.loadMenu((String)((Object[])e.getPlayer().getMetadata("permSet").get(0).value())[0]);
-                targetmenu.getItemArray().get((int)((Object[])e.getPlayer().getMetadata("permSet").get(0).value())[1]).setPermission(e.getMessage());
-                MenuFileHandler.saveMenu(targetmenu);
-                new ItemEditor().show(targetmenu, e.getPlayer(), (int)((Object[])e.getPlayer().getMetadata("permSet").get(0).value())[1]);
+                Menu menu = MenuFileHandler.loadMenu((String)((Object[])e.getPlayer().getMetadata("permSet").get(0).value())[0], true);
+                menu.getItemArray().get((int)((Object[])e.getPlayer().getMetadata("permSet").get(0).value())[1]).setPermission(e.getMessage());
+                MenuFileHandler.saveMenu(menu);
+                menu = MenuFileHandler.loadMenu(menu.getName(), true);
+                new ItemEditor().show(menu, e.getPlayer(), (int)((Object[])e.getPlayer().getMetadata("permSet").get(0).value())[1]);
                 e.getPlayer().removeMetadata("permSet", Bukkit.getPluginManager().getPlugin("SteakGUI"));
             } else {
                 new MessageHandler().sendMessage(e.getPlayer(), "&c취소되었습니다.");
                 e.setCancelled(true);
-                new MenuSetting().show(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("permSet").get(0).asString()), e.getPlayer());
+                new MenuSetting().show(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("permSet").get(0).asString(), true), e.getPlayer());
                 e.getPlayer().removeMetadata("permSet", Bukkit.getPluginManager().getPlugin("SteakGUI"));
             }
         }

@@ -32,11 +32,11 @@ public class GUIItem {
 
     public MenuItem getMenuItem(Menu menu, Player player) {
         MENU = menu;
-        String displayname = SteakGUI.convertMessage(SteakGUI.lh.getLanguage("menu.nodisplayname", new String[]{}), menu, player);
+        String displayname = null;
         if(ITEM.getItemMeta().hasDisplayName()) {
             displayname = SteakGUI.convertMessage(ITEM.getItemMeta().getDisplayName(), menu, player);
         }
-        String[] lore = SteakGUI.convertMessage(SteakGUI.lh.getLanguage("menu.nolore", new String[]{}), menu, player).split("\\n");
+        String[] lore = null;
         if(ITEM.getItemMeta().hasLore()) {
             Object[] objarray = ITEM.getItemMeta().getLore().toArray();
             lore = new String[objarray.length];
@@ -59,6 +59,8 @@ public class GUIItem {
     public ItemStack getItemStack() {
         return ITEM;
     }
+
+    public void setItemStack(ItemStack stack) { ITEM = stack; }
 
     public ArrayList<ItemTask> getTasks() {
         return TASK;

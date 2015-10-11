@@ -26,13 +26,20 @@ public class MenuEditor {
         ItemMenu menuEditor = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4수정:&c" + title), ItemMenu.Size.fit(menu.getSize()), (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
         for(Integer key:menu.getItemArray().keySet()) {
             ItemStack item = menu.getItemArray().get(key).getItemStack();
-            String[] lorearray = new String[item.getItemMeta().getLore().size()];
-            int i = 0;
-            for(String lore:item.getItemMeta().getLore()) {
-                lorearray[i] = SteakGUI.convertMessage(lore);
-                i++;
+            String[] lorearray = new String[0];
+            if(item.getItemMeta().getLore() != null) {
+                lorearray = new String[item.getItemMeta().getLore().size()];
+                int i = 0;
+                for (String lore : item.getItemMeta().getLore()) {
+                    lorearray[i] = SteakGUI.convertMessage(lore);
+                    i++;
+                }
+            } else {
+
             }
-            menuEditor.setItem(key, new MenuEditorItem(menu, p, key, SteakGUI.convertMessage(item.getItemMeta().getDisplayName()), item, lorearray));
+            if(key < ItemMenu.Size.fit(menu.getSize()).getSize()) {
+                menuEditor.setItem(key, new MenuEditorItem(menu, p, key, SteakGUI.convertMessage(item.getItemMeta().getDisplayName()), item, lorearray));
+            }
         }
         menuEditor.open(p);
     }

@@ -139,7 +139,7 @@ public class BuyTaskEditor {
         if(e.getPlayer().hasMetadata("permBuy")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 펄미션이 성공적으로 등록되었습니다!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("permBuy").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String) metadata[0]);
+            Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[1] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
             new BuyTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
@@ -148,7 +148,7 @@ public class BuyTaskEditor {
         } else if(e.getPlayer().hasMetadata("permBuyCost")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 펄미션이 성공적으로 등록되었습니다!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("permBuyCost").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String) metadata[0]);
+            Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[3] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
             new BuyTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
@@ -157,7 +157,7 @@ public class BuyTaskEditor {
         } else if(e.getPlayer().hasMetadata("moneyBuyCost")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 원이 성공적으로 등록되었습니다!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("moneyBuyCost").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String) metadata[0]);
+            Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[3] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
             new BuyTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
@@ -166,7 +166,7 @@ public class BuyTaskEditor {
         } else if(e.getPlayer().hasMetadata("buyComMsg")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 메세지가 성공적으로 등록되었습니다!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("buyComMsg").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String) metadata[0]);
+            Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[4] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
             new BuyTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
@@ -175,7 +175,7 @@ public class BuyTaskEditor {
         } else if(e.getPlayer().hasMetadata("noMoneyMsg")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 메세지가 성공적으로 등록되었습니다!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("noMoneyMsg").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String) metadata[0]);
+            Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[5] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
             new BuyTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
@@ -184,7 +184,7 @@ public class BuyTaskEditor {
         } else if(e.getPlayer().hasMetadata("noSlotMsg")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 메세지가 성공적으로 등록되었습니다!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("noSlotMsg").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String) metadata[0]);
+            Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[6] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
             new BuyTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
@@ -199,7 +199,7 @@ public class BuyTaskEditor {
             if(e.getItem() != null) {
                 new MessageHandler().sendMessage(e.getPlayer(), "&b아이템을 성공적으로 가져왔습니다!");
                 Object[] metadata = (Object[]) e.getPlayer().getMetadata("itemBuy").get(0).value();
-                Menu menu = MenuFileHandler.loadMenu((String) ((Object[]) e.getPlayer().getMetadata("itemBuy").get(0).value())[0]);
+                Menu menu = MenuFileHandler.loadMenu((String) ((Object[]) e.getPlayer().getMetadata("itemBuy").get(0).value())[0], true);
                 ItemStack stack = e.getItem();
                 menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[2] = ItemStackConverter.convert(stack);
                 e.setCancelled(true);
@@ -214,7 +214,7 @@ public class BuyTaskEditor {
             if(e.getItem() != null) {
                 new MessageHandler().sendMessage(e.getPlayer(), "&b아이템을 성공적으로 가져왔습니다!");
                 Object[] metadata = (Object[]) e.getPlayer().getMetadata("itemBuyCost").get(0).value();
-                Menu menu = MenuFileHandler.loadMenu((String) ((Object[]) e.getPlayer().getMetadata("itemBuyCost").get(0).value())[0]);
+                Menu menu = MenuFileHandler.loadMenu((String) ((Object[]) e.getPlayer().getMetadata("itemBuyCost").get(0).value())[0], true);
                 ItemStack stack = e.getItem();
                 menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[3] = ItemStackConverter.convert(stack);
                 MenuFileHandler.saveMenu(menu);

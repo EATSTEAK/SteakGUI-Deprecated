@@ -87,7 +87,7 @@ public class MenuSetting implements Listener {
             if(e.getMessage().length() <= 16 && !e.getMessage().equals("cancel") && !e.getMessage().equals("취소")) {
                 new MessageHandler().sendMessage(e.getPlayer(), "&b매뉴 이름이 &r" + e.getMessage() + "&b 으로 저장되었습니다.");
                 e.setCancelled(true);
-                Menu targetmenu = MenuFileHandler.loadMenu(e.getPlayer().getMetadata("titleEdit").get(0).asString());
+                Menu targetmenu = MenuFileHandler.loadMenu(e.getPlayer().getMetadata("titleEdit").get(0).asString(), true);
                 targetmenu.setTitle(e.getMessage());
                 MenuFileHandler.saveMenu(targetmenu);
                 new MenuSetting().show(targetmenu, e.getPlayer());
@@ -95,12 +95,12 @@ public class MenuSetting implements Listener {
             } else if(e.getMessage().equals("cancel") || e.getMessage().equals("취소")) {
                 new MessageHandler().sendMessage(e.getPlayer(), "&c취소되었습니다.");
                 e.setCancelled(true);
-                new MenuSetting().show(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("titleEdit").get(0).asString()), e.getPlayer());
+                new MenuSetting().show(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("titleEdit").get(0).asString(), true), e.getPlayer());
                 e.getPlayer().removeMetadata("titleEdit", Bukkit.getPluginManager().getPlugin("SteakGUI"));
             } else {
                 new MessageHandler().sendMessage(e.getPlayer(), "&c매뉴 이름이 너무 깁니다!");
                 e.setCancelled(true);
-                new MenuSetting().show(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("titleEdit").get(0).asString()), e.getPlayer());
+                new MenuSetting().show(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("titleEdit").get(0).asString(), true), e.getPlayer());
                 e.getPlayer().removeMetadata("titleEdit", Bukkit.getPluginManager().getPlugin("SteakGUI"));
             }
         }
@@ -113,26 +113,26 @@ public class MenuSetting implements Listener {
                 if (e.getClickedBlock().getType().equals(Material.CHEST)) {
                     Chest chest = (Chest) e.getClickedBlock().getState();
                     chest.getBlockInventory();
-                    loadFromChest(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("importChest").get(0).asString()), e.getPlayer(), e.getPlayer().getMetadata("importChest").get(0).asString(), chest, false);
+                    loadFromChest(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("importChest").get(0).asString(), true), e.getPlayer(), e.getPlayer().getMetadata("importChest").get(0).asString(), chest, false);
                     e.setCancelled(true);
                     e.getPlayer().removeMetadata("importChest", Bukkit.getPluginManager().getPlugin("SteakGUI"));
                 } else {
                     new MessageHandler().sendMessage(e.getPlayer(), "&c클릭한 블럭이 체스트가 아닙니다!");
                     e.setCancelled(true);
-                    new MenuSetting().show(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("importChest").get(0).asString()), e.getPlayer());
+                    new MenuSetting().show(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("importChest").get(0).asString(), true), e.getPlayer());
                     e.getPlayer().removeMetadata("importChest", Bukkit.getPluginManager().getPlugin("SteakGUI"));
                 }
             } else if(e.getPlayer().hasMetadata("importChestForce")) {
                 if (e.getClickedBlock().getType().equals(Material.CHEST)) {
                     Chest chest = (Chest) e.getClickedBlock().getState();
 
-                    loadFromChest(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("importChestForce").get(0).asString()), e.getPlayer(), e.getPlayer().getMetadata("importChestForce").get(0).asString(), chest, true);
+                    loadFromChest(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("importChestForce").get(0).asString(), true), e.getPlayer(), e.getPlayer().getMetadata("importChestForce").get(0).asString(), chest, true);
                     e.setCancelled(true);
                     e.getPlayer().removeMetadata("importChestForce", Bukkit.getPluginManager().getPlugin("SteakGUI"));
                 } else {
                     new MessageHandler().sendMessage(e.getPlayer(), "&c클릭한 블럭이 체스트가 아닙니다!");
                     e.setCancelled(true);
-                    new MenuSetting().show(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("importChestForce").get(0).asString()), e.getPlayer());
+                    new MenuSetting().show(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("importChestForce").get(0).asString(), true), e.getPlayer());
                     e.getPlayer().removeMetadata("importChestForce", Bukkit.getPluginManager().getPlugin("SteakGUI"));
                 }
             }
@@ -142,31 +142,20 @@ public class MenuSetting implements Listener {
     public void loadFromChest(Menu menu, Player p, String menuName, Chest chest, boolean rewrite) {
         int i = 0;
         for(ItemStack s:chest.getInventory().getContents()) {
-            ItemStack stack = s.clone();
             if(rewrite) {
-                if(stack != null) {
-                    ItemMeta itemmeta = stack.getItemMeta();
-                    if (itemmeta.getDisplayName() == null) {
-                        itemmeta.setDisplayName(SteakGUI.lh.getLanguage("menu.nodisplayname"));
-                    }
-                    if (itemmeta.getLore() == null) {
-                        itemmeta.setLore(Arrays.asList(SteakGUI.lh.getLanguage("menu.nolore").split("\n")));
-                    }
-                    stack.setItemMeta(itemmeta);
+                if(s != null) {
+                    ItemStack stack = new ItemStack(s.getType(), s.getAmount(), s.getDurability());
+                    stack.setData(s.getData());
+                    stack.setItemMeta(s.getItemMeta());
                     menu.setItem(i, new GUIItem(stack, "", new ItemTask(ItemTask.MESSAGE, new String[]{SteakGUI.lh.getLanguage("menu.noitemtask")})));
                 } else {
                     menu.removeItem(i);
                 }
             } else {
-                if(stack != null && !menu.hasItem(i)) {
-                    ItemMeta itemmeta = stack.getItemMeta();
-                    if (itemmeta.getDisplayName() == null) {
-                        itemmeta.setDisplayName(SteakGUI.lh.getLanguage("menu.nodisplayname"));
-                    }
-                    if (itemmeta.getLore() == null) {
-                        itemmeta.setLore(Arrays.asList(SteakGUI.lh.getLanguage("menu.nolore").split("\n")));
-                    }
-                    stack.setItemMeta(itemmeta);
+                if(s != null && !menu.hasItem(i)) {
+                    ItemStack stack = new ItemStack(s.getType(), s.getAmount(), s.getDurability());
+                    stack.setData(s.getData());
+                    stack.setItemMeta(s.getItemMeta());
                     menu.setItem(i, new GUIItem(stack, "", new ItemTask(ItemTask.MESSAGE, new String[]{SteakGUI.lh.getLanguage("menu.noitemtask")})));
                 }
             }

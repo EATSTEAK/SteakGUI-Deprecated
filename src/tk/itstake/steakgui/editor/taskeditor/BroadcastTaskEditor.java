@@ -79,7 +79,7 @@ public class BroadcastTaskEditor implements Listener {
         if(e.getPlayer().hasMetadata("messageSet")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 메시지가 성공적으로 등록되었습니다!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("messageSet").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String) metadata[0]);
+            Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[0] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
             new BroadcastTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);

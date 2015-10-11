@@ -116,7 +116,7 @@ public class GiveTaskEditor {
         if(e.getPlayer().hasMetadata("permGive")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 펄미션이 성공적으로 등록되었습니다!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("permGive").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String) metadata[0]);
+            Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[1] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
             new GiveTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
@@ -125,7 +125,7 @@ public class GiveTaskEditor {
         } else if(e.getPlayer().hasMetadata("expGive")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 경험치가 성공적으로 등록되었습니다!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("expGive").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String) metadata[0]);
+            Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[1] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
             new GiveTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
@@ -134,7 +134,7 @@ public class GiveTaskEditor {
         } else if(e.getPlayer().hasMetadata("levelGive")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 레벨이 성공적으로 등록되었습니다!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("levelGive").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String) metadata[0]);
+            Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[1] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
             new GiveTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);

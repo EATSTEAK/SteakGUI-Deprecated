@@ -8,12 +8,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import tk.itstake.steakgui.SteakGUI;
 import tk.itstake.steakgui.editor.EditorMain;
 import tk.itstake.steakgui.editor.MenuEditor;
 import tk.itstake.steakgui.gui.GUIItem;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.itemtask.ItemTask;
 import tk.itstake.steakgui.util.MenuFileHandler;
+import tk.itstake.util.ConfigHandler;
 import tk.itstake.util.LanguageHandler;
 import tk.itstake.util.MessageHandler;
 
@@ -86,6 +88,8 @@ public class MainCommand {
     }
 
     private static void reloadCmd(CommandSender sender) {
+        ConfigHandler.loadConfig();
+        SteakGUI.lh.languageLoad();
         MenuFileHandler.reloadMenu();
         mh.sendMessage(sender, lh.getLanguage("command.reloaded"));
     }
@@ -93,7 +97,7 @@ public class MainCommand {
     private static void deleteCmd(CommandSender sender, String name, String arg) {
         if((sender instanceof Player && sender.hasPermission("steakgui.setting")) || !(sender instanceof Player)) {
             MenuFileHandler.deleteMenu(arg);
-            mh.sendMessage(sender, lh.getLanguage("menudeleted", new String[]{arg}));
+            mh.sendMessage(sender, lh.getLanguage("menu.deleted", new String[]{arg}));
         } else {
             mh.sendMessage(sender, lh.getLanguage("nopermission"));
         }
@@ -104,16 +108,12 @@ public class MainCommand {
             if(arg.matches("^[a-zA-Z1-9_]*$")) {
                 HashMap<Integer, GUIItem> itemarray = new HashMap<>();
                 ItemStack defaultitem = new ItemStack(Material.STONE, 1);
-                ItemMeta defaultitemmeta = defaultitem.getItemMeta();
-                defaultitemmeta.setDisplayName(lh.getLanguage("menu.nodisplayname"));
-                defaultitemmeta.setLore(Arrays.asList(lh.getLanguage("menu.nolore").split("\n")));
-                defaultitem.setItemMeta(defaultitemmeta);
                 itemarray.put(0, new GUIItem(defaultitem, "", new ItemTask(ItemTask.MESSAGE, new String[]{lh.getLanguage("menu.noitemtask")})));
                 Menu newmenu = new Menu(arg, arg, 1, itemarray);
                 MenuFileHandler.saveMenu(newmenu);
-                mh.sendMessage(sender, lh.getLanguage("menucreated", new String[]{arg}));
+                mh.sendMessage(sender, lh.getLanguage("menu.created", new String[]{arg}));
             } else {
-                mh.sendMessage(sender, lh.getLanguage("notmatchedformat"));
+                mh.sendMessage(sender, lh.getLanguage("command.notmatchedformat"));
             }
         } else {
             mh.sendMessage(sender, lh.getLanguage("nopermission"));
@@ -140,7 +140,7 @@ public class MainCommand {
                 if(targetmenu != null) {
                     targetmenu.open(target);
                 } else {
-                    mh.sendMessage(target, lh.getLanguage("notexistmenu"));
+                    mh.sendMessage(target, lh.getLanguage("menu.notexist"));
                 }
             } else {
                 mh.sendMessage(target, lh.getLanguage("nopermission"));
@@ -153,7 +153,7 @@ public class MainCommand {
                     if(targetmenu != null) {
                         targetmenu.open(target);
                     } else {
-                        mh.sendMessage(target, lh.getLanguage("notexistmenu"));
+                        mh.sendMessage(target, lh.getLanguage("menu.notexist"));
                     }
                 } else {
                     mh.sendMessage(target, lh.getLanguage("offlineplayer"));

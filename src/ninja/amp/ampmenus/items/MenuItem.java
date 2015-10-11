@@ -30,14 +30,18 @@ import java.util.List;
  * An Item inside an {@link ninja.amp.ampmenus.menus.ItemMenu}.
  */
 public class MenuItem {
-    private final String displayName;
-    private final ItemStack icon;
-    private final List<String> lore;
+    private String displayName = null;
+    private ItemStack icon;
+    private List<String> lore = null;
 
     public MenuItem(String displayName, ItemStack icon, String... lore) {
-        this.displayName = displayName;
+        if(displayName != null) {
+            this.displayName = displayName;
+        }
         this.icon = icon;
-        this.lore = Arrays.asList(lore);
+        if(lore != null) {
+            this.lore = Arrays.asList(lore);
+        }
     }
 
     /**
@@ -96,8 +100,12 @@ public class MenuItem {
      */
     public static ItemStack setNameAndLore(ItemStack itemStack, String displayName, List<String> lore) {
         ItemMeta meta = itemStack.getItemMeta();
-        meta.setDisplayName(displayName);
-        meta.setLore(lore);
+        if(displayName != null) {
+            meta.setDisplayName(displayName);
+        }
+        if(lore != null) {
+            meta.setLore(lore);
+        }
         itemStack.setItemMeta(meta);
         return itemStack;
     }
