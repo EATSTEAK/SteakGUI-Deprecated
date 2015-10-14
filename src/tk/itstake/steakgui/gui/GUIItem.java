@@ -101,6 +101,7 @@ public class GUIItem {
                     e.printStackTrace();
                 }
             }
+            MENU.update(event.getPlayer());
         }
 
         @Override
