@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,6 +23,7 @@ import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.itemtask.ItemTask;
 import tk.itstake.steakgui.util.ItemStackConverter;
 import tk.itstake.steakgui.util.MenuFileHandler;
+import tk.itstake.util.JSONUtil;
 import tk.itstake.util.MessageHandler;
 
 import java.util.Arrays;
@@ -29,7 +31,7 @@ import java.util.Arrays;
 /**
  * Created by ITSTAKE on 2015-08-12.
  */
-public class BuyTaskEditor {
+public class BuyTaskEditor implements Listener {
     public void show(Menu menu, Player player, int slot, int task) {
         String title = menu.getTitle();
         if(title.length() > 10) {
@@ -37,30 +39,31 @@ public class BuyTaskEditor {
         }
         GUIItem slotItem = menu.getItemArray().get(slot);
         ItemTask edittask = slotItem.getTask(task);
-        ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4¼öÁ¤:&c" + title), ItemMenu.Size.FIVE_LINE, (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
-        setting.setItem(0, new ItemTaskItem(menu, player, task, 0, 1,  slot, SteakGUI.convertMessage("&cÆŞ¹Ì¼Ç ±¸¸Å"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b±¸¸ÅÇÒ ¼ö ÀÖ´Â ¹°Ç°À» ÆŞ¹Ì¼ÇÀ¸·Î ¼³Á¤ÇÕ´Ï´Ù.")}));
-        setting.setItem(1, new ItemTaskItem(menu, player, task, 1, 1,  slot, SteakGUI.convertMessage("&c¾ÆÀÌÅÛ ±¸¸Å"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&b±¸¸ÅÇÒ ¼ö ÀÖ´Â ¹°Ç°À» ¾ÆÀÌÅÛÀ¸·Î ¼³Á¤ÇÕ´Ï´Ù.")}));
+        ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4ìˆ˜ì •:&c" + title), ItemMenu.Size.SIX_LINE, (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
+        setting.setItem(0, new ItemTaskItem(menu, player, task, 0, 1,  slot, SteakGUI.convertMessage("&cí„ë¯¸ì…˜ êµ¬ë§¤"), Material.PAPER, new String[]{SteakGUI.convertMessage("&bêµ¬ë§¤í•  ìˆ˜ ìˆëŠ” ë¬¼í’ˆì„ í„ë¯¸ì…˜ìœ¼ë¡œ ì„¤ì •í•©ë‹ˆë‹¤.")}));
+        setting.setItem(1, new ItemTaskItem(menu, player, task, 1, 1,  slot, SteakGUI.convertMessage("&cì•„ì´í…œ êµ¬ë§¤"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&bêµ¬ë§¤í•  ìˆ˜ ìˆëŠ” ë¬¼í’ˆì„ ì•„ì´í…œìœ¼ë¡œ ì„¤ì •í•©ë‹ˆë‹¤.")}));
         if(((String)edittask.getData()[0]).equals("permission")) {
-            setting.setItem(9, new ItemTaskItem(menu, player, task, 2, 1,  slot, SteakGUI.convertMessage("&bÆŞ¹Ì¼Ç ÀÔ·Â"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b±¸¸ÅÇÏ°Ô µÉ ÆŞ¹Ì¼ÇÀ» ÀÔ·ÂÇÕ´Ï´Ù.")}));
+            setting.setItem(9, new ItemTaskItem(menu, player, task, 2, 1,  slot, SteakGUI.convertMessage("&bí„ë¯¸ì…˜ ì…ë ¥"), Material.PAPER, new String[]{SteakGUI.convertMessage("&bêµ¬ë§¤í•˜ê²Œ ë  í„ë¯¸ì…˜ì„ ì…ë ¥í•©ë‹ˆë‹¤.")}));
         } else {
-            setting.setItem(9, new ItemTaskItem(menu, player, task, 3, 1,  slot, SteakGUI.convertMessage("&b¾ÆÀÌÅÛ ¼±ÅÃ"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b±¸¸ÅÇÏ°Ô µÉ ¾ÆÀÌÅÛÀ» ¼Õ¿¡¼­ ¼±ÅÃÇÕ´Ï´Ù.")}));
+            setting.setItem(9, new ItemTaskItem(menu, player, task, 3, 1,  slot, SteakGUI.convertMessage("&bì•„ì´í…œ ì„ íƒ"), Material.PAPER, new String[]{SteakGUI.convertMessage("&bêµ¬ë§¤í•˜ê²Œ ë  ì•„ì´í…œì„ ì†ì—ì„œ ì„ íƒí•©ë‹ˆë‹¤.")}));
         }
-        setting.setItem(18, new ItemTaskItem(menu, player, task, 4, 1,  slot, SteakGUI.convertMessage("&cÆŞ¹Ì¼Ç ÁöºÒ"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b¾ÆÀÌÅÛ ±¸¸Å½Ã ÆŞ¹Ì¼ÇÀ» ÁöºÒÇÕ´Ï´Ù.")}));
-        setting.setItem(19, new ItemTaskItem(menu, player, task, 5, 1,  slot, SteakGUI.convertMessage("&c¾ÆÀÌÅÛ ÁöºÒ"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&b¾ÆÀÌÅÛ ±¸¸Å½Ã ¾ÆÀÌÅÛÀ» ÁöºÒÇÕ´Ï´Ù.")}));
-        setting.setItem(20, new ItemTaskItem(menu, player, task, 6, 1,  slot, SteakGUI.convertMessage("&cµ· ÁöºÒ"), Material.IRON_INGOT, new String[]{SteakGUI.convertMessage("&b¾ÆÀÌÅÛ ±¸¸Å½Ã µ·À» ÁöºÒÇÕ´Ï´Ù.")}));
+        setting.setItem(18, new ItemTaskItem(menu, player, task, 4, 1,  slot, SteakGUI.convertMessage("&cí„ë¯¸ì…˜ ì§€ë¶ˆ"), Material.PAPER, new String[]{SteakGUI.convertMessage("&bì•„ì´í…œ êµ¬ë§¤ì‹œ í„ë¯¸ì…˜ì„ ì§€ë¶ˆí•©ë‹ˆë‹¤.")}));
+        setting.setItem(19, new ItemTaskItem(menu, player, task, 5, 1,  slot, SteakGUI.convertMessage("&cì•„ì´í…œ ì§€ë¶ˆ"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&bì•„ì´í…œ êµ¬ë§¤ì‹œ ì•„ì´í…œì„ ì§€ë¶ˆí•©ë‹ˆë‹¤.")}));
+        setting.setItem(20, new ItemTaskItem(menu, player, task, 6, 1,  slot, SteakGUI.convertMessage("&cëˆ ì§€ë¶ˆ"), Material.IRON_INGOT, new String[]{SteakGUI.convertMessage("&bì•„ì´í…œ êµ¬ë§¤ì‹œ ëˆì„ ì§€ë¶ˆí•©ë‹ˆë‹¤.")}));
         if(((String)edittask.getData()[2]).equals("permission")) {
-            setting.setItem(27, new ItemTaskItem(menu, player, task, 7, 1,  slot, SteakGUI.convertMessage("&bÆŞ¹Ì¼Ç ÀÔ·Â"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b¾ÆÀÌÅÛ ±¸¸Å½Ã ¼Ò¸ğÇÒ ÆŞ¹Ì¼ÇÀ» ÀÔ·ÂÇÕ´Ï´Ù.")}));
+            setting.setItem(27, new ItemTaskItem(menu, player, task, 7, 1,  slot, SteakGUI.convertMessage("&bí„ë¯¸ì…˜ ì…ë ¥"), Material.PAPER, new String[]{SteakGUI.convertMessage("&bì•„ì´í…œ êµ¬ë§¤ì‹œ ì†Œëª¨í•  í„ë¯¸ì…˜ì„ ì…ë ¥í•©ë‹ˆë‹¤.")}));
         } else if(((String)edittask.getData()[2]).equals("money")) {
-            setting.setItem(27, new ItemTaskItem(menu, player, task, 8, 1,  slot, SteakGUI.convertMessage("&bµ· ¾×¼ö ÀÔ·Â"), Material.IRON_INGOT, new String[]{SteakGUI.convertMessage("&b¾ÆÀÌÅÛ ±¸¸Å½Ã ¼Ò¸ğÇÒ µ· ¾×¼ö¸¦ ÀÔ·ÂÇÕ´Ï´Ù.")}));
+            setting.setItem(27, new ItemTaskItem(menu, player, task, 8, 1,  slot, SteakGUI.convertMessage("&bëˆ ì•¡ìˆ˜ ì…ë ¥"), Material.IRON_INGOT, new String[]{SteakGUI.convertMessage("&bì•„ì´í…œ êµ¬ë§¤ì‹œ ì†Œëª¨í•  ëˆ ì•¡ìˆ˜ë¥¼ ì…ë ¥í•©ë‹ˆë‹¤.")}));
         } else {
-            setting.setItem(27, new ItemTaskItem(menu, player, task, 9, 1,  slot, SteakGUI.convertMessage("&b¾ÆÀÌÅÛ ¼±ÅÃ"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&b¾ÆÀÌÅÛ ±¸¸Å½Ã ¼Ò¸ğÇÒ ¾ÆÀÌÅÛÀ» ¼±ÅÃÇÕ´Ï´Ù.")}));
+            setting.setItem(27, new ItemTaskItem(menu, player, task, 9, 1,  slot, SteakGUI.convertMessage("&bì•„ì´í…œ ì„ íƒ"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&bì•„ì´í…œ êµ¬ë§¤ì‹œ ì†Œëª¨í•  ì•„ì´í…œì„ ì„ íƒí•©ë‹ˆë‹¤.")}));
         }
-        setting.setItem(36, new ItemTaskItem(menu, player, task, 10, 1,  slot, SteakGUI.convertMessage("&b±¸¸Å ¼º°ø ¸Ş½ÃÁö ÀÔ·Â"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b±¸¸Å¿¡ ¼º°øÇÏ¸é Ç¥½ÃÇÒ ¸Ş½ÃÁö¸¦ ÀÔ·ÂÇÕ´Ï´Ù. ¸¸¾à '¾øÀ½' È¤Àº 'none' À» ÀÔ·ÂÇÏ¸é ¸Ş¼¼Áö´Â º¸ÀÌÁö ¾Ê½À´Ï´Ù.")}));
-        setting.setItem(37, new ItemTaskItem(menu, player, task, 11, 1,  slot, SteakGUI.convertMessage("&bµ· ºÎÁ· ¸Ş½ÃÁö ÀÔ·Â"), Material.PAPER, new String[]{SteakGUI.convertMessage("&bµ·ÀÌ ºÎÁ·ÇÏ¸é Ç¥½ÃÇÒ ¸Ş½ÃÁö¸¦ ÀÔ·ÂÇÕ´Ï´Ù. ¸¸¾à '¾øÀ½' È¤Àº 'none' À» ÀÔ·ÂÇÏ¸é ¸Ş¼¼Áö´Â º¸ÀÌÁö ¾Ê½À´Ï´Ù.")}));
-        setting.setItem(38, new ItemTaskItem(menu, player, task, 12, 1,  slot, SteakGUI.convertMessage("&bÀÎº¥Åä¸® ºÎÁ· ¸Ş½ÃÁö ÀÔ·Â"), Material.PAPER, new String[]{SteakGUI.convertMessage("&bÀÎº¥Åä¸®°¡ ºÎÁ·ÇÏ¸é Ç¥½ÃÇÒ ¸Ş½ÃÁö¸¦ ÀÔ·ÂÇÕ´Ï´Ù. ¸¸¾à '¾øÀ½' È¤Àº 'none' À» ÀÔ·ÂÇÏ¸é ¸Ş¼¼Áö´Â º¸ÀÌÁö ¾Ê½À´Ï´Ù.")}));
-        setting.setItem(45, new ItemTaskItem(menu, player, task, 13, 1,  slot, SteakGUI.convertMessage("&bÀÛ¾÷ Á¾·ù º¯°æ"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&bÀÛ¾÷ Á¾·ù¸¦ º¯°æ ÇÕ´Ï´Ù.")}));
-        setting.setItem(46, new ItemTaskItem(menu, player, task, 14, 1,  slot, SteakGUI.convertMessage("&bÀÛ¾÷ »èÁ¦"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&bÀÛ¾÷À» »èÁ¦ÇÕ´Ï´Ù.")}));
-        setting.setItem(47, new ItemTaskItem(menu, player, task, 99, 1, slot, SteakGUI.convertMessage("&cµ¹¾Æ°¡±â"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&cÀÌÀü ¸Å´º·Î µ¹¾Æ°©´Ï´Ù.")}));
+        setting.setItem(36, new ItemTaskItem(menu, player, task, 10, 1,  slot, SteakGUI.convertMessage("&bêµ¬ë§¤ ì„±ê³µ ë©”ì‹œì§€ ì…ë ¥"), Material.PAPER, new String[]{SteakGUI.convertMessage("&bêµ¬ë§¤ì— ì„±ê³µí•˜ë©´ í‘œì‹œí•  ë©”ì‹œì§€ë¥¼ ì…ë ¥í•©ë‹ˆë‹¤. ë§Œì•½ 'ì—†ìŒ' í˜¹ì€ 'none' ì„ ì…ë ¥í•˜ë©´ ë©”ì„¸ì§€ëŠ” ë³´ì´ì§€ ì•ŠìŠµë‹ˆë‹¤.")}));
+        setting.setItem(37, new ItemTaskItem(menu, player, task, 11, 1,  slot, SteakGUI.convertMessage("&bëˆ ë¶€ì¡± ë©”ì‹œì§€ ì…ë ¥"), Material.PAPER, new String[]{SteakGUI.convertMessage("&bëˆì´ ë¶€ì¡±í•˜ë©´ í‘œì‹œí•  ë©”ì‹œì§€ë¥¼ ì…ë ¥í•©ë‹ˆë‹¤. ë§Œì•½ 'ì—†ìŒ' í˜¹ì€ 'none' ì„ ì…ë ¥í•˜ë©´ ë©”ì„¸ì§€ëŠ” ë³´ì´ì§€ ì•ŠìŠµë‹ˆë‹¤.")}));
+        setting.setItem(38, new ItemTaskItem(menu, player, task, 12, 1,  slot, SteakGUI.convertMessage("&bì¸ë²¤í† ë¦¬ ë¶€ì¡± ë©”ì‹œì§€ ì…ë ¥"), Material.PAPER, new String[]{SteakGUI.convertMessage("&bì¸ë²¤í† ë¦¬ê°€ ë¶€ì¡±í•˜ë©´ í‘œì‹œí•  ë©”ì‹œì§€ë¥¼ ì…ë ¥í•©ë‹ˆë‹¤. ë§Œì•½ 'ì—†ìŒ' í˜¹ì€ 'none' ì„ ì…ë ¥í•˜ë©´ ë©”ì„¸ì§€ëŠ” ë³´ì´ì§€ ì•ŠìŠµë‹ˆë‹¤.")}));
+        setting.setItem(45, new ItemTaskItem(menu, player, task, 13, 1,  slot, SteakGUI.convertMessage("&bì‘ì—… ì¢…ë¥˜ ë³€ê²½"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&bì‘ì—… ì¢…ë¥˜ë¥¼ ë³€ê²½ í•©ë‹ˆë‹¤.")}));
+        setting.setItem(46, new ItemTaskItem(menu, player, task, 14, 1,  slot, SteakGUI.convertMessage("&bì‘ì—… ì‚­ì œ"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&bì‘ì—…ì„ ì‚­ì œí•©ë‹ˆë‹¤.")}));
+        //setting.setItem(47, new ItemTaskItem(menu, player, task, 15, 1,  slot, SteakGUI.convertMessage("&bí´ë¦­ ë°©ì‹ ë³€ê²½"), Material.BUCKET, new String[]{SteakGUI.convertMessage("&bí´ë¦­ ë°©ì‹ì„ ë³€ê²½í•©ë‹ˆë‹¤.")}));
+        setting.setItem(53, new ItemTaskItem(menu, player, task, 99, 1, slot, SteakGUI.convertMessage("&cëŒì•„ê°€ê¸°"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&cì´ì „ ë§¤ë‰´ë¡œ ëŒì•„ê°‘ë‹ˆë‹¤.")}));
         setting.open(player);
     }
 
@@ -84,50 +87,67 @@ public class BuyTaskEditor {
             ItemTask editTask = menu.getItemArray().get(slot).getTask(task);
             if(t == 0) {
                 editTask.getData()[0] = "permission";
-                new MessageHandler().sendMessage(event.getPlayer(), "&cÀÌÁ¦ ÆŞ¹Ì¼ÇÀ» ±¸¸ÅÇÏ°Ô µË´Ï´Ù.");
+                MenuFileHandler.saveMenu(menu);
+                new MessageHandler().sendMessage(event.getPlayer(), "&cì´ì œ í„ë¯¸ì…˜ì„ êµ¬ë§¤í•˜ê²Œ ë©ë‹ˆë‹¤.");
+                new BuyTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
             } else if(t == 1) {
                 editTask.getData()[0] = "item";
-                new MessageHandler().sendMessage(event.getPlayer(), "&cÀÌÁ¦ ¾ÆÀÌÅÛÀ» ±¸¸ÅÇÏ°Ô µË´Ï´Ù.");
+                MenuFileHandler.saveMenu(menu);
+                new MessageHandler().sendMessage(event.getPlayer(), "&cì´ì œ ì•„ì´í…œì„ êµ¬ë§¤í•˜ê²Œ ë©ë‹ˆë‹¤.");
+                new BuyTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
             } else if(t == 2) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&aÆŞ¹Ì¼ÇÀ» ÀÔ·ÂÇÏ¼¼¿ä.");
+                new MessageHandler().sendMessage(event.getPlayer(), "&aí„ë¯¸ì…˜ì„ ì…ë ¥í•˜ì„¸ìš”.");
                 player.setMetadata("permBuy", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
                 event.setWillClose(true);
             } else if(t == 3) {
                 player.setMetadata("itemBuy", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
-                new MessageHandler().sendMessage(player, "&b±¸¸ÅÇÒ ¾ÆÀÌÅÛÀ» Å¬¸¯ÇØ ÁÖ¼¼¿ä. ¸¸¾à ±¸¸ÅÇÒ ¾ÆÀÌÅÛÀÌ ¾øÀ¸½Ã´Ù¸é ºó ½½·ÔÀ» Å¬¸¯ÇÏ¼¼¿ä.");
+                new MessageHandler().sendMessage(player, "&bêµ¬ë§¤í•  ì•„ì´í…œì„ í´ë¦­í•´ ì£¼ì„¸ìš”. ë§Œì•½ êµ¬ë§¤í•  ì•„ì´í…œì´ ì—†ìœ¼ì‹œë‹¤ë©´ ë¹ˆ ìŠ¬ë¡¯ì„ í´ë¦­í•˜ì„¸ìš”.");
                 event.setWillClose(true);
             } else if(t == 4) {
                 editTask.getData()[2] = "permission";
-                new MessageHandler().sendMessage(event.getPlayer(), "&cÀÌÁ¦ ÆŞ¹Ì¼ÇÀ¸·Î ÁöºÒÇÏ°Ô µË´Ï´Ù.");
+                MenuFileHandler.saveMenu(menu);
+                new MessageHandler().sendMessage(event.getPlayer(), "&cì´ì œ í„ë¯¸ì…˜ìœ¼ë¡œ ì§€ë¶ˆí•˜ê²Œ ë©ë‹ˆë‹¤.");
+                new BuyTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
             } else if(t == 5) {
-                editTask.getData()[2] = "money";
-                new MessageHandler().sendMessage(event.getPlayer(), "&cÀÌÁ¦ µ·À¸·Î ÁöºÒÇÏ°Ô µË´Ï´Ù.");
-            } else if(t == 6) {
                 editTask.getData()[2] = "item";
-                new MessageHandler().sendMessage(event.getPlayer(), "&cÀÌÁ¦ ¾ÆÀÌÅÛÀ¸·Î ÁöºÒÇÏ°Ô µË´Ï´Ù.");
+                MenuFileHandler.saveMenu(menu);
+                new MessageHandler().sendMessage(event.getPlayer(), "&cì´ì œ ì•„ì´í…œìœ¼ë¡œ ì§€ë¶ˆí•˜ê²Œ ë©ë‹ˆë‹¤.");
+                new BuyTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
+            } else if(t == 6) {
+                editTask.getData()[2] = "money";
+                MenuFileHandler.saveMenu(menu);
+                new MessageHandler().sendMessage(event.getPlayer(), "&cì´ì œ ëˆìœ¼ë¡œ ì§€ë¶ˆí•˜ê²Œ ë©ë‹ˆë‹¤.");
+                new BuyTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
             } else if(t == 7) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&aÆŞ¹Ì¼ÇÀ» ÀÔ·ÂÇÏ¼¼¿ä.");
+                new MessageHandler().sendMessage(event.getPlayer(), "&aí„ë¯¸ì…˜ì„ ì…ë ¥í•˜ì„¸ìš”.");
                 player.setMetadata("permBuyCost", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
+                event.setWillClose(true);
             } else if(t == 8) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&aµ· ¾×¼ö¸¦ ÀÔ·ÂÇÏ¼¼¿ä.(¼Ò¼ıÁ¡ Æ÷ÇÔ) ¿¹: 100.00");
+                new MessageHandler().sendMessage(event.getPlayer(), "&aëˆ ì•¡ìˆ˜ë¥¼ ì…ë ¥í•˜ì„¸ìš”.(ì†Œìˆ«ì  í¬í•¨) ì˜ˆ: 100.00");
                 player.setMetadata("moneyBuyCost", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
+                event.setWillClose(true);
             } else if(t == 9) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&aÆŞ¹Ì¼ÇÀ» ÀÔ·ÂÇÏ¼¼¿ä.");
+                new MessageHandler().sendMessage(event.getPlayer(), "&aì•„ì´í…œì„ ì„ íƒí•˜ì„¸ìš”.");
                 player.setMetadata("itemBuyCost", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
+                event.setWillClose(true);
             } else if(t == 10) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&a±¸¸Å ¼º°ø ¸Ş½ÃÁö¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+                new MessageHandler().sendMessage(event.getPlayer(), "&aêµ¬ë§¤ ì„±ê³µ ë©”ì‹œì§€ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
                 player.setMetadata("buyComMsg", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
+                event.setWillClose(true);
             } else if(t == 11) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&aµ· ºÎÁ· ¸Ş½ÃÁö¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+                new MessageHandler().sendMessage(event.getPlayer(), "&aëˆ ë¶€ì¡± ë©”ì‹œì§€ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
                 player.setMetadata("noMoneyMsg", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
+                event.setWillClose(true);
             } else if(t == 12) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&aÀÎº¥Åä¸® °ø°£ ºÎÁ· ¸Ş½ÃÁö¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+                new MessageHandler().sendMessage(event.getPlayer(), "&aì¸ë²¤í† ë¦¬ ê³µê°„ ë¶€ì¡± ë©”ì‹œì§€ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
                 player.setMetadata("noSlotMsg", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
+                event.setWillClose(true);
             } else if(t == 13) {
                 new NewTaskSelector().show(menu, player, slot, task);
             } else if(t == 14) {
                 menu.getItemArray().get(slot).delTask(task);
-                new ItemTaskEditor().show(menu, player, slot);
+                MenuFileHandler.saveMenu(menu);
+                new ItemTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), player, slot);
             } else {
                 new ItemTaskEditor().show(menu, player, slot);
             }
@@ -137,7 +157,7 @@ public class BuyTaskEditor {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
         if(e.getPlayer().hasMetadata("permBuy")) {
-            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " ÆŞ¹Ì¼ÇÀÌ ¼º°øÀûÀ¸·Î µî·ÏµÇ¾ú½À´Ï´Ù!");
+            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " í„ë¯¸ì…˜ì´ ì„±ê³µì ìœ¼ë¡œ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("permBuy").get(0).value();
             Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[1] = e.getMessage();
@@ -146,7 +166,7 @@ public class BuyTaskEditor {
             e.setCancelled(true);
             e.getPlayer().removeMetadata("permBuy", Bukkit.getPluginManager().getPlugin("SteakGUI"));
         } else if(e.getPlayer().hasMetadata("permBuyCost")) {
-            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " ÆŞ¹Ì¼ÇÀÌ ¼º°øÀûÀ¸·Î µî·ÏµÇ¾ú½À´Ï´Ù!");
+            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " í„ë¯¸ì…˜ì´ ì„±ê³µì ìœ¼ë¡œ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("permBuyCost").get(0).value();
             Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[3] = e.getMessage();
@@ -155,7 +175,7 @@ public class BuyTaskEditor {
             e.setCancelled(true);
             e.getPlayer().removeMetadata("permBuyCost", Bukkit.getPluginManager().getPlugin("SteakGUI"));
         } else if(e.getPlayer().hasMetadata("moneyBuyCost")) {
-            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " ¿øÀÌ ¼º°øÀûÀ¸·Î µî·ÏµÇ¾ú½À´Ï´Ù!");
+            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " ì›ì´ ì„±ê³µì ìœ¼ë¡œ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("moneyBuyCost").get(0).value();
             Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[3] = e.getMessage();
@@ -164,7 +184,7 @@ public class BuyTaskEditor {
             e.setCancelled(true);
             e.getPlayer().removeMetadata("moneyBuyCost", Bukkit.getPluginManager().getPlugin("SteakGUI"));
         } else if(e.getPlayer().hasMetadata("buyComMsg")) {
-            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " ¸Ş¼¼Áö°¡ ¼º°øÀûÀ¸·Î µî·ÏµÇ¾ú½À´Ï´Ù!");
+            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " ë©”ì„¸ì§€ê°€ ì„±ê³µì ìœ¼ë¡œ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("buyComMsg").get(0).value();
             Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[4] = e.getMessage();
@@ -173,7 +193,7 @@ public class BuyTaskEditor {
             e.setCancelled(true);
             e.getPlayer().removeMetadata("buyComMsg", Bukkit.getPluginManager().getPlugin("SteakGUI"));
         } else if(e.getPlayer().hasMetadata("noMoneyMsg")) {
-            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " ¸Ş¼¼Áö°¡ ¼º°øÀûÀ¸·Î µî·ÏµÇ¾ú½À´Ï´Ù!");
+            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " ë©”ì„¸ì§€ê°€ ì„±ê³µì ìœ¼ë¡œ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("noMoneyMsg").get(0).value();
             Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[5] = e.getMessage();
@@ -182,7 +202,7 @@ public class BuyTaskEditor {
             e.setCancelled(true);
             e.getPlayer().removeMetadata("noMoneyMsg", Bukkit.getPluginManager().getPlugin("SteakGUI"));
         } else if(e.getPlayer().hasMetadata("noSlotMsg")) {
-            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " ¸Ş¼¼Áö°¡ ¼º°øÀûÀ¸·Î µî·ÏµÇ¾ú½À´Ï´Ù!");
+            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " ë©”ì„¸ì§€ê°€ ì„±ê³µì ìœ¼ë¡œ ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("noSlotMsg").get(0).value();
             Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[6] = e.getMessage();
@@ -197,32 +217,35 @@ public class BuyTaskEditor {
     public void onItemClick(PlayerInteractEvent e) {
         if(e.getPlayer().hasMetadata("itemBuy")) {
             if(e.getItem() != null) {
-                new MessageHandler().sendMessage(e.getPlayer(), "&b¾ÆÀÌÅÛÀ» ¼º°øÀûÀ¸·Î °¡Á®¿Ô½À´Ï´Ù!");
+                new MessageHandler().sendMessage(e.getPlayer(), "&bì•„ì´í…œì„ ì„±ê³µì ìœ¼ë¡œ ê°€ì ¸ì™”ìŠµë‹ˆë‹¤!");
                 Object[] metadata = (Object[]) e.getPlayer().getMetadata("itemBuy").get(0).value();
                 Menu menu = MenuFileHandler.loadMenu((String) ((Object[]) e.getPlayer().getMetadata("itemBuy").get(0).value())[0], true);
                 ItemStack stack = e.getItem();
-                menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[2] = ItemStackConverter.convert(stack);
+                Object[] data = menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData();
+                data[1] = ItemStackConverter.convert(stack).toJSONString();
+                MenuFileHandler.saveMenu(menu);
                 e.setCancelled(true);
                 new BuyTaskEditor().show(menu, e.getPlayer(), (int) ((Object[]) e.getPlayer().getMetadata("itemBuy").get(0).value())[1], (int) ((Object[]) e.getPlayer().getMetadata("itemBuy").get(0).value())[2]);
                 e.getPlayer().removeMetadata("itemBuy", Bukkit.getPluginManager().getPlugin("SteakGUI"));
             } else {
-                new MessageHandler().sendMessage(e.getPlayer(), "&c¾ÆÀÌÅÛ °¡Á®¿À±â°¡ Ãë¼ÒµÇ¾ú½À´Ï´Ù!");
+                new MessageHandler().sendMessage(e.getPlayer(), "&cì•„ì´í…œ ê°€ì ¸ì˜¤ê¸°ê°€ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤!");
                 e.setCancelled(true);
                 e.getPlayer().removeMetadata("itemBuy", Bukkit.getPluginManager().getPlugin("SteakGUI"));
             }
         } else if(e.getPlayer().hasMetadata("itemBuyCost")) {
             if(e.getItem() != null) {
-                new MessageHandler().sendMessage(e.getPlayer(), "&b¾ÆÀÌÅÛÀ» ¼º°øÀûÀ¸·Î °¡Á®¿Ô½À´Ï´Ù!");
+                new MessageHandler().sendMessage(e.getPlayer(), "&bì•„ì´í…œì„ ì„±ê³µì ìœ¼ë¡œ ê°€ì ¸ì™”ìŠµë‹ˆë‹¤!");
                 Object[] metadata = (Object[]) e.getPlayer().getMetadata("itemBuyCost").get(0).value();
                 Menu menu = MenuFileHandler.loadMenu((String) ((Object[]) e.getPlayer().getMetadata("itemBuyCost").get(0).value())[0], true);
                 ItemStack stack = e.getItem();
-                menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[3] = ItemStackConverter.convert(stack);
+                Object[] data = menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData();
+                data[3] = ItemStackConverter.convert(stack).toJSONString();
                 MenuFileHandler.saveMenu(menu);
                 e.setCancelled(true);
                 new BuyTaskEditor().show(menu, e.getPlayer(), (int) ((Object[]) e.getPlayer().getMetadata("itemBuyCost").get(0).value())[1], (int) ((Object[]) e.getPlayer().getMetadata("itemBuyCost").get(0).value())[2]);
                 e.getPlayer().removeMetadata("itemBuyCost", Bukkit.getPluginManager().getPlugin("SteakGUI"));
             } else {
-                new MessageHandler().sendMessage(e.getPlayer(), "&c¾ÆÀÌÅÛ °¡Á®¿À±â°¡ Ãë¼ÒµÇ¾ú½À´Ï´Ù!");
+                new MessageHandler().sendMessage(e.getPlayer(), "&cì•„ì´í…œ ê°€ì ¸ì˜¤ê¸°ê°€ ì·¨ì†Œë˜ì—ˆìŠµë‹ˆë‹¤!");
                 e.setCancelled(true);
                 e.getPlayer().removeMetadata("itemBuyCost", Bukkit.getPluginManager().getPlugin("SteakGUI"));
             }

@@ -14,6 +14,12 @@ public class VaultHooker {
     public static Economy economy = null;
     public static Chat chat = null;
 
+    public VaultHooker() {
+        setupChat();
+        setupEconomy();
+        setupPermissions();
+    }
+
     private boolean setupPermissions()
     {
         RegisteredServiceProvider<Permission> permissionProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);

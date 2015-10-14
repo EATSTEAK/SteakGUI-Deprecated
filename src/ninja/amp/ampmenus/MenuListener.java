@@ -35,6 +35,7 @@ import tk.itstake.util.BukkitUtil;
 import tk.itstake.util.MessageHandler;
 
 import java.lang.ClassNotFoundException;
+import java.util.Collection;
 
 /**
  * Passes inventory click events to their menus for handling.
@@ -110,13 +111,38 @@ public class MenuListener implements Listener {
      * Closes all {@link ninja.amp.ampmenus.menus.ItemMenu}s currently open.
      */
     public static void closeOpenMenus() {
-        for (Player player : BukkitUtil.allPlayers()) {
+        for (Player player : allPlayers()) {
             if (player.getOpenInventory() != null) {
                 Inventory inventory = player.getOpenInventory().getTopInventory();
                 if (inventory.getHolder() instanceof MenuHolder) {
                     player.closeInventory();
                 }
             }
+        }
+    }
+
+    public static Player[] allPlayers() {
+        Class<?>[] parameterTypes = {};
+        Object obj = null;
+        try {
+            obj = Bukkit.class.getMethod("getOnlinePlayers", parameterTypes).invoke(null ,(Object[])null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(obj instanceof Player[]) {
+            Player[] onlinePlayers = (Player[]) obj;
+            return onlinePlayers;
+        } else if(obj instanceof Collection) {
+            Collection<? extends Player> onlinePlayer = (Collection<? extends Player>) obj;
+            Player[] onlinePlayers = new Player[onlinePlayer.size()];
+            int i = 0;
+            for(Player player: onlinePlayer) {
+                onlinePlayers[i] = player;
+                i++;
+            }
+            return onlinePlayers;
+        } else {
+            return null;
         }
     }
 }

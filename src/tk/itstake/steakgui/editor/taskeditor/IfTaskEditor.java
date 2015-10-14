@@ -32,11 +32,12 @@ public class IfTaskEditor {
         }
         GUIItem slotItem = menu.getItemArray().get(slot);
         ItemTask edittask = slotItem.getTask(task);
-        ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4¼öÁ¤:&c" + title), ItemMenu.Size.TWO_LINE, (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
-        setting.setItem(0, new ItemTaskItem(menu, player, task, 0, 1,  slot, SteakGUI.convertMessage("&cIF¹®ÀÇ GUI ¼öÁ¤Àº ´ÙÀ½ ¹öÀü¿¡ Áö¿øµÉ ¿¹Á¤ÀÔ´Ï´Ù."), Material.PAPER, new String[]{SteakGUI.convertMessage("&bÀÌ ¾ÆÀÌÅÛÀ» Å¬¸¯ÇÏ¸é ¶ß´Â ¸µÅ©¸¦ ÀÌ¿ëÇÏ¿© ÀÚ¼¼È÷ ¾Ë¾Æº¸¼¼¿ä.")}));
-        setting.setItem(9, new ItemTaskItem(menu, player, task, 1, 1,  slot, SteakGUI.convertMessage("&bÀÛ¾÷ Á¾·ù º¯°æ"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&bÀÛ¾÷ Á¾·ù¸¦ º¯°æ ÇÕ´Ï´Ù.")}));
-        setting.setItem(10, new ItemTaskItem(menu, player, task, 2, 1,  slot, SteakGUI.convertMessage("&bÀÛ¾÷ »èÁ¦"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&bÀÛ¾÷À» »èÁ¦ÇÕ´Ï´Ù.")}));
-        setting.setItem(11, new ItemTaskItem(menu, player, task, 99, 1, slot, SteakGUI.convertMessage("&cµ¹¾Æ°¡±â"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&cÀÌÀü ¸Å´º·Î µ¹¾Æ°©´Ï´Ù.")}));
+        ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4ìˆ˜ì •:&c" + title), ItemMenu.Size.TWO_LINE, (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
+        setting.setItem(0, new ItemTaskItem(menu, player, task, 0, 1,  slot, SteakGUI.convertMessage("&cIFë¬¸ì˜ GUI ìˆ˜ì •ì€ ë‹¤ìŒ ë²„ì „ì— ì§€ì›ë  ì˜ˆì •ì…ë‹ˆë‹¤."), Material.PAPER, new String[]{SteakGUI.convertMessage("&bì´ ì•„ì´í…œì„ í´ë¦­í•˜ë©´ ëœ¨ëŠ” ë§í¬ë¥¼ ì´ìš©í•˜ì—¬ ìì„¸íˆ ì•Œì•„ë³´ì„¸ìš”.")}));
+        setting.setItem(9, new ItemTaskItem(menu, player, task, 1, 1,  slot, SteakGUI.convertMessage("&bì‘ì—… ì¢…ë¥˜ ë³€ê²½"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&bì‘ì—… ì¢…ë¥˜ë¥¼ ë³€ê²½ í•©ë‹ˆë‹¤.")}));
+        setting.setItem(10, new ItemTaskItem(menu, player, task, 2, 1,  slot, SteakGUI.convertMessage("&bì‘ì—… ì‚­ì œ"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&bì‘ì—…ì„ ì‚­ì œí•©ë‹ˆë‹¤.")}));
+        //setting.setItem(11, new ItemTaskItem(menu, player, task, 3, 1,  slot, SteakGUI.convertMessage("&bí´ë¦­ ë°©ì‹ ë³€ê²½"), Material.BUCKET, new String[]{SteakGUI.convertMessage("&bí´ë¦­ ë°©ì‹ì„ ë³€ê²½í•©ë‹ˆë‹¤.")}));
+        setting.setItem(17, new ItemTaskItem(menu, player, task, 99, 1, slot, SteakGUI.convertMessage("&cëŒì•„ê°€ê¸°"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&cì´ì „ ë§¤ë‰´ë¡œ ëŒì•„ê°‘ë‹ˆë‹¤.")}));
         setting.open(player);
     }
 
@@ -59,13 +60,14 @@ public class IfTaskEditor {
         public void onItemClick(ItemClickEvent event) {
             ItemTask editTask = menu.getItemArray().get(slot).getTask(task);
             if(t == 0) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&ahttp://wiki.itstake.tk/index.php?title=SteakGUI/ÀÛ¾÷");
+                new MessageHandler().sendMessage(event.getPlayer(), "&ahttp://wiki.itstake.tk/index.php?title=SteakGUI/ì‘ì—…");
                 event.setWillClose(true);
             } else if(t == 1) {
                 new NewTaskSelector().show(menu, player, slot, task);
             } else if(t == 2) {
                 menu.getItemArray().get(slot).delTask(task);
-                new ItemTaskEditor().show(menu, player, slot);
+                MenuFileHandler.saveMenu(menu);
+                new ItemTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), player, slot);
             } else {
                 new ItemTaskEditor().show(menu, player, slot);
             }

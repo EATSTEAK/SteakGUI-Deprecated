@@ -1,11 +1,17 @@
 package tk.itstake.steakgui;
 
+import net.milkbowl.vault.Vault;
 import ninja.amp.ampmenus.MenuListener;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.steakgui.command.MainCommand;
@@ -29,6 +35,7 @@ import java.util.ArrayList;
 public class SteakGUI extends JavaPlugin implements Listener {
 
     MessageHandler mh = new MessageHandler();
+    public static String consoleCmd = "";
     private ArrayList<String> pluginList = new ArrayList<>();
     public void addToPluginList(String name) {
         pluginList.add(name);
@@ -49,7 +56,8 @@ public class SteakGUI extends JavaPlugin implements Listener {
         lh.languageLoad();
         mh.sendConsoleMessage(lh.getLanguage("console.onenable", new String[]{this.getDescription().getVersion()}));
         MenuListener.getInstance().register(this);
-        new VaultHooker();
+        VaultHooker hooker = new VaultHooker();
+        getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new MenuSetting(), this);
         getServer().getPluginManager().registerEvents(new ItemEditor(), this);
         getServer().getPluginManager().registerEvents(new CommandTaskEditor(), this);
@@ -58,6 +66,9 @@ public class SteakGUI extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new SoundTaskEditor(), this);
         getServer().getPluginManager().registerEvents(new BroadcastTaskEditor(), this);
         getServer().getPluginManager().registerEvents(new ItemStackEditor(), this);
+        getServer().getPluginManager().registerEvents(new BuyTaskEditor(), this);
+        getServer().getPluginManager().registerEvents(new SellTaskEditor(), this);
+        getServer().getPluginManager().registerEvents(new GiveTaskEditor(), this);
         UpdateChecker update = new UpdateChecker();
         update.updateCheck();
         getServer().getPluginManager().registerEvents(update, this);
@@ -71,6 +82,28 @@ public class SteakGUI extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         return MainCommand.runCmd(sender, cmd, label, args);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        if(!event.isCancelled()) {
+            if (event.getPlayer().hasMetadata("SGCmd")) {
+                event.getPlayer().performCommand(event.getMessage());
+                System.out.println(event.getMessage());
+                event.getPlayer().removeMetadata("SGCmd", this);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onServerCommand(ServerCommandEvent event) {
+        if(!event.isCancelled()) {
+            if(!consoleCmd.equals("")) {
+                Bukkit.dispatchCommand(event.getSender(), consoleCmd);
+                System.out.println(event.getCommand());
+                consoleCmd = "";
+            }
+        }
     }
 
     public static String convertMessage(String message) {

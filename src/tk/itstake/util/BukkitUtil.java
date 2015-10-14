@@ -2,6 +2,8 @@ package tk.itstake.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 
@@ -33,5 +35,60 @@ public class BukkitUtil {
         } else {
             return null;
         }
+    }
+
+    public static Inventory removeItem(Inventory inv, ItemStack stack) {
+        int amount = stack.getAmount();
+        int index = 0;
+        ItemStack[] stacks = inv.getContents();
+        for(ItemStack target:inv.getContents()) {
+            if(target != null) {
+                if (amount > 0) {
+                    if (target.isSimilar(stack)) {
+                        if (target.getAmount() > amount) {
+                            target.setAmount(target.getAmount() - amount);
+                            stacks[index] = target;
+                            amount = 0;
+                        } else if (target.getAmount() == amount) {
+                            target = null;
+                            stacks[index] = target;
+                            amount = 0;
+                        } else {
+                            amount = amount - target.getAmount();
+                            target = null;
+                            stacks[index] = target;
+                        }
+                    }
+                } else {
+                    break;
+                }
+            }
+            index++;
+        }
+        inv.setContents(stacks);
+        return inv;
+    }
+
+
+    public static boolean hasItem(Inventory inv, ItemStack stack) {
+        int amount = stack.getAmount();
+        for(ItemStack target:inv.getContents()) {
+            if(target != null) {
+                if (amount > 0) {
+                    if (target.isSimilar(stack)) {
+                        if (target.getAmount() > amount) {
+                            return true;
+                        } else if (target.getAmount() == amount) {
+                            return true;
+                        } else {
+                            amount = amount - target.getAmount();
+                        }
+                    }
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 }

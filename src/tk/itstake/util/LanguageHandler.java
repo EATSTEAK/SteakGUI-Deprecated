@@ -142,7 +142,7 @@ public class LanguageHandler {
         defaultlang.put("command.help.list", "&c[&2SteakGUI&c] &6/%0% list &e- 메뉴의 목록을 봅니다.");
         defaultlang.put("command.help.reload", "&c[&2SteakGUI&c] &6/%0% reload &e- 메뉴 혹은 설정 파일을 리로드합니다.");
         defaultlang.put("command.list.intro", "&c[&2SteakGUI&c] &b메뉴 목록---------");
-        defaultlang.put("command.list.format", "&c[&2SteakGUI&c] &6%0%");
+        defaultlang.put("command.list.format", "&c[&2SteakGUI&c]&6 %0%");
         defaultlang.put("command.list.nomenu", "&c[&2SteakGUI&c] &c메뉴가 없습니다!");
         defaultlang.put("command.reloaded", "&c[&2SteakGUI&c] &6소고기구이가 리로드 되었습니다.");
         defaultlang.put("nopermission", "&c[&2SteakGUI&c] &c권한이 없습니다!");

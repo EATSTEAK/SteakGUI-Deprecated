@@ -59,7 +59,7 @@ public class ItemStackConverter {
             if(metajson.containsKey("enchantments")) {
                 JSONObject enchantment = (JSONObject)metajson.get("enchantments");
                 for(Object enchant:enchantment.keySet()) {
-                    Integer level = (Integer) enchantment.get(enchant);
+                    Integer level = (int)(long)enchantment.get(enchant);
                     meta.addEnchant(Enchantment.getByName((String)enchant), level, true);
                 }
             }

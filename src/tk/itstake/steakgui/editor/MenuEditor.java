@@ -38,7 +38,7 @@ public class MenuEditor {
 
             }
             if(key < ItemMenu.Size.fit(menu.getSize()).getSize()) {
-                menuEditor.setItem(key, new MenuEditorItem(menu, p, key, SteakGUI.convertMessage(item.getItemMeta().getDisplayName()), item, lorearray));
+                menuEditor.setItem(key, new MenuEditorItem(menu, p, key, item.getItemMeta().getDisplayName(), item, lorearray));
             }
         }
         menuEditor.open(p);

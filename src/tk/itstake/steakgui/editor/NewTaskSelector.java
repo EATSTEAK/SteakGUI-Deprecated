@@ -70,7 +70,7 @@ public class NewTaskSelector {
                 new BuyTaskEditor().show(menu, player, slot, task);
             }
             else if(tasktype.equals(ItemTask.SELL)) {
-                ItemTask editTask = new ItemTask(tasktype, new Object[]{"","","","","","",""});
+                ItemTask editTask = new ItemTask(tasktype, new Object[]{"","","","","",""});
                 menu.getItemArray().get(slot).setTask(task, editTask);
                 new SellTaskEditor().show(menu, player, slot, task);
             }

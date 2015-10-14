@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -55,36 +56,36 @@ public class ItemTask {
     }
 
     public void runTask(ItemClickEvent event, Menu MENU) throws Exception {
+        JSONParser parser = new JSONParser();
         if(CLICKTYPE == null || CLICKTYPE.equals(event.getClick())) {
             if (TYPE.equals(COMMAND) && DATA.length == 2) {
                 String permission = (String)DATA[0];
                 String command = (String)DATA[1];
+                event.getPlayer().setMetadata("SGCmd", new FixedMetadataValue(Bukkit.getServer().getPluginManager().getPlugin("SteakGUI"), command));
                 if (permission.equals("op") && !event.getPlayer().isOp()) {
                     event.getPlayer().setOp(true);
                     Bukkit.getServer().getPluginManager().callEvent(new PlayerCommandPreprocessEvent(event.getPlayer(), command));
-                    event.getPlayer().performCommand(command.substring(1));
                     event.getPlayer().setOp(false);
                 } else if (permission.equals("console")) {
-                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command.substring(1));
                     Bukkit.getServer().getPluginManager().callEvent(new ServerCommandEvent(Bukkit.getConsoleSender(), command));
                 } else {
-                    event.getPlayer().performCommand(command.substring(1));
+                    SteakGUI.consoleCmd = command;
                     Bukkit.getServer().getPluginManager().callEvent(new PlayerCommandPreprocessEvent(event.getPlayer(), command));
                 }
             } else if (TYPE.equals(OPEN_MENU) && DATA.length == 1) {
                 String menuname = (String)DATA[0];
                 Menu openmenu = MenuFileHandler.loadMenu(menuname);
                 openmenu.open(event.getPlayer());
-            } else if (TYPE.equals(BUY) && DATA.length == 6) {
+            } else if (TYPE.equals(BUY) && DATA.length == 7) {
                 String type = (String)DATA[0];
-                Object json = DATA[1];
+                String json = (String)DATA[1];
                 String costtype = (String)DATA[2];
-                Object cost = DATA[3];
+                String cost = (String)DATA[3];
                 String buycompletemsg = (String)DATA[4];
                 String nomoneymsg = (String)DATA[5];
                 String noslotmsg = (String)DATA[6];
                 if (type.equals("item")) {
-                    JSONObject jo = (JSONObject) json;
+                    JSONObject jo = (JSONObject)parser.parse(json);
                     ItemStack item = ItemStackConverter.convert(jo);
                     if(costtype.equals("money")) {
                         if (VaultHooker.economy.getBalance(event.getPlayer()) >= Double.parseDouble((String)cost)) {
@@ -99,12 +100,12 @@ public class ItemTask {
                             mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(nomoneymsg, MENU, event.getPlayer()));
                         }
                     } else if(costtype.equals("item")) {
-                        JSONObject jo2 = (JSONObject) cost;
+                        JSONObject jo2 = (JSONObject)parser.parse(cost);
                         ItemStack item2 = ItemStackConverter.convert(jo2);
-                        if (event.getPlayer().getInventory().contains(item2)) {
+                        if (BukkitUtil.hasItem(event.getPlayer().getInventory(), item2)) {
                             if (event.getPlayer().getInventory().firstEmpty() != -1) {
+                                event.getPlayer().getInventory().setContents(BukkitUtil.removeItem(event.getPlayer().getInventory(), item2).getContents());
                                 event.getPlayer().getInventory().addItem(item);
-                                event.getPlayer().getInventory().remove(item2);
                                 mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
                             } else {
                                 mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(noslotmsg, MENU, event.getPlayer()));
@@ -132,11 +133,11 @@ public class ItemTask {
                             } else {
                                 mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(nomoneymsg, MENU, event.getPlayer()));
                             }
-                        } else if (costtype.equals("money")) {
-                            JSONObject jo2 = (JSONObject) cost;
+                        } else if (costtype.equals("item")) {
+                            JSONObject jo2 = (JSONObject)parser.parse(cost);
                             ItemStack item2 = ItemStackConverter.convert(jo2);
-                            if (event.getPlayer().getInventory().contains(item2)) {
-                                event.getPlayer().getInventory().remove(item2);
+                            if (BukkitUtil.hasItem(event.getPlayer().getInventory(), item2)) {
+                                event.getPlayer().getInventory().setContents(BukkitUtil.removeItem(event.getPlayer().getInventory(), item2).getContents());
                                 VaultHooker.permission.playerAdd(event.getPlayer(), (String)json);
                                 mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
                             }
@@ -151,24 +152,24 @@ public class ItemTask {
                         mh.sendMessage(event.getPlayer(), lh.getLanguage("existpermission"));
                     }
                 }
-            } else if (TYPE.equals(SELL) && DATA.length == 5) {
+            } else if (TYPE.equals(SELL) && DATA.length == 6) {
                 String type = (String)DATA[0];
-                Object sellitem = (String)DATA[1];
+                String sellitem = (String)DATA[1];
                 String costtype = (String)DATA[2];
-                Object cost = (String)DATA[3];
+                String cost = (String)DATA[3];
                 String sellcompletemsg = (String)DATA[4];
                 String sellfailedmsg = (String)DATA[5];
                 if (type.equals("item")) {
-                    JSONObject jo = (JSONObject) sellitem;
+                    JSONObject jo = (JSONObject) parser.parse(sellitem);
                     ItemStack item = ItemStackConverter.convert(jo);
-                    if(event.getPlayer().getInventory().contains(item)) {
+                    if(BukkitUtil.hasItem(event.getPlayer().getInventory(), item)) {
                         mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
-                        event.getPlayer().getInventory().removeItem(item);
+                        event.getPlayer().getInventory().setContents(BukkitUtil.removeItem(event.getPlayer().getInventory(), item).getContents());
                         if(costtype.equals("money")) {
                             VaultHooker.economy.depositPlayer(event.getPlayer(), Double.parseDouble((String)cost));
                         } else if(costtype.equals("item")) {
                             JSONParser jp2 = new JSONParser();
-                            JSONObject jo2 = (JSONObject) cost;
+                            JSONObject jo2 = (JSONObject) parser.parse(cost);
                             ItemStack item2 = ItemStackConverter.convert(jo2);
                             event.getPlayer().getInventory().addItem(item2);
                         } else if(costtype.equals("permission")) {
@@ -184,7 +185,7 @@ public class ItemTask {
                             mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
                             VaultHooker.permission.playerRemove(event.getPlayer(), (String)sellitem);
                         } else if(costtype.equals("item")) {
-                            JSONObject jo = (JSONObject)cost;
+                            JSONObject jo = (JSONObject) parser.parse(cost);
                             ItemStack item = ItemStackConverter.convert(jo);
                             event.getPlayer().getInventory().addItem(item);
                             mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
@@ -207,14 +208,14 @@ public class ItemTask {
                 new MessageHandler().sendMessage(event.getPlayer(), SteakGUI.convertMessage(message, MENU, event.getPlayer()));
             } else if (TYPE.equals(GIVE) && DATA.length == 2) {
                 String type = (String)DATA[0];
-                Object json = DATA[1];
+                String json = (String)DATA[1];
                 if (type.equals("item")) {
-                    JSONObject jo = (JSONObject) json;
+                    JSONObject jo = (JSONObject) parser.parse(json);
                     ItemStack additem = ItemStackConverter.convert(jo);
                     if(additem.getItemMeta().getDisplayName() != null) {
                         additem.getItemMeta().setDisplayName(SteakGUI.convertMessage(additem.getItemMeta().getDisplayName(), MENU, event.getPlayer()));
                     }
-                    if(additem.getItemMeta().getLore().size() > 0) {
+                    if(additem.getItemMeta().getLore() != null && additem.getItemMeta().getLore().size() > 0) {
                         List<String> lorel = additem.getItemMeta().getLore();
                         int i = 0;
                         for(String lore:lorel) {
@@ -222,7 +223,7 @@ public class ItemTask {
                         }
                         additem.getItemMeta().setLore(lorel);
                     }
-                    event.getPlayer().getInventory().addItem();
+                    event.getPlayer().getInventory().addItem(additem);
                 } else if (type.equals("permission")) {
                     VaultHooker.permission.playerAdd(event.getPlayer(), (String)json);
                 } else if (type.equals("money")) {
