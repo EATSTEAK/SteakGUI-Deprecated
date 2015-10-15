@@ -34,7 +34,7 @@ public class ItemTaskConverter {
             dataarray[i] = (String) d;
             i++;
         }
-        if(clicktype.equals("ALL")) {
+        if(clicktype[0].equals("ALL")) {
             return new ItemTask(type, dataarray);
         } else {
             ArrayList<ClickType> clickTypes = new ArrayList<>();

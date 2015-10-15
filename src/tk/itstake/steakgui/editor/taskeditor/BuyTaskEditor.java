@@ -62,7 +62,7 @@ public class BuyTaskEditor implements Listener {
         setting.setItem(38, new ItemTaskItem(menu, player, task, 12, 1,  slot, SteakGUI.convertMessage("&b인벤토리 부족 메시지 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b인벤토리가 부족하면 표시할 메시지를 입력합니다. 만약 '없음' 혹은 'none' 을 입력하면 메세지는 보이지 않습니다.")}));
         setting.setItem(45, new ItemTaskItem(menu, player, task, 13, 1,  slot, SteakGUI.convertMessage("&b작업 종류 변경"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&b작업 종류를 변경 합니다.")}));
         setting.setItem(46, new ItemTaskItem(menu, player, task, 14, 1,  slot, SteakGUI.convertMessage("&b작업 삭제"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&b작업을 삭제합니다.")}));
-        //setting.setItem(47, new ItemTaskItem(menu, player, task, 15, 1,  slot, SteakGUI.convertMessage("&b클릭 방식 변경"), Material.BUCKET, new String[]{SteakGUI.convertMessage("&b클릭 방식을 변경합니다.")}));
+        setting.setItem(47, new ItemTaskItem(menu, player, task, 15, 1,  slot, SteakGUI.convertMessage("&b클릭 방식 변경"), Material.BUCKET, new String[]{SteakGUI.convertMessage("&b클릭 방식을 변경합니다.")}));
         setting.setItem(53, new ItemTaskItem(menu, player, task, 99, 1, slot, SteakGUI.convertMessage("&c돌아가기"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&c이전 매뉴로 돌아갑니다.")}));
         setting.open(player);
     }
@@ -148,6 +148,8 @@ public class BuyTaskEditor implements Listener {
                 menu.getItemArray().get(slot).delTask(task);
                 MenuFileHandler.saveMenu(menu);
                 new ItemTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), player, slot);
+            } else if(t == 15) {
+                new TaskClickTypeEditor().show(menu, player, slot, task);
             } else {
                 new ItemTaskEditor().show(menu, player, slot);
             }

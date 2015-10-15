@@ -62,19 +62,19 @@ public class ItemTask {
             if (TYPE.equals(COMMAND) && DATA.length == 2) {
                 String permission = (String)DATA[0];
                 String command = (String)DATA[1];
-                event.getPlayer().setMetadata("SGCmd", new FixedMetadataValue(Bukkit.getServer().getPluginManager().getPlugin("SteakGUI"), command));
+                event.getPlayer().setMetadata("SGCmd", new FixedMetadataValue(Bukkit.getServer().getPluginManager().getPlugin("SteakGUI"), SteakGUI.convertMessage(command, MENU, event.getPlayer())));
                 if (permission.equals("op") && !event.getPlayer().isOp()) {
                     event.getPlayer().setOp(true);
-                    Bukkit.getServer().getPluginManager().callEvent(new PlayerCommandPreprocessEvent(event.getPlayer(), command));
+                    Bukkit.getServer().getPluginManager().callEvent(new PlayerCommandPreprocessEvent(event.getPlayer(), SteakGUI.convertMessage(command, MENU, event.getPlayer())));
                     event.getPlayer().setOp(false);
                 } else if (permission.equals("console")) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.substring(1));
                 } else {
-                    Bukkit.getServer().getPluginManager().callEvent(new PlayerCommandPreprocessEvent(event.getPlayer(), command));
+                    Bukkit.getServer().getPluginManager().callEvent(new PlayerCommandPreprocessEvent(event.getPlayer(), SteakGUI.convertMessage(command, MENU, event.getPlayer())));
                 }
             } else if (TYPE.equals(OPEN_MENU) && DATA.length == 1) {
                 String menuname = (String)DATA[0];
-                Menu openmenu = MenuFileHandler.loadMenu(menuname);
+                Menu openmenu = MenuFileHandler.loadMenu(SteakGUI.convertMessage(menuname, MENU, event.getPlayer()));
                 openmenu.open(event.getPlayer());
             } else if (TYPE.equals(BUY) && DATA.length == 7) {
                 String type = (String)DATA[0];
@@ -307,11 +307,15 @@ public class ItemTask {
         return DATA;
     }
 
-    public String getClickType() {
+    public ArrayList<ClickType> getClickType() {
         if(CLICKTYPE != null) {
-            return CLICKTYPE.toString();
+            return CLICKTYPE;
         } else {
-            return "ALL";
+            return null;
         }
+    }
+
+    public void setClickType(ArrayList<ClickType> type) {
+        CLICKTYPE = type;
     }
 }

@@ -39,7 +39,7 @@ public class SoundTaskEditor implements Listener {
         setting.setItem(2, new ItemTaskItem(menu, player, task, 2, 1,  slot, SteakGUI.convertMessage("&b소리 높낮이 입력"), Material.RECORD_3, new String[]{SteakGUI.convertMessage("&b소리의 높낮이를 입력합니다.")}));
         setting.setItem(9, new ItemTaskItem(menu, player, task, 3, 1,  slot, SteakGUI.convertMessage("&b작업 종류 변경"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&b작업 종류를 변경 합니다.")}));
         setting.setItem(10, new ItemTaskItem(menu, player, task, 4, 1,  slot, SteakGUI.convertMessage("&b작업 삭제"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&b작업을 삭제합니다.")}));
-        //setting.setItem(11, new ItemTaskItem(menu, player, task, 5, 1,  slot, SteakGUI.convertMessage("&b클릭 방식 변경"), Material.BUCKET, new String[]{SteakGUI.convertMessage("&b클릭 방식을 변경합니다.")}));
+        setting.setItem(11, new ItemTaskItem(menu, player, task, 5, 1,  slot, SteakGUI.convertMessage("&b클릭 방식 변경"), Material.BUCKET, new String[]{SteakGUI.convertMessage("&b클릭 방식을 변경합니다.")}));
         setting.setItem(17, new ItemTaskItem(menu, player, task, 99, 1, slot, SteakGUI.convertMessage("&c돌아가기"), Material.FEATHER, new String[]{SteakGUI.convertMessage("&c이전 매뉴로 돌아갑니다.")}));
         setting.open(player);
     }
@@ -80,6 +80,8 @@ public class SoundTaskEditor implements Listener {
                 menu.getItemArray().get(slot).delTask(task);
                 MenuFileHandler.saveMenu(menu);
                 new ItemTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), player, slot);
+            } else if(t == 5) {
+                new TaskClickTypeEditor().show(menu, player, slot, task);
             } else {
                 new ItemTaskEditor().show(menu, player, slot);
             }
@@ -112,7 +114,6 @@ public class SoundTaskEditor implements Listener {
             Menu menu = MenuFileHandler.loadMenu((String) metadata[0]);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[2] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
-            new SoundTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
             new SoundTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
             e.setCancelled(true);
             e.getPlayer().removeMetadata("pitchSet", Bukkit.getPluginManager().getPlugin("SteakGUI"));
