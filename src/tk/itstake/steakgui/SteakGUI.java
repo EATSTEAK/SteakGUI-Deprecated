@@ -35,7 +35,6 @@ import java.util.ArrayList;
 public class SteakGUI extends JavaPlugin implements Listener {
 
     MessageHandler mh = new MessageHandler();
-    public static String consoleCmd = "";
     private ArrayList<String> pluginList = new ArrayList<>();
     public void addToPluginList(String name) {
         pluginList.add(name);
@@ -89,19 +88,7 @@ public class SteakGUI extends JavaPlugin implements Listener {
         if(!event.isCancelled()) {
             if (event.getPlayer().hasMetadata("SGCmd")) {
                 event.getPlayer().performCommand(event.getMessage());
-                System.out.println(event.getMessage());
                 event.getPlayer().removeMetadata("SGCmd", this);
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onServerCommand(ServerCommandEvent event) {
-        if(!event.isCancelled()) {
-            if(!consoleCmd.equals("")) {
-                Bukkit.dispatchCommand(event.getSender(), consoleCmd);
-                System.out.println(event.getCommand());
-                consoleCmd = "";
             }
         }
     }

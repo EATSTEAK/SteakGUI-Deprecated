@@ -67,9 +67,8 @@ public class ItemTask {
                     Bukkit.getServer().getPluginManager().callEvent(new PlayerCommandPreprocessEvent(event.getPlayer(), command));
                     event.getPlayer().setOp(false);
                 } else if (permission.equals("console")) {
-                    Bukkit.getServer().getPluginManager().callEvent(new ServerCommandEvent(Bukkit.getConsoleSender(), command));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.substring(1));
                 } else {
-                    SteakGUI.consoleCmd = command;
                     Bukkit.getServer().getPluginManager().callEvent(new PlayerCommandPreprocessEvent(event.getPlayer(), command));
                 }
             } else if (TYPE.equals(OPEN_MENU) && DATA.length == 1) {
