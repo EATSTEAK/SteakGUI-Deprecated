@@ -14,6 +14,7 @@ import tk.itstake.steakgui.SteakGUI;
 import tk.itstake.steakgui.editor.taskeditor.*;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.itemtask.ItemTask;
+import tk.itstake.steakgui.util.MenuFileHandler;
 
 /**
  * Created by ITSTAKE on 2015-08-12.
@@ -103,6 +104,7 @@ public class NewTaskSelector {
                 menu.getItemArray().get(slot).setTask(task, editTask);
                 new IfTaskEditor().show(menu, player, slot, task);
             }
+            MenuFileHandler.saveMenu(menu);
         }
     }
 }

@@ -36,7 +36,7 @@ public class CommandTaskEditor implements Listener {
         ItemTask edittask = slotItem.getTask(task);
         ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4수정:&c" + title), ItemMenu.Size.THREE_LINE, (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
         setting.setItem(0, new ItemTaskItem(menu, player, task, 0, 1,  slot, SteakGUI.convertMessage("&b플레이어 권한"), Material.BUCKET, new String[]{SteakGUI.convertMessage("&b플레이어 권한으로 명령어를 실행합니다.")}));
-        setting.setItem(1, new ItemTaskItem(menu, player, task, 1, 1,  slot, SteakGUI.convertMessage("&b요피 권한"), Material.WATER_BUCKET, new String[]{SteakGUI.convertMessage("&b요피 권한으로 명령어를 실행합니다.")}));
+        setting.setItem(1, new ItemTaskItem(menu, player, task, 1, 1,  slot, SteakGUI.convertMessage("&b오피 권한"), Material.WATER_BUCKET, new String[]{SteakGUI.convertMessage("&b오피 권한으로 명령어를 실행합니다.")}));
         setting.setItem(2, new ItemTaskItem(menu, player, task, 2, 1,  slot, SteakGUI.convertMessage("&b콘솔 권한"), Material.LAVA_BUCKET, new String[]{SteakGUI.convertMessage("&b콘솔 권한으로 명령어를 실행합니다.")}));
         setting.setItem(9, new ItemTaskItem(menu, player, task, 3, 1,  slot, SteakGUI.convertMessage("&b명령어 입력"), Material.COMMAND, new String[]{SteakGUI.convertMessage("&b실행할 명령어를 입력합니다.")}));
         setting.setItem(18, new ItemTaskItem(menu, player, task, 4, 1,  slot, SteakGUI.convertMessage("&b작업 종류 변경"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&b작업 종류를 변경합니다.")}));

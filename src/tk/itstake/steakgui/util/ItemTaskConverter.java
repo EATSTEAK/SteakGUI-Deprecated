@@ -19,7 +19,20 @@ public class ItemTaskConverter {
             datajson.add(data);
         }
         taskjson.put("type", task.getType());
-        taskjson.put("clicktype", task.getClickType());
+        ArrayList<ClickType> clickTypes = task.getClickType();
+        String clickType = "";
+        if(clickTypes == null) {
+            clickType = "ALL";
+        } else {
+            for(ClickType ct:clickTypes) {
+                if(clickType.equals("")) {
+                    clickType = ct.name();
+                } else {
+                    clickType = "," + ct.name();
+                }
+            }
+        }
+        taskjson.put("clicktype", clickType);
         taskjson.put("data", datajson);
         return taskjson;
     }
