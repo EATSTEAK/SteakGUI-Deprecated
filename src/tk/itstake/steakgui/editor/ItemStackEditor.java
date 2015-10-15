@@ -42,11 +42,9 @@ public class ItemStackEditor implements Listener {
         ItemStack stack = slotItem.getItemStack();
         int menuSize = 9;
         List<String> lores = null;
-        if(stack.getItemMeta() == null) {
+        if(stack.getItemMeta().getLore() != null) {
             lores = stack.getItemMeta().getLore();
-            if(lores != null) {
-                menuSize = lores.size() + 9;
-            }
+            menuSize = lores.size() + 9;
         }
         ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4수정:&c" + title), ItemMenu.Size.fit(menuSize), (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
         int i = 1;
@@ -55,6 +53,7 @@ public class ItemStackEditor implements Listener {
         } else {
             setting.setItem(0, new ItemStackEditItem(menu, player, -1, s, SteakGUI.convertMessage("&b이름 수정"), Material.PISTON_STICKY_BASE, new String[]{SteakGUI.convertMessage("&c아이템의 이름을 수정합니다"), SteakGUI.convertMessage("&b현재 이름:&f 없음")}));
         }
+        System.out.println(stack.getItemMeta().getLore());
         if(lores != null) {
             for (String lore : lores) {
                 setting.setItem(i, new ItemStackEditItem(menu, player, i, s, SteakGUI.convertMessage("&b" + i + "번째 로어"), Material.PISTON_BASE, new String[]{SteakGUI.convertMessage(lore)}));

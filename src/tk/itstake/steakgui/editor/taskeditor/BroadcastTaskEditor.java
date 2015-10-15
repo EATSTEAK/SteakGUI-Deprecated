@@ -72,7 +72,7 @@ public class BroadcastTaskEditor implements Listener {
                 new ItemTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), player, slot);
             } else if(t == 3) {
                 menu.getItemArray().get(slot).delTask(task);
-                new TaskClickTypeEditor().show(menu, player, slot);
+                new TaskClickTypeEditor().show(menu, player, slot, task);
             } else {
                 new ItemTaskEditor().show(menu, player, slot);
             }

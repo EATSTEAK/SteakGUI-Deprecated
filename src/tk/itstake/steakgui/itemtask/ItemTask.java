@@ -21,6 +21,7 @@ import tk.itstake.util.BukkitUtil;
 import tk.itstake.util.MessageHandler;
 import tk.itstake.util.LanguageHandler;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,10 +41,10 @@ public class ItemTask {
     public static String IF = "if";
     String TYPE = "";
     Object[] DATA = null;
-    ClickType CLICKTYPE = null;
+    ArrayList<ClickType> CLICKTYPE = null;
     private MessageHandler mh = new MessageHandler();
     private LanguageHandler lh = new LanguageHandler();
-    public ItemTask(String type, Object[] data, ClickType clickType) {
+    public ItemTask(String type, Object[] data, ArrayList<ClickType> clickType) {
         TYPE = type;
         DATA = data;
         CLICKTYPE = clickType;
@@ -57,7 +58,7 @@ public class ItemTask {
 
     public void runTask(ItemClickEvent event, Menu MENU) throws Exception {
         JSONParser parser = new JSONParser();
-        if(CLICKTYPE == null || CLICKTYPE.equals(event.getClick())) {
+        if(CLICKTYPE == null || CLICKTYPE.contains(event.getClick())) {
             if (TYPE.equals(COMMAND) && DATA.length == 2) {
                 String permission = (String)DATA[0];
                 String command = (String)DATA[1];
