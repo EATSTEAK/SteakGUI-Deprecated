@@ -60,7 +60,7 @@ public class TaskClickTypeEditor {
         ItemStack nestack = new ItemStack(Material.PAPER, 1);
         ItemStack estack = new ItemStack(Material.PAPER, 1);
         ItemStack bstack = new ItemStack(Material.FEATHER, 1);
-        estack.addEnchantment(Enchantment.DURABILITY, 1);
+        estack.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
         ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4수정:&c" + title), ItemMenu.Size.FOUR_LINE, (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
         if(clickTypes == null) {
             setting.setItem(11, new ClickTypeEditItem(menu, player, task, slot, 1, estack, SteakGUI.convertMessage("&b모두"), new String[]{SteakGUI.convertMessage("&b모든 클릭 방식을 인식합니다."), SteakGUI.convertMessage("&c현재 인식하는 클릭 방식: &b모두")}));
