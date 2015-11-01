@@ -1,8 +1,6 @@
 package tk.itstake.steakgui;
 
-import net.milkbowl.vault.Vault;
 import ninja.amp.ampmenus.MenuListener;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,14 +9,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.steakgui.command.MainCommand;
-import tk.itstake.steakgui.editor.ItemEditor;
-import tk.itstake.steakgui.editor.ItemStackEditor;
-import tk.itstake.steakgui.editor.MenuSetting;
-import tk.itstake.steakgui.editor.taskeditor.*;
+import tk.itstake.steakgui.menueditor.ItemEditor;
+import tk.itstake.steakgui.menueditor.ItemStackEditor;
+import tk.itstake.steakgui.menueditor.MenuSetting;
+import tk.itstake.steakgui.menueditor.taskeditor.*;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.util.UpdateChecker;
 import tk.itstake.steakgui.util.VaultHooker;
@@ -87,7 +84,7 @@ public class SteakGUI extends JavaPlugin implements Listener {
     public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
         if(!event.isCancelled()) {
             if (event.getPlayer().hasMetadata("SGCmd")) {
-                event.getPlayer().performCommand(event.getMessage());
+                event.getPlayer().performCommand(event.getMessage().substring(1));
                 event.getPlayer().removeMetadata("SGCmd", this);
             }
         }

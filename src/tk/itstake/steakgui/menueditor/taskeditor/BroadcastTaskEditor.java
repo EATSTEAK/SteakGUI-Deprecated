@@ -1,4 +1,4 @@
-package tk.itstake.steakgui.editor.taskeditor;
+package tk.itstake.steakgui.menueditor.taskeditor;
 
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import ninja.amp.ampmenus.items.MenuItem;
@@ -10,13 +10,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.steakgui.SteakGUI;
-import tk.itstake.steakgui.editor.ItemTaskEditor;
-import tk.itstake.steakgui.editor.NewTaskSelector;
+import tk.itstake.steakgui.menueditor.ItemTaskEditor;
+import tk.itstake.steakgui.menueditor.NewTaskSelector;
 import tk.itstake.steakgui.gui.GUIItem;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.itemtask.ItemTask;
@@ -26,7 +25,7 @@ import tk.itstake.util.MessageHandler;
 /**
  * Created by ITSTAKE on 2015-08-12.
  */
-public class MessageTaskEditor implements Listener {
+public class BroadcastTaskEditor implements Listener {
     public void show(Menu menu, Player player, int slot, int task) {
         String title = menu.getTitle();
         if(title.length() > 10) {
@@ -72,6 +71,7 @@ public class MessageTaskEditor implements Listener {
                 MenuFileHandler.saveMenu(menu);
                 new ItemTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), player, slot);
             } else if(t == 3) {
+                menu.getItemArray().get(slot).delTask(task);
                 new TaskClickTypeEditor().show(menu, player, slot, task);
             } else {
                 new ItemTaskEditor().show(menu, player, slot);
@@ -84,10 +84,10 @@ public class MessageTaskEditor implements Listener {
         if(e.getPlayer().hasMetadata("messageSet")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 메시지가 성공적으로 등록되었습니다!");
             Object[] metadata = (Object[]) e.getPlayer().getMetadata("messageSet").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String)metadata[0]);
+            Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[0] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
-            new MessageTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
+            new BroadcastTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
             e.setCancelled(true);
             e.getPlayer().removeMetadata("messageSet", Bukkit.getPluginManager().getPlugin("SteakGUI"));
         }

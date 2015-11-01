@@ -1,5 +1,6 @@
 package tk.itstake.steakgui.variable;
 
+import io.netty.util.internal.StringUtil;
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -39,7 +40,7 @@ public class Variables {
         String[] strarray = new String[data.size()];
         int i = 0;
         for(String str:data) {
-            strarray[i] = str;
+            strarray[i] = SteakGUI.convertMessage(str, menu, player);
             i++;
         }
         return convert(placeholder, strarray, menu, player);
@@ -73,8 +74,8 @@ public class Variables {
                 return menu.getTitle();
             case "add":
                 if(data.length == 2) {
-                    if(isDoubleable(data[0]) && isDoubleable(data[1])) {
-                        return toDouble(data[0]) + toDouble(data[1]) + "";
+                    if(isNum(data[0]) && isNum(data[1])) {
+                        return parseNum(data[0]) + parseNum(data[1]) + "";
                     } else {
                         return null;
                     }
@@ -83,8 +84,8 @@ public class Variables {
                 }
             case "sub":
                 if(data.length == 2) {
-                    if(isDoubleable(data[0]) && isDoubleable(data[1])) {
-                        return toDouble(data[0]) - toDouble(data[1]) + "";
+                    if(isNum(data[0]) && isNum(data[1])) {
+                        return parseNum(data[0]) - parseNum(data[1]) + "";
                     } else {
                         return null;
                     }
@@ -93,8 +94,8 @@ public class Variables {
                 }
             case "multiply":
                 if(data.length == 2) {
-                    if(isDoubleable(data[0]) && isDoubleable(data[1])) {
-                        return toDouble(data[0]) * toDouble(data[1]) + "";
+                    if(isNum(data[0]) && isNum(data[1])) {
+                        return parseNum(data[0]) * parseNum(data[1]) + "";
                     } else {
                         return null;
                     }
@@ -103,8 +104,8 @@ public class Variables {
                 }
             case "divide":
                 if(data.length == 2) {
-                    if(isDoubleable(data[0]) && isDoubleable(data[1]) && toDouble(data[1]) > 0) {
-                        return toDouble(data[0]) / toDouble(data[1]) + "";
+                    if(isNum(data[0]) && isNum(data[1]) && parseNum(data[1]) > 0) {
+                        return parseNum(data[0]) / parseNum(data[1]) + "";
                     } else {
                         return null;
                     }
@@ -112,18 +113,16 @@ public class Variables {
                     return null;
                 }
             case "if":
-                if(data.length == 3) {
-                    String first = VariableConverter.convert(data[0], menu, player);
-                    String sec = VariableConverter.convert(data[1], menu, player);
-                    if(first.equals(sec)) {
-                        return VariableConverter.convert(data[2], menu, player);
+                if(data.length == 4) {
+                    String syntax = VariableConverter.convert(data[0], menu, player);
+                    if(syntaxConvert(syntax)) {
+                        return VariableConverter.convert(data[1], menu, player);
                     } else {
-                        return null;
+                        return "";
                     }
-                } else if(data.length == 4) {
-                    String first = VariableConverter.convert(data[0], menu, player);
-                    String sec = VariableConverter.convert(data[1], menu, player);
-                    if(first.equals(sec)) {
+                } else if(data.length == 5) {
+                    String syntax = VariableConverter.convert(data[0], menu, player);
+                    if(syntaxConvert(syntax)) {
                         return VariableConverter.convert(data[2], menu, player);
                     } else {
                         return VariableConverter.convert(data[3], menu, player);
@@ -132,14 +131,14 @@ public class Variables {
                     return null;
                 }
             case "money":
-                return VaultHooker.economy.getBalance((OfflinePlayer)player) + "";
+                return VaultHooker.economy.getBalance(player.getName()) + "";
             case "prefix":
                 return VaultHooker.chat.getPlayerPrefix(player);
             case "suffix":
                 return VaultHooker.chat.getPlayerPrefix(player);
             case "integer":
-                if(data.length == 1 && isDoubleable(data[0])) {
-                    return toDouble(data[0]).intValue() + "";
+                if(data.length == 1 && isNum(data[0])) {
+                    return parseNum(data[0]) + "";
                 } else {
                     return null;
                 }
@@ -158,28 +157,85 @@ public class Variables {
         }
     }
 
-
-    private boolean isDoubleable(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (Exception e) {
-            try {
-                Double.parseDouble(str);
-                return true;
-            } catch (Exception e2) {
-                return false;
+    public static boolean syntaxConvert(String syntax) {
+        String[] orsplited = syntax.split("\\|\\|");
+        for(String st:orsplited) {
+            String[] andsp = st.split("&&");
+            ArrayList<Boolean> andbool = new ArrayList<>();
+            for(String sp:andsp) {
+                andbool.add(ifConvert(sp));
             }
+            if(!andbool.contains(false)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean ifConvert(String sp) {
+        String[] targetmath = new String[]{"==", "!=", "<=", ">=", "?=", ">", "<"};
+        for(String math:targetmath) {
+            String[] splited = sp.split(math);
+            if(splited.length == 2) {
+                String one = splited[0].trim();
+                String two = splited[1].trim();
+                switch(math) {
+                    case "==":
+                        return one.equals(two);
+                    case "!=":
+                        return !one.equals(two);
+                    case "<=":
+                        return (parseNum(one) <= parseNum(two));
+                    case ">=":
+                        return (parseNum(one) >= parseNum(two));
+                    case "?=":
+                        return one.contains(two);
+                    case ">":
+                        return (parseNum(one) > parseNum(two));
+                    case "<":
+                        return (parseNum(one) < parseNum(two));
+                    default:
+                        return false;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    private static double parseNum(String cost) {
+        if(isInt(cost)) {
+            return Integer.parseInt(cost);
+        } else {
+            return Double.parseDouble(cost);
         }
     }
 
-    private Double toDouble(String str) {
-        double d = 0.0;
-        try {
-            d = Integer.parseInt(str) + 0.0;
-        } catch (Exception e) {
-            d = Double.parseDouble(str);
+    private static boolean isNum(String cost) {
+        if(isInt(cost)) {
+            return true;
+        } else if(isDouble(cost)) {
+            return true;
+        } else {
+            return false;
         }
-        return d;
+    }
+
+    private static boolean isDouble(String cost) {
+        try {
+            Double.parseDouble(cost);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean isInt(String str) {
+        try {
+            Integer.parseInt(str);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }

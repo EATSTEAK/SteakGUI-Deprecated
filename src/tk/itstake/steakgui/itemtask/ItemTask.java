@@ -35,6 +35,7 @@ public class ItemTask {
     public static String SELL = "sell";
     public static String MESSAGE = "message";
     public static String GIVE = "give";
+    public static String TAKE = "take";
     public static String SOUND = "sound";
     public static String BROADCAST = "broadcast";
     public static String CLOSE = "close";
@@ -58,6 +59,11 @@ public class ItemTask {
 
     public void runTask(ItemClickEvent event, Menu MENU) throws Exception {
         JSONParser parser = new JSONParser();
+        int i = 0;
+        for(Object data:DATA) {
+            DATA[i] = SteakGUI.convertMessage((String)data, MENU, event.getPlayer());
+            i++;
+        }
         if(CLICKTYPE == null || CLICKTYPE.contains(event.getClick())) {
             if (TYPE.equals(COMMAND) && DATA.length == 2) {
                 String permission = (String)DATA[0];
@@ -88,10 +94,10 @@ public class ItemTask {
                     JSONObject jo = (JSONObject)parser.parse(json);
                     ItemStack item = ItemStackConverter.convert(jo);
                     if(costtype.equals("money")) {
-                        if (VaultHooker.economy.getBalance(event.getPlayer()) >= Double.parseDouble((String)cost)) {
+                        if (VaultHooker.economy.getBalance(event.getPlayer().getName()) >= parseCost((String) cost)) {
                             if (event.getPlayer().getInventory().firstEmpty() != -1) {
                                 event.getPlayer().getInventory().addItem(item);
-                                VaultHooker.economy.withdrawPlayer(event.getPlayer(), Double.parseDouble((String)cost));
+                                VaultHooker.economy.withdrawPlayer(event.getPlayer().getName(), parseCost((String) cost));
                                 mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
                             } else {
                                 mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(noslotmsg, MENU, event.getPlayer()));
@@ -127,7 +133,7 @@ public class ItemTask {
                 } else if (type.equals("permission")) {
                     if(!event.getPlayer().hasPermission((String)json)) {
                         if (costtype.equals("money")) {
-                            if (VaultHooker.economy.getBalance(event.getPlayer()) >= Double.parseDouble((String)cost)) {
+                            if (VaultHooker.economy.getBalance(event.getPlayer().getName()) >= parseCost((String) cost)) {
                                 VaultHooker.permission.playerAdd(event.getPlayer(), (String)json);
                                 mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
                             } else {
@@ -166,7 +172,7 @@ public class ItemTask {
                         mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
                         event.getPlayer().getInventory().setContents(BukkitUtil.removeItem(event.getPlayer().getInventory(), item).getContents());
                         if(costtype.equals("money")) {
-                            VaultHooker.economy.depositPlayer(event.getPlayer(), Double.parseDouble((String)cost));
+                            VaultHooker.economy.depositPlayer(event.getPlayer().getName(), parseCost((String) cost));
                         } else if(costtype.equals("item")) {
                             JSONParser jp2 = new JSONParser();
                             JSONObject jo2 = (JSONObject) parser.parse(cost);
@@ -181,7 +187,7 @@ public class ItemTask {
                 } else if (type.equals("permission")) {
                     if(event.getPlayer().hasPermission((String)sellitem)) {
                         if(costtype.equals("money")) {
-                            VaultHooker.economy.depositPlayer(event.getPlayer(), Double.parseDouble((String)cost));
+                            VaultHooker.economy.depositPlayer(event.getPlayer().getName(), parseCost((String) cost));
                             mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
                             VaultHooker.permission.playerRemove(event.getPlayer(), (String)sellitem);
                         } else if(costtype.equals("item")) {
@@ -217,7 +223,7 @@ public class ItemTask {
                     }
                     if(additem.getItemMeta().getLore() != null && additem.getItemMeta().getLore().size() > 0) {
                         List<String> lorel = additem.getItemMeta().getLore();
-                        int i = 0;
+                        i = 0;
                         for(String lore:lorel) {
                             lorel.add(i, SteakGUI.convertMessage(lore, MENU, event.getPlayer()));
                         }
@@ -227,16 +233,51 @@ public class ItemTask {
                 } else if (type.equals("permission")) {
                     VaultHooker.permission.playerAdd(event.getPlayer(), (String)json);
                 } else if (type.equals("money")) {
-                    VaultHooker.economy.depositPlayer(event.getPlayer(), Double.parseDouble((String)json));
+                    VaultHooker.economy.depositPlayer(event.getPlayer().getName(), parseCost((String)json));
                 } else if (type.equals("exp")) {
                     if (isNum((String)json)) {
-                        event.getPlayer().giveExp(Integer.parseInt((String)json));
+                        event.getPlayer().giveExp(Integer.parseInt((String) json));
                     } else {
                         throw new Exception("Input String is Not Number");
                     }
                 } else if (type.equals("level")) {
                     if (isNum((String)json)) {
-                        event.getPlayer().giveExpLevels(Integer.parseInt((String)json));
+                        event.getPlayer().giveExpLevels(Integer.parseInt((String) json));
+                    } else {
+                        throw new Exception("Input String is Not Number");
+                    }
+                }
+            } else if (TYPE.equals(TAKE) && DATA.length == 2) {
+                String type = (String)DATA[0];
+                String json = (String)DATA[1];
+                if (type.equals("item")) {
+                    JSONObject jo = (JSONObject) parser.parse(json);
+                    ItemStack removeitem = ItemStackConverter.convert(jo);
+                    if(removeitem.getItemMeta().getDisplayName() != null) {
+                        removeitem.getItemMeta().setDisplayName(SteakGUI.convertMessage(removeitem.getItemMeta().getDisplayName(), MENU, event.getPlayer()));
+                    }
+                    if(removeitem.getItemMeta().getLore() != null && removeitem.getItemMeta().getLore().size() > 0) {
+                        List<String> lorel = removeitem.getItemMeta().getLore();
+                        i = 0;
+                        for(String lore:lorel) {
+                            lorel.add(i, SteakGUI.convertMessage(lore, MENU, event.getPlayer()));
+                        }
+                        removeitem.getItemMeta().setLore(lorel);
+                    }
+                    event.getPlayer().getInventory().setContents(BukkitUtil.removeItem(event.getPlayer().getInventory(), removeitem).getContents());
+                } else if (type.equals("permission")) {
+                    VaultHooker.permission.playerRemove(event.getPlayer(), (String)json);
+                } else if (type.equals("money")) {
+                    VaultHooker.economy.withdrawPlayer(event.getPlayer().getName(), parseCost((String)json));
+                } else if (type.equals("exp")) {
+                    if (isNum((String)json)) {
+                        event.getPlayer().giveExp(Integer.parseInt((String)json) * -1);
+                    } else {
+                        throw new Exception("Input String is Not Number");
+                    }
+                } else if (type.equals("level")) {
+                    if (isNum((String)json)) {
+                        event.getPlayer().giveExpLevels(Integer.parseInt((String)json) * -1);
                     } else {
                         throw new Exception("Input String is Not Number");
                     }
@@ -257,17 +298,16 @@ public class ItemTask {
                 }
             } else if (TYPE.equals(CLOSE)) {
                 event.setWillClose(true);
-            } else if(TYPE.equals(IF) && DATA.length == 4) {
+            } else if(TYPE.equals(IF) && DATA.length == 3) {
                 String first = SteakGUI.convertMessage((String)DATA[0]);
-                String sec = SteakGUI.convertMessage((String)DATA[1]);
-                if(first.equals(sec)) {
-                    JSONArray jo = (JSONArray) DATA[3];
+                if(first.equals("true")) {
+                    JSONArray jo = (JSONArray) DATA[2];
                     for(Object task:jo) {
                         JSONObject json = (JSONObject)task;
                         ItemTaskConverter.convert(json).runTask(event, MENU);
                     }
                 } else {
-                    JSONArray jo = (JSONArray) DATA[4];
+                    JSONArray jo = (JSONArray) DATA[3];
                     for(Object task:jo) {
                         JSONObject json = (JSONObject)task;
                         ItemTaskConverter.convert(json).runTask(event, MENU);
@@ -317,5 +357,32 @@ public class ItemTask {
 
     public void setClickType(ArrayList<ClickType> type) {
         CLICKTYPE = type;
+    }
+
+    private double parseCost(String cost) {
+        if(isNum(cost)) {
+            return Integer.parseInt(cost);
+        } else {
+            return Double.parseDouble(cost);
+        }
+    }
+
+    private boolean isDouble(String cost) {
+        try {
+            Double.parseDouble(cost);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isCost(String cost) {
+        if(isNum(cost)) {
+            return true;
+        } else if(isDouble(cost)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

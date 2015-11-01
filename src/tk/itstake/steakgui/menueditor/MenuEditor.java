@@ -1,17 +1,15 @@
-package tk.itstake.steakgui.editor;
+package tk.itstake.steakgui.menueditor;
 
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import ninja.amp.ampmenus.items.MenuItem;
 import ninja.amp.ampmenus.menus.ItemMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.steakgui.SteakGUI;
 import tk.itstake.steakgui.gui.Menu;
-import tk.itstake.steakgui.util.MenuFileHandler;
 
 /**
  * Created by ITSTAKE on 2015-08-12.

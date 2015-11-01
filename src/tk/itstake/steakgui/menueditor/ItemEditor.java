@@ -1,4 +1,4 @@
-package tk.itstake.steakgui.editor;
+package tk.itstake.steakgui.menueditor;
 
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import ninja.amp.ampmenus.items.MenuItem;
@@ -13,17 +13,13 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.steakgui.SteakGUI;
 import tk.itstake.steakgui.gui.GUIItem;
 import tk.itstake.steakgui.gui.Menu;
-import tk.itstake.steakgui.itemtask.ItemTask;
 import tk.itstake.steakgui.util.MenuFileHandler;
 import tk.itstake.util.MessageHandler;
-
-import java.util.Arrays;
 
 /**
  * Created by ITSTAKE on 2015-08-12.

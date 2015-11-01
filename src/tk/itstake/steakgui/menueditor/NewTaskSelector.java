@@ -1,4 +1,4 @@
-package tk.itstake.steakgui.editor;
+package tk.itstake.steakgui.menueditor;
 
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import ninja.amp.ampmenus.items.MenuItem;
@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.JSONArray;
 import tk.itstake.steakgui.SteakGUI;
-import tk.itstake.steakgui.editor.taskeditor.*;
+import tk.itstake.steakgui.menueditor.taskeditor.*;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.itemtask.ItemTask;
 import tk.itstake.steakgui.util.MenuFileHandler;
@@ -35,7 +35,7 @@ public class NewTaskSelector {
         setting.setItem(21, new ItemTaskItem(menu, player, "sound", task, slot, SteakGUI.convertMessage("&b소리 내기"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b소리를 냅니다.")}));
         setting.setItem(22, new ItemTaskItem(menu, player, "broadcast", task, slot, SteakGUI.convertMessage("&b방송 하기"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b모두에게 메시지를 보냅니다.")}));
         setting.setItem(23, new ItemTaskItem(menu, player, "close", task, slot, SteakGUI.convertMessage("&b매뉴 닫기"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b해당 매뉴를 닫습니다.")}));
-        setting.setItem(24, new ItemTaskItem(menu, player, "if", task, slot, SteakGUI.convertMessage("&b조건문"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b조건문을 실행합니다.")}));
+        setting.setItem(24, new ItemTaskItem(menu, player, "take", task, slot, SteakGUI.convertMessage("&b아이템 뺏기"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b아이템을 뺏습니다."), SteakGUI.convertMessage("&c조건문 에디터는 다음 버전에 지원될 예정입니다.")}));
         setting.open(player);
     }
 
@@ -103,6 +103,10 @@ public class NewTaskSelector {
                 ItemTask editTask = new ItemTask(tasktype, new Object[]{"","", new JSONArray(), new JSONArray()});
                 menu.getItemArray().get(slot).setTask(task, editTask);
                 new IfTaskEditor().show(menu, player, slot, task);
+            } else if(tasktype.equals(ItemTask.TAKE)) {
+                ItemTask editTask = new ItemTask(tasktype, new Object[]{"",""});
+                menu.getItemArray().get(slot).setTask(task, editTask);
+                new TakeTaskEditor().show(menu, player, slot, task);
             }
             MenuFileHandler.saveMenu(menu);
         }

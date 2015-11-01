@@ -6,20 +6,18 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import tk.itstake.steakgui.SteakGUI;
-import tk.itstake.steakgui.editor.EditorMain;
-import tk.itstake.steakgui.editor.MenuEditor;
+import tk.itstake.steakgui.menueditor.EditorMain;
 import tk.itstake.steakgui.gui.GUIItem;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.itemtask.ItemTask;
 import tk.itstake.steakgui.util.MenuFileHandler;
+import tk.itstake.steakgui.variable.Variables;
 import tk.itstake.util.ConfigHandler;
 import tk.itstake.util.LanguageHandler;
 import tk.itstake.util.MessageHandler;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**

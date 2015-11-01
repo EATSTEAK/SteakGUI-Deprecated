@@ -1,4 +1,4 @@
-package tk.itstake.steakgui.editor.taskeditor;
+package tk.itstake.steakgui.menueditor.taskeditor;
 
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import ninja.amp.ampmenus.items.MenuItem;
@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.steakgui.SteakGUI;
-import tk.itstake.steakgui.editor.ItemTaskEditor;
-import tk.itstake.steakgui.editor.NewTaskSelector;
+import tk.itstake.steakgui.menueditor.ItemTaskEditor;
+import tk.itstake.steakgui.menueditor.NewTaskSelector;
 import tk.itstake.steakgui.gui.GUIItem;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.itemtask.ItemTask;
@@ -25,7 +25,7 @@ import tk.itstake.util.MessageHandler;
 /**
  * Created by ITSTAKE on 2015-08-12.
  */
-public class BroadcastTaskEditor implements Listener {
+public class OpenMenuTaskEditor implements Listener {
     public void show(Menu menu, Player player, int slot, int task) {
         String title = menu.getTitle();
         if(title.length() > 10) {
@@ -34,7 +34,7 @@ public class BroadcastTaskEditor implements Listener {
         GUIItem slotItem = menu.getItemArray().get(slot);
         ItemTask edittask = slotItem.getTask(task);
         ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4수정:&c" + title), ItemMenu.Size.TWO_LINE, (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
-        setting.setItem(0, new ItemTaskItem(menu, player, task, 0, 1,  slot, SteakGUI.convertMessage("&b메시지 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b보여줄 메시지를 입력합니다.")}));
+        setting.setItem(0, new ItemTaskItem(menu, player, task, 0, 1,  slot, SteakGUI.convertMessage("&b매뉴 이름 입력"), Material.CHEST, new String[]{SteakGUI.convertMessage("&b이동할 매뉴의 이름을 입력합니다.")}));
         setting.setItem(9, new ItemTaskItem(menu, player, task, 1, 1,  slot, SteakGUI.convertMessage("&b작업 종류 변경"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&b작업 종류를 변경 합니다.")}));
         setting.setItem(10, new ItemTaskItem(menu, player, task, 2, 1,  slot, SteakGUI.convertMessage("&b작업 삭제"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&b작업을 삭제합니다.")}));
         setting.setItem(11, new ItemTaskItem(menu, player, task, 3, 1,  slot, SteakGUI.convertMessage("&b클릭 방식 변경"), Material.BUCKET, new String[]{SteakGUI.convertMessage("&b클릭 방식을 변경합니다.")}));
@@ -61,8 +61,8 @@ public class BroadcastTaskEditor implements Listener {
         public void onItemClick(ItemClickEvent event) {
             ItemTask editTask = menu.getItemArray().get(slot).getTask(task);
             if(t == 0) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&a메시지를 입력하세요.");
-                player.setMetadata("messageSet", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
+                new MessageHandler().sendMessage(event.getPlayer(), "&a매뉴 이름을 입력하세요.");
+                player.setMetadata("menuSet", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
                 event.setWillClose(true);
             } else if(t == 1) {
                 new NewTaskSelector().show(menu, player, slot, task);
@@ -71,7 +71,6 @@ public class BroadcastTaskEditor implements Listener {
                 MenuFileHandler.saveMenu(menu);
                 new ItemTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), player, slot);
             } else if(t == 3) {
-                menu.getItemArray().get(slot).delTask(task);
                 new TaskClickTypeEditor().show(menu, player, slot, task);
             } else {
                 new ItemTaskEditor().show(menu, player, slot);
@@ -81,15 +80,15 @@ public class BroadcastTaskEditor implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
-        if(e.getPlayer().hasMetadata("messageSet")) {
-            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 메시지가 성공적으로 등록되었습니다!");
-            Object[] metadata = (Object[]) e.getPlayer().getMetadata("messageSet").get(0).value();
-            Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
+        if(e.getPlayer().hasMetadata("menuSet")) {
+            new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 매뉴가 성공적으로 등록되었습니다!");
+            Object[] metadata = (Object[]) e.getPlayer().getMetadata("menuSet").get(0).value();
+            Menu menu = MenuFileHandler.loadMenu((String) metadata[0]);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[0] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
-            new BroadcastTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
+            new OpenMenuTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
             e.setCancelled(true);
-            e.getPlayer().removeMetadata("messageSet", Bukkit.getPluginManager().getPlugin("SteakGUI"));
+            e.getPlayer().removeMetadata("menuSet", Bukkit.getPluginManager().getPlugin("SteakGUI"));
         }
     }
 }

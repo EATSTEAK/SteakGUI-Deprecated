@@ -1,4 +1,4 @@
-package tk.itstake.steakgui.editor.taskeditor;
+package tk.itstake.steakgui.menueditor.taskeditor;
 
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import ninja.amp.ampmenus.items.MenuItem;
@@ -15,21 +15,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.steakgui.SteakGUI;
-import tk.itstake.steakgui.editor.ItemTaskEditor;
-import tk.itstake.steakgui.editor.NewTaskSelector;
 import tk.itstake.steakgui.gui.GUIItem;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.itemtask.ItemTask;
+import tk.itstake.steakgui.menueditor.ItemTaskEditor;
+import tk.itstake.steakgui.menueditor.NewTaskSelector;
 import tk.itstake.steakgui.util.ItemStackConverter;
 import tk.itstake.steakgui.util.MenuFileHandler;
 import tk.itstake.util.MessageHandler;
 
-import java.util.List;
-
 /**
  * Created by ITSTAKE on 2015-08-12.
  */
-public class GiveTaskEditor implements Listener {
+public class TakeTaskEditor implements Listener {
     public void show(Menu menu, Player player, int slot, int task) {
         String title = menu.getTitle();
         if(title.length() > 10) {
@@ -38,18 +36,18 @@ public class GiveTaskEditor implements Listener {
         GUIItem slotItem = menu.getItemArray().get(slot);
         ItemTask edittask = slotItem.getTask(task);
         ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4수정:&c" + title), ItemMenu.Size.THREE_LINE, (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
-        setting.setItem(0, new ItemTaskItem(menu, player, task, 0, 1,  slot, SteakGUI.convertMessage("&c펄미션 받기"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b받는 물품을 펄미션으로 설정합니다.")}));
-        setting.setItem(1, new ItemTaskItem(menu, player, task, 1, 1,  slot, SteakGUI.convertMessage("&c아이템 받기"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&b받는 물품을 아이템으로 설정합니다.")}));
-        setting.setItem(2, new ItemTaskItem(menu, player, task, 2, 1,  slot, SteakGUI.convertMessage("&c경험치 받기"), Material.ENCHANTMENT_TABLE, new String[]{SteakGUI.convertMessage("&b받는 물품을 경험치로 설정합니다.")}));
-        setting.setItem(3, new ItemTaskItem(menu, player, task, 3, 1,  slot, SteakGUI.convertMessage("&c레벨 받기"), Material.EXP_BOTTLE, new String[]{SteakGUI.convertMessage("&b받는 물품을 레벨으로 설정합니다.")}));
+        setting.setItem(0, new ItemTaskItem(menu, player, task, 0, 1,  slot, SteakGUI.convertMessage("&c펄미션 뺏기"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b뺏을 물품을 펄미션으로 설정합니다.")}));
+        setting.setItem(1, new ItemTaskItem(menu, player, task, 1, 1,  slot, SteakGUI.convertMessage("&c아이템 뺏기"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&b뺏을 물품을 아이템으로 설정합니다.")}));
+        setting.setItem(2, new ItemTaskItem(menu, player, task, 2, 1,  slot, SteakGUI.convertMessage("&c경험치 뺏기"), Material.ENCHANTMENT_TABLE, new String[]{SteakGUI.convertMessage("&b뺏을 물품을 경험치로 설정합니다.")}));
+        setting.setItem(3, new ItemTaskItem(menu, player, task, 3, 1,  slot, SteakGUI.convertMessage("&c레벨 뺏기"), Material.EXP_BOTTLE, new String[]{SteakGUI.convertMessage("&b뺏을 물품을 레벨으로 설정합니다.")}));
         if(((String)edittask.getData()[0]).equals("permission")) {
-            setting.setItem(9, new ItemTaskItem(menu, player, task, 4, 1,  slot, SteakGUI.convertMessage("&b펄미션 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b받게 될 펄미션을 입력합니다.")}));
+            setting.setItem(9, new ItemTaskItem(menu, player, task, 4, 1,  slot, SteakGUI.convertMessage("&b펄미션 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b뺏게 될 펄미션을 입력합니다.")}));
         } else if(((String)edittask.getData()[0]).equals("item")) {
-            setting.setItem(9, new ItemTaskItem(menu, player, task, 5, 1,  slot, SteakGUI.convertMessage("&b아이템 선택"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&b받게 될 아이템을 손에서 선택합니다.")}));
+            setting.setItem(9, new ItemTaskItem(menu, player, task, 5, 1,  slot, SteakGUI.convertMessage("&b아이템 선택"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&b뺏게 될 아이템을 손에서 선택합니다.")}));
         } else if(((String)edittask.getData()[0]).equals("exp")) {
-            setting.setItem(9, new ItemTaskItem(menu, player, task, 6, 1,  slot, SteakGUI.convertMessage("&b경험치 선택"), Material.ENCHANTMENT_TABLE, new String[]{SteakGUI.convertMessage("&b받게 될 경험치를 손에서 선택합니다.")}));
+            setting.setItem(9, new ItemTaskItem(menu, player, task, 6, 1,  slot, SteakGUI.convertMessage("&b경험치 선택"), Material.ENCHANTMENT_TABLE, new String[]{SteakGUI.convertMessage("&b뺏게 될 경험치를 손에서 선택합니다.")}));
         } else if(((String)edittask.getData()[0]).equals("level")) {
-            setting.setItem(9, new ItemTaskItem(menu, player, task, 7, 1,  slot, SteakGUI.convertMessage("&b아이템 선택"), Material.EXP_BOTTLE, new String[]{SteakGUI.convertMessage("&b받게 될 레벨을 손에서 선택합니다.")}));
+            setting.setItem(9, new ItemTaskItem(menu, player, task, 7, 1,  slot, SteakGUI.convertMessage("&b아이템 선택"), Material.EXP_BOTTLE, new String[]{SteakGUI.convertMessage("&b뺏게 될 레벨을 손에서 선택합니다.")}));
         }
         setting.setItem(18, new ItemTaskItem(menu, player, task, 8, 1,  slot, SteakGUI.convertMessage("&b작업 종류 변경"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&b작업 종류를 변경 합니다.")}));
         setting.setItem(19, new ItemTaskItem(menu, player, task, 9, 1,  slot, SteakGUI.convertMessage("&b작업 삭제"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&b작업을 삭제합니다.")}));
@@ -78,39 +76,39 @@ public class GiveTaskEditor implements Listener {
             ItemTask editTask = menu.getItemArray().get(slot).getTask(task);
             if(t == 0) {
                 editTask.getData()[0] = "permission";
-                new MessageHandler().sendMessage(event.getPlayer(), "&c이제 펄미션을 받게 됩니다.");
+                new MessageHandler().sendMessage(event.getPlayer(), "&c이제 펄미션을 뺏게 됩니다.");
                 MenuFileHandler.saveMenu(menu);
-                new GiveTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
+                new TakeTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
             } else if(t == 1) {
                 editTask.getData()[0] = "item";
-                new MessageHandler().sendMessage(event.getPlayer(), "&c이제 아이템을 받게 됩니다.");
+                new MessageHandler().sendMessage(event.getPlayer(), "&c이제 아이템을 뺏게 됩니다.");
                 MenuFileHandler.saveMenu(menu);
-                new GiveTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
+                new TakeTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
             } else if(t == 2) {
                 editTask.getData()[0] = "exp";
-                new MessageHandler().sendMessage(event.getPlayer(), "&c이제 경험치를 받게 됩니다.");
+                new MessageHandler().sendMessage(event.getPlayer(), "&c이제 경험치를 뺏게 됩니다.");
                 MenuFileHandler.saveMenu(menu);
-                new GiveTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
+                new TakeTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
             } else if(t == 3) {
                 editTask.getData()[0] = "level";
-                new MessageHandler().sendMessage(event.getPlayer(), "&c이제 레벨을 받게 됩니다.");
+                new MessageHandler().sendMessage(event.getPlayer(), "&c이제 레벨을 뺏게 됩니다.");
                 MenuFileHandler.saveMenu(menu);
-                new GiveTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
+                new TakeTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), event.getPlayer(), slot, task);
             } else if(t == 4) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&a받게 될 펄미션을 입력하세요.");
-                player.setMetadata("permGive", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
+                new MessageHandler().sendMessage(event.getPlayer(), "&a뺏게 될 펄미션을 입력하세요.");
+                player.setMetadata("permTake", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
                 event.setWillClose(true);
             } else if(t == 5) {
-                player.setMetadata("itemGive", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
-                new MessageHandler().sendMessage(player, "&b받게 될 아이템을 클릭해 주세요. 만약 취소하시려면 빈 슬롯을 클릭하세요.");
+                player.setMetadata("itemTake", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
+                new MessageHandler().sendMessage(player, "&b뺏게 될 아이템을 클릭해 주세요. 만약 취소하시려면 빈 슬롯을 클릭하세요.");
                 event.setWillClose(true);
             } else if(t == 6) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&a받게 될 경험치를 입력하세요.(소숫점 포함) 예: 100.00");
-                player.setMetadata("permGive", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
+                new MessageHandler().sendMessage(event.getPlayer(), "&a뺏게 될 경험치를 입력하세요.(소숫점 포함) 예: 100.00");
+                player.setMetadata("expTake", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
                 event.setWillClose(true);
             } else if(t == 7) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&a받게 될 레벨을 입력하세요.(소숫점 포함) 예: 100.00 - 레벨은 그냥 뒤에 .0 붙여주시면 됩니다.");
-                player.setMetadata("permGive", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
+                new MessageHandler().sendMessage(event.getPlayer(), "&a뺏게 될 레벨을 입력하세요.(소숫점 포함) 예: 100.00 - 레벨은 그냥 뒤에 .0 붙여주시면 됩니다.");
+                player.setMetadata("levelTake", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
                 event.setWillClose(true);
             } else if(t == 8) {
                 new NewTaskSelector().show(menu, player, slot, task);
@@ -128,53 +126,53 @@ public class GiveTaskEditor implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
-        if(e.getPlayer().hasMetadata("permGive")) {
+        if(e.getPlayer().hasMetadata("permTake")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 펄미션이 성공적으로 등록되었습니다!");
-            Object[] metadata = (Object[]) e.getPlayer().getMetadata("permGive").get(0).value();
+            Object[] metadata = (Object[]) e.getPlayer().getMetadata("permTake").get(0).value();
             Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[1] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
-            new GiveTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
+            new TakeTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
             e.setCancelled(true);
-            e.getPlayer().removeMetadata("permGive", Bukkit.getPluginManager().getPlugin("SteakGUI"));
-        } else if(e.getPlayer().hasMetadata("expGive")) {
+            e.getPlayer().removeMetadata("permTake", Bukkit.getPluginManager().getPlugin("SteakGUI"));
+        } else if(e.getPlayer().hasMetadata("expTake")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 경험치가 성공적으로 등록되었습니다!");
-            Object[] metadata = (Object[]) e.getPlayer().getMetadata("expGive").get(0).value();
+            Object[] metadata = (Object[]) e.getPlayer().getMetadata("expTake").get(0).value();
             Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[1] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
-            new GiveTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
+            new TakeTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
             e.setCancelled(true);
-            e.getPlayer().removeMetadata("expGive", Bukkit.getPluginManager().getPlugin("SteakGUI"));
-        } else if(e.getPlayer().hasMetadata("levelGive")) {
+            e.getPlayer().removeMetadata("expTake", Bukkit.getPluginManager().getPlugin("SteakGUI"));
+        } else if(e.getPlayer().hasMetadata("levelTake")) {
             new MessageHandler().sendMessage(e.getPlayer(), "&a" + e.getMessage() + " 레벨이 성공적으로 등록되었습니다!");
-            Object[] metadata = (Object[]) e.getPlayer().getMetadata("levelGive").get(0).value();
+            Object[] metadata = (Object[]) e.getPlayer().getMetadata("levelTake").get(0).value();
             Menu menu = MenuFileHandler.loadMenu((String) metadata[0], true);
             menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[1] = e.getMessage();
             MenuFileHandler.saveMenu(menu);
-            new GiveTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
+            new TakeTaskEditor().show(menu, e.getPlayer(), (int) metadata[1], (int) metadata[2]);
             e.setCancelled(true);
-            e.getPlayer().removeMetadata("levelGive", Bukkit.getPluginManager().getPlugin("SteakGUI"));
+            e.getPlayer().removeMetadata("levelTake", Bukkit.getPluginManager().getPlugin("SteakGUI"));
         }
     }
 
     @EventHandler
     public void onItemClick(PlayerInteractEvent e) {
-        if(e.getPlayer().hasMetadata("itemGive")) {
+        if(e.getPlayer().hasMetadata("itemTake")) {
             if(e.getItem() != null) {
                 new MessageHandler().sendMessage(e.getPlayer(), "&b아이템을 성공적으로 가져왔습니다!");
-                Object[] metadata = (Object[]) e.getPlayer().getMetadata("itemGive").get(0).value();
-                Menu menu = MenuFileHandler.loadMenu((String) ((Object[]) e.getPlayer().getMetadata("itemGive").get(0).value())[0]);
+                Object[] metadata = (Object[]) e.getPlayer().getMetadata("itemTake").get(0).value();
+                Menu menu = MenuFileHandler.loadMenu((String) ((Object[]) e.getPlayer().getMetadata("itemTake").get(0).value())[0]);
                 ItemStack stack = e.getItem();
                 menu.getItemArray().get((int)metadata[1]).getTask((int)metadata[2]).getData()[1] = ItemStackConverter.convert(stack).toJSONString();
                 MenuFileHandler.saveMenu(menu);
                 e.setCancelled(true);
-                new GiveTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), e.getPlayer(), (int) ((Object[]) e.getPlayer().getMetadata("itemGive").get(0).value())[1], (int) ((Object[]) e.getPlayer().getMetadata("itemGive").get(0).value())[2]);
-                e.getPlayer().removeMetadata("itemGive", Bukkit.getPluginManager().getPlugin("SteakGUI"));
+                new TakeTaskEditor().show(MenuFileHandler.loadMenu(menu.getName()), e.getPlayer(), (int) ((Object[]) e.getPlayer().getMetadata("itemTake").get(0).value())[1], (int) ((Object[]) e.getPlayer().getMetadata("itemTake").get(0).value())[2]);
+                e.getPlayer().removeMetadata("itemTake", Bukkit.getPluginManager().getPlugin("SteakGUI"));
             } else {
                 new MessageHandler().sendMessage(e.getPlayer(), "&c아이템 가져오기가 취소되었습니다!");
                 e.setCancelled(true);
-                e.getPlayer().removeMetadata("itemGive", Bukkit.getPluginManager().getPlugin("SteakGUI"));
+                e.getPlayer().removeMetadata("itemTake", Bukkit.getPluginManager().getPlugin("SteakGUI"));
             }
         }
     }

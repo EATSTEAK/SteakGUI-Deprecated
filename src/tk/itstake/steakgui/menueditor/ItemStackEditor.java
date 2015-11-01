@@ -1,4 +1,4 @@
-package tk.itstake.steakgui.editor;
+package tk.itstake.steakgui.menueditor;
 
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import ninja.amp.ampmenus.items.MenuItem;
@@ -6,28 +6,22 @@ import ninja.amp.ampmenus.menus.ItemMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.steakgui.SteakGUI;
-import tk.itstake.steakgui.editor.taskeditor.*;
 import tk.itstake.steakgui.gui.GUIItem;
 import tk.itstake.steakgui.gui.Menu;
-import tk.itstake.steakgui.itemtask.ItemTask;
 import tk.itstake.steakgui.util.MenuFileHandler;
 import tk.itstake.util.MessageHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by ITSTAKE on 2015-10-11.

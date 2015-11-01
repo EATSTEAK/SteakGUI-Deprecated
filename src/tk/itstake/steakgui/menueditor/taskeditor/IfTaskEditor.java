@@ -1,4 +1,4 @@
-package tk.itstake.steakgui.editor.taskeditor;
+package tk.itstake.steakgui.menueditor.taskeditor;
 
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import ninja.amp.ampmenus.items.MenuItem;
@@ -7,14 +7,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.steakgui.SteakGUI;
-import tk.itstake.steakgui.editor.ItemTaskEditor;
-import tk.itstake.steakgui.editor.NewTaskSelector;
+import tk.itstake.steakgui.menueditor.ItemTaskEditor;
+import tk.itstake.steakgui.menueditor.NewTaskSelector;
 import tk.itstake.steakgui.gui.GUIItem;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.itemtask.ItemTask;

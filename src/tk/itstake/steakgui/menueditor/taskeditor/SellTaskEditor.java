@@ -1,4 +1,4 @@
-package tk.itstake.steakgui.editor.taskeditor;
+package tk.itstake.steakgui.menueditor.taskeditor;
 
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import ninja.amp.ampmenus.items.MenuItem;
@@ -15,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.itstake.steakgui.SteakGUI;
-import tk.itstake.steakgui.editor.ItemTaskEditor;
-import tk.itstake.steakgui.editor.NewTaskSelector;
+import tk.itstake.steakgui.menueditor.ItemTaskEditor;
+import tk.itstake.steakgui.menueditor.NewTaskSelector;
 import tk.itstake.steakgui.gui.GUIItem;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.itemtask.ItemTask;
@@ -53,8 +53,8 @@ public class SellTaskEditor implements Listener {
         } else {
             setting.setItem(27, new ItemTaskItem(menu, player, task, 9, 1,  slot, SteakGUI.convertMessage("&b아이템 선택"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&b아이템 판매시 받을 아이템을 선택합니다.")}));
         }
-        setting.setItem(36, new ItemTaskItem(menu, player, task, 10, 1,  slot, SteakGUI.convertMessage("&b판매 성공 메시지 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b판매에 성공하면 표시할 메시지를 입력합니다. 만약 '없음' 혹은 'none' 을 입력하면 메세지는 보이지 않습니다.")}));
-        setting.setItem(37, new ItemTaskItem(menu, player, task, 11, 1,  slot, SteakGUI.convertMessage("&b판매 실패 메시지 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b판매에 실패하면 표시할 메시지를 입력합니다. 만약 '없음' 혹은 'none' 을 입력하면 메세지는 보이지 않습니다.")}));
+        setting.setItem(36, new ItemTaskItem(menu, player, task, 10, 1,  slot, SteakGUI.convertMessage("&b판매 성공 메시지 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b판매에 성공하면 표시할 메시지를 입력합니다."), SteakGUI.convertMessage("&b만약 '없음' 혹은 'none' 을 입력하면 메세지는 보이지 않습니다.")}));
+        setting.setItem(37, new ItemTaskItem(menu, player, task, 11, 1,  slot, SteakGUI.convertMessage("&b판매 실패 메시지 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b판매에 실패하면 표시할 메시지를 입력합니다."), SteakGUI.convertMessage("&b만약 '없음' 혹은 'none' 을 입력하면 메세지는 보이지 않습니다.")}));
         setting.setItem(45, new ItemTaskItem(menu, player, task, 12, 1,  slot, SteakGUI.convertMessage("&b작업 종류 변경"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&b작업 종류를 변경 합니다.")}));
         setting.setItem(46, new ItemTaskItem(menu, player, task, 13, 1,  slot, SteakGUI.convertMessage("&b작업 삭제"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&b작업을 삭제합니다.")}));
         setting.setItem(47, new ItemTaskItem(menu, player, task, 14, 1,  slot, SteakGUI.convertMessage("&b클릭 방식 변경"), Material.BUCKET, new String[]{SteakGUI.convertMessage("&b클릭 방식을 변경합니다.")}));
@@ -118,7 +118,7 @@ public class SellTaskEditor implements Listener {
                 player.setMetadata("permSellCost", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
                 event.setWillClose(true);
             } else if(t == 8) {
-                new MessageHandler().sendMessage(event.getPlayer(), "&a돈 액수를 입력하세요.(소숫점 포함) 예: 100.00");
+                new MessageHandler().sendMessage(event.getPlayer(), "&a돈 액수를 입력하세요.(소숫점 가능) 예: 100,100.00");
                 player.setMetadata("moneySellCost", new FixedMetadataValue(Bukkit.getPluginManager().getPlugin("SteakGUI"), new Object[]{menu.getName(), slot, task}));
                 event.setWillClose(true);
             } else if(t == 9) {
