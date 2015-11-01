@@ -30,12 +30,10 @@ package tk.itstake.steakgui.itemtask;
 
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.json.simple.JSONArray;
@@ -45,10 +43,9 @@ import tk.itstake.steakgui.SteakGUI;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.util.*;
 import tk.itstake.util.BukkitUtil;
-import tk.itstake.util.MessageHandler;
 import tk.itstake.util.LanguageHandler;
+import tk.itstake.util.MessageHandler;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +81,7 @@ public class ItemTask {
         CLICKTYPE = null;
     }
 
-    public void runTask(ItemClickEvent event, Menu MENU) throws Exception {
+    public void runTask(final ItemClickEvent event, final Menu MENU) throws Exception {
         JSONParser parser = new JSONParser();
         int i = 0;
         for(Object data:DATA) {
@@ -106,9 +103,16 @@ public class ItemTask {
                     Bukkit.getServer().getPluginManager().callEvent(new PlayerCommandPreprocessEvent(event.getPlayer(), SteakGUI.convertMessage(command, MENU, event.getPlayer())));
                 }
             } else if (TYPE.equals(OPEN_MENU) && DATA.length == 1) {
-                String menuname = (String)DATA[0];
-                Menu openmenu = MenuFileHandler.loadMenu(SteakGUI.convertMessage(menuname, MENU, event.getPlayer()));
-                openmenu.open(event.getPlayer());
+                final String menuname = (String)DATA[0];
+                event.setWillClose(true);
+                Bukkit.getServer().getScheduler().runTaskLater(SteakGUI.p, new Runnable() {
+                    @Override
+                    public void run() {
+                        Menu openmenu = MenuFileHandler.loadMenu(SteakGUI.convertMessage(menuname, MENU, event.getPlayer()));
+                        openmenu.open(event.getPlayer());
+                    }
+                }, 2);
+
             } else if (TYPE.equals(BUY) && DATA.length == 7) {
                 String type = (String)DATA[0];
                 String json = (String)DATA[1];
@@ -118,42 +122,76 @@ public class ItemTask {
                 String nomoneymsg = (String)DATA[5];
                 String noslotmsg = (String)DATA[6];
                 if (type.equals("item")) {
-                    JSONObject jo = (JSONObject)parser.parse(json);
+                    JSONObject jo = null;
+                    try {
+                        jo = (JSONObject) parser.parse(json);
+                    } catch(Exception e) {
+                        mh.sendMessage(event.getPlayer(), lh.getLanguage("menu.wrongsetting"));
+                        e.printStackTrace();
+                        return;
+                    }
                     ItemStack item = ItemStackConverter.convert(jo);
                     if(costtype.equals("money")) {
                         if (VaultHooker.economy.getBalance(event.getPlayer().getName()) >= parseCost((String) cost)) {
                             if (event.getPlayer().getInventory().firstEmpty() != -1) {
                                 event.getPlayer().getInventory().addItem(item);
                                 VaultHooker.economy.withdrawPlayer(event.getPlayer().getName(), parseCost((String) cost));
-                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
+                                if(!buycompletemsg.equals("")) {
+                                    mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
+                                }
                             } else {
-                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(noslotmsg, MENU, event.getPlayer()));
+                                if(!noslotmsg.equals("")) {
+                                    mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(noslotmsg, MENU, event.getPlayer()));
+                                }
                             }
                         } else {
-                            mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(nomoneymsg, MENU, event.getPlayer()));
+                            if(!nomoneymsg.equals("")) {
+                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(nomoneymsg, MENU, event.getPlayer()));
+                            }
                         }
                     } else if(costtype.equals("item")) {
-                        JSONObject jo2 = (JSONObject)parser.parse(cost);
+                        JSONObject jo2 = null;
+                        try {
+                            jo2 = (JSONObject) parser.parse(cost);
+                        } catch(Exception e) {
+                            mh.sendMessage(event.getPlayer(), lh.getLanguage("menu.wrongsetting"));
+                            e.printStackTrace();
+                            return;
+                        }
                         ItemStack item2 = ItemStackConverter.convert(jo2);
                         if (BukkitUtil.hasItem(event.getPlayer().getInventory(), item2)) {
                             if (event.getPlayer().getInventory().firstEmpty() != -1) {
                                 event.getPlayer().getInventory().setContents(BukkitUtil.removeItem(event.getPlayer().getInventory(), item2).getContents());
                                 event.getPlayer().getInventory().addItem(item);
-                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
+                                if(!buycompletemsg.equals("")) {
+                                    mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
+                                }
                             } else {
-                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(noslotmsg, MENU, event.getPlayer()));
+                                if(!noslotmsg.equals("")) {
+                                    mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(noslotmsg, MENU, event.getPlayer()));
+                                }
                             }
                         } else {
-                            mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(nomoneymsg, MENU, event.getPlayer()));
+                            if(!nomoneymsg.equals("")) {
+                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(nomoneymsg, MENU, event.getPlayer()));
+                            }
                         }
                     } else if(costtype.equals("permission")) {
                         if(event.getPlayer().hasPermission((String)cost)) {
                             if (event.getPlayer().getInventory().firstEmpty() != -1) {
                                 event.getPlayer().getInventory().addItem(item);
                                 VaultHooker.permission.playerRemove(event.getPlayer(), (String)cost);
-                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
+                                if(!buycompletemsg.equals("")) {
+                                    mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
+                                }
                             } else {
-                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(noslotmsg, MENU, event.getPlayer()));
+                                if(!noslotmsg.equals("")) {
+                                    mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(noslotmsg, MENU, event.getPlayer()));
+                                }
+                            }
+                        } else {
+                            if(!nomoneymsg.equals("")) {
+                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(nomoneymsg, MENU, event.getPlayer()));
                             }
                         }
                     }
@@ -162,23 +200,42 @@ public class ItemTask {
                         if (costtype.equals("money")) {
                             if (VaultHooker.economy.getBalance(event.getPlayer().getName()) >= parseCost((String) cost)) {
                                 VaultHooker.permission.playerAdd(event.getPlayer(), (String)json);
-                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
+                                if(!buycompletemsg.equals("")) {
+                                    mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
+                                }
                             } else {
-                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(nomoneymsg, MENU, event.getPlayer()));
+                                if(!nomoneymsg.equals("")) {
+                                    mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(nomoneymsg, MENU, event.getPlayer()));
+                                }
                             }
                         } else if (costtype.equals("item")) {
-                            JSONObject jo2 = (JSONObject)parser.parse(cost);
+                            JSONObject jo2 = null;
+                            try {
+                                jo2 = (JSONObject) parser.parse(cost);
+                            } catch(Exception e) {
+                                mh.sendMessage(event.getPlayer(), lh.getLanguage("menu.wrongsetting"));
+                                e.printStackTrace();
+                                return;
+                            }
                             ItemStack item2 = ItemStackConverter.convert(jo2);
                             if (BukkitUtil.hasItem(event.getPlayer().getInventory(), item2)) {
                                 event.getPlayer().getInventory().setContents(BukkitUtil.removeItem(event.getPlayer().getInventory(), item2).getContents());
                                 VaultHooker.permission.playerAdd(event.getPlayer(), (String)json);
-                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
+                                if(!buycompletemsg.equals("")) {
+                                    mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
+                                }
                             }
                         } else if(costtype.equals("permission")) {
-                            if(event.getPlayer().hasPermission((String)json)) {
+                            if(event.getPlayer().hasPermission((String)cost)) {
                                 VaultHooker.permission.playerRemove(event.getPlayer(), (String)cost);
                                 VaultHooker.permission.playerAdd(event.getPlayer(), (String)json);
-                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
+                                if(!buycompletemsg.equals("")) {
+                                    mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(buycompletemsg, MENU, event.getPlayer()));
+                                }
+                            } else {
+                                if(!nomoneymsg.equals("")) {
+                                    mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(nomoneymsg, MENU, event.getPlayer()));
+                                }
                             }
                         }
                     } else {
@@ -193,47 +250,78 @@ public class ItemTask {
                 String sellcompletemsg = (String)DATA[4];
                 String sellfailedmsg = (String)DATA[5];
                 if (type.equals("item")) {
-                    JSONObject jo = (JSONObject) parser.parse(sellitem);
+                    JSONObject jo = null;
+                    try {
+                        jo = (JSONObject) parser.parse(sellitem);
+                    } catch(Exception e) {
+                        mh.sendMessage(event.getPlayer(), lh.getLanguage("menu.wrongsetting"));
+                        e.printStackTrace();
+                        return;
+                    }
                     ItemStack item = ItemStackConverter.convert(jo);
                     if(BukkitUtil.hasItem(event.getPlayer().getInventory(), item)) {
-                        mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
                         event.getPlayer().getInventory().setContents(BukkitUtil.removeItem(event.getPlayer().getInventory(), item).getContents());
                         if(costtype.equals("money")) {
                             VaultHooker.economy.depositPlayer(event.getPlayer().getName(), parseCost((String) cost));
+                            if(!sellcompletemsg.equals("")) {
+                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
+                            }
                         } else if(costtype.equals("item")) {
                             JSONParser jp2 = new JSONParser();
-                            JSONObject jo2 = (JSONObject) parser.parse(cost);
+                            JSONObject jo2 = null;
+                            try {
+                                jo2 = (JSONObject) parser.parse(cost);
+                            } catch(Exception e) {
+                                mh.sendMessage(event.getPlayer(), lh.getLanguage("menu.wrongsetting"));
+                                e.printStackTrace();
+                                return;
+                            }
                             ItemStack item2 = ItemStackConverter.convert(jo2);
                             event.getPlayer().getInventory().addItem(item2);
+                            if(!sellcompletemsg.equals("")) {
+                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
+                            }
                         } else if(costtype.equals("permission")) {
                             VaultHooker.permission.playerAdd(event.getPlayer(), (String)cost);
+                            if(!sellcompletemsg.equals("")) {
+                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
+                            }
                         }
                     } else {
-                        mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellfailedmsg, MENU, event.getPlayer()));
+                        if(!sellfailedmsg.equals("")) {
+                            mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellfailedmsg, MENU, event.getPlayer()));
+                        }
                     }
                 } else if (type.equals("permission")) {
                     if(event.getPlayer().hasPermission((String)sellitem)) {
                         if(costtype.equals("money")) {
                             VaultHooker.economy.depositPlayer(event.getPlayer().getName(), parseCost((String) cost));
-                            mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
                             VaultHooker.permission.playerRemove(event.getPlayer(), (String)sellitem);
                         } else if(costtype.equals("item")) {
-                            JSONObject jo = (JSONObject) parser.parse(cost);
+                            JSONObject jo = null;
+                            try {
+                                jo = (JSONObject) parser.parse(cost);
+                            } catch(Exception e) {
+                                mh.sendMessage(event.getPlayer(), lh.getLanguage("menu.wrongsetting"));
+                                e.printStackTrace();
+                                return;
+                            }
                             ItemStack item = ItemStackConverter.convert(jo);
                             event.getPlayer().getInventory().addItem(item);
-                            mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
                             VaultHooker.permission.playerRemove(event.getPlayer(), (String)sellitem);
                         } else if(costtype.equals("permission")) {
                             if(!event.getPlayer().hasPermission((String)cost)) {
                                 VaultHooker.permission.playerAdd(event.getPlayer(), (String)cost);
-                                mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
                                 VaultHooker.permission.playerRemove(event.getPlayer(), (String)sellitem);
-                            } else {
-                                mh.sendMessage(event.getPlayer(), lh.getLanguage("existpermission"));
                             }
                         }
+                        if(!sellcompletemsg.equals("")) {
+                            mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellcompletemsg, MENU, event.getPlayer()));
+                        }
                     } else {
-                        mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellfailedmsg, MENU, event.getPlayer()));
+                        if(!sellfailedmsg.equals("")) {
+                            mh.sendMessage(event.getPlayer(), SteakGUI.convertMessage(sellfailedmsg, MENU, event.getPlayer()));
+                        }
                     }
                 }
             } else if (TYPE.equals(MESSAGE) && DATA.length == 1) {
@@ -243,7 +331,14 @@ public class ItemTask {
                 String type = (String)DATA[0];
                 String json = (String)DATA[1];
                 if (type.equals("item")) {
-                    JSONObject jo = (JSONObject) parser.parse(json);
+                    JSONObject jo = null;
+                    try {
+                        jo = (JSONObject) parser.parse(json);
+                    } catch(Exception e) {
+                        mh.sendMessage(event.getPlayer(), lh.getLanguage("menu.wrongsetting"));
+                        e.printStackTrace();
+                        return;
+                    }
                     ItemStack additem = ItemStackConverter.convert(jo);
                     if(additem.getItemMeta().getDisplayName() != null) {
                         additem.getItemMeta().setDisplayName(SteakGUI.convertMessage(additem.getItemMeta().getDisplayName(), MENU, event.getPlayer()));
@@ -268,7 +363,7 @@ public class ItemTask {
                         throw new Exception("Input String is Not Number");
                     }
                 } else if (type.equals("level")) {
-                    if (isNum((String)json)) {
+                    if (isNum((String) json)) {
                         event.getPlayer().giveExpLevels(Integer.parseInt((String) json));
                     } else {
                         throw new Exception("Input String is Not Number");
@@ -278,7 +373,14 @@ public class ItemTask {
                 String type = (String)DATA[0];
                 String json = (String)DATA[1];
                 if (type.equals("item")) {
-                    JSONObject jo = (JSONObject) parser.parse(json);
+                    JSONObject jo = null;
+                    try {
+                        jo = (JSONObject) parser.parse(json);
+                    } catch(Exception e) {
+                        mh.sendMessage(event.getPlayer(), lh.getLanguage("menu.wrongsetting"));
+                        e.printStackTrace();
+                        return;
+                    }
                     ItemStack removeitem = ItemStackConverter.convert(jo);
                     if(removeitem.getItemMeta().getDisplayName() != null) {
                         removeitem.getItemMeta().setDisplayName(SteakGUI.convertMessage(removeitem.getItemMeta().getDisplayName(), MENU, event.getPlayer()));

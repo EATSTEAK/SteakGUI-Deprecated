@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/src/plugin.yml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/tk/itstake/steakgui/SteakGUI.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/tk/itstake/steakgui/gui/Menu.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/tk/itstake/steakgui/menueditor/ItemStackEditor.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/tk/itstake/steakgui/menueditor/taskeditor/BuyTaskEditor.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/tk/itstake/steakgui/menueditor/taskeditor/GiveTaskEditor.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/tk/itstake/steakgui/menueditor/taskeditor/IfTaskEditor.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/tk/itstake/steakgui/menueditor/taskeditor/SellTaskEditor.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/tk/itstake/steakgui/menueditor/taskeditor/TaskClickTypeEditor.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/tk/itstake/steakgui/util/UpdateChecker.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/tk/itstake/util/LanguageHandler.java" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

@@ -146,7 +146,7 @@ public class MainCommand {
 
     private static void settingCmd(CommandSender sender, String name, String arg) {
         if(sender instanceof Player && sender.hasPermission("steakgui.setting")) {
-            if(MenuFileHandler.listMenu().contains(arg)) {
+            if(MenuFileHandler.isMenu(arg)) {
                 new EditorMain().show(MenuFileHandler.loadMenu(arg), (Player)sender);
             } else {
                 mh.sendMessage(sender, lh.getLanguage("notexistmenu"));
@@ -158,11 +158,21 @@ public class MainCommand {
 
     private static void openCmd(CommandSender sender, String name, String arg, String arg1) {
         if(sender instanceof Player && sender.getName().equals(arg1)) {
-            Player target = Bukkit.getPlayer(arg1);
+            final Player target = Bukkit.getPlayer(arg1);
             if(target.hasPermission("steakgui.open")) {
-                Menu targetmenu = MenuFileHandler.loadMenu(arg);
-                if(targetmenu != null) {
-                    targetmenu.open(target);
+                if(MenuFileHandler.isMenu(arg)) {
+                    final Menu targetmenu = MenuFileHandler.loadMenu(arg);
+                    if (targetmenu != null) {
+                        Bukkit.getScheduler().runTaskLater(SteakGUI.p, new Runnable() {
+                            @Override
+                            public void run() {
+                                targetmenu.open(target);
+                            }
+                        }, 2);
+
+                    } else {
+                        mh.sendMessage(target, lh.getLanguage("menu.notexist"));
+                    }
                 } else {
                     mh.sendMessage(target, lh.getLanguage("menu.notexist"));
                 }
@@ -173,9 +183,13 @@ public class MainCommand {
             if((sender instanceof  Player && sender.hasPermission("steakgui.open.others")) || !(sender instanceof Player)) {
                 Player target = Bukkit.getPlayer(arg1);
                 if(target.isOnline()) {
-                    Menu targetmenu = MenuFileHandler.loadMenu(arg);
-                    if(targetmenu != null) {
-                        targetmenu.open(target);
+                    if(MenuFileHandler.isMenu(arg)) {
+                        Menu targetmenu = MenuFileHandler.loadMenu(arg);
+                        if (targetmenu != null) {
+                            targetmenu.open(target);
+                        } else {
+                            mh.sendMessage(target, lh.getLanguage("menu.notexist"));
+                        }
                     } else {
                         mh.sendMessage(target, lh.getLanguage("menu.notexist"));
                     }

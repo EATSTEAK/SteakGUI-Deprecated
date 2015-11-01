@@ -101,6 +101,9 @@ public class ItemTaskEditor {
                 else if(editTask.getType().equals(ItemTask.GIVE)) {
                     new GiveTaskEditor().show(menu, player, slot, task);
                 }
+                else if(editTask.getType().equals(ItemTask.TAKE)) {
+                    new TakeTaskEditor().show(menu, player, slot, task);
+                }
                 else if(editTask.getType().equals(ItemTask.SOUND)) {
                     new SoundTaskEditor().show(menu, player, slot, task);
                 }

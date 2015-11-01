@@ -30,16 +30,14 @@ package tk.itstake.steakgui.util;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import tk.itstake.steakgui.SteakGUI;
 import tk.itstake.steakgui.gui.GUIItem;
-import tk.itstake.steakgui.itemtask.ItemTask;
 import tk.itstake.steakgui.gui.Menu;
-import tk.itstake.steakgui.variable.VariableConverter;
+import tk.itstake.steakgui.itemtask.ItemTask;
 import tk.itstake.util.JSONUtil;
 import tk.itstake.util.LanguageHandler;
 
@@ -139,7 +137,7 @@ public class MenuFileHandler {
     public static Menu loadMenu(String name, boolean forcereload) {
         if(!loadedmenu.containsKey(name) || forcereload) {
             File dataFolder = SteakGUI.p.getDataFolder();
-            if (dataFolder.exists() && dataFolder.isDirectory()) {
+            if (!dataFolder.exists() || !dataFolder.isDirectory()) {
                 dataFolder.mkdir();
             }
             File menuFolder = new File(dataFolder.toString() + File.separator + "menu");
@@ -188,6 +186,23 @@ public class MenuFileHandler {
 
     public static void reloadMenu() {
         loadedmenu = new HashMap<>();
+    }
+
+    public static boolean isMenu(String name) {
+        File dataFolder = SteakGUI.p.getDataFolder();
+        if (!dataFolder.exists() || !dataFolder.isDirectory()) {
+            return false;
+        }
+        File menuFolder = new File(dataFolder.toString() + File.separator + "menu");
+        if (!menuFolder.exists() || !menuFolder.isDirectory()) {
+            return false;
+        }
+        File menuFile = new File(menuFolder.toString() + File.separator + name + ".json");
+        if(menuFile.exists()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

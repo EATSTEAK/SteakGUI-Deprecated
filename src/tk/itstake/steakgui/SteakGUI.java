@@ -92,6 +92,7 @@ public class SteakGUI extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new BuyTaskEditor(), this);
         getServer().getPluginManager().registerEvents(new SellTaskEditor(), this);
         getServer().getPluginManager().registerEvents(new GiveTaskEditor(), this);
+        getServer().getPluginManager().registerEvents(new TakeTaskEditor(), this);
         UpdateChecker update = new UpdateChecker();
         update.updateCheck();
         getServer().getPluginManager().registerEvents(update, this);

@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="SteakGUI">
+    <output-path>D:/Test Servers/1.5.x/plugins</output-path>
+    <root id="archive" name="SteakGUI.jar">
+      <element id="module-output" name="SteakGUI" />
+      <element id="file-copy" path="$PROJECT_DIR$/lib/json-simple-1.1.1.jar" />
+    </root>
+  </artifact>
+</component>

@@ -31,7 +31,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import sun.security.krb5.Config;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -114,13 +113,13 @@ public class LanguageHandler {
         // If Can't Load Language File
         plugin = Bukkit.getPluginManager().getPlugin("SteakGUI");
         File langfolder = new File(plugin.getDataFolder().toString() + File.separator + "lang");
-        File langfile = new File(langfolder.toString() + File.separator + "ko_KR.json");
+        File langfile = new File(langfolder.toString() + File.separator + ConfigHandler.getConfig("lang").toString() + ".json");
         // Write New File
         try {
             FileWriter fw = new FileWriter(langfile);
             JSONObject defaultlang = getDefaultLanguage();
             for(Object key:defaultlang.keySet()) {
-                if(language.containsKey(key)) {
+                if(!language.containsKey(key)) {
                     defaultlang.put(key, language.get(key));
                 }
             }
@@ -137,7 +136,7 @@ public class LanguageHandler {
         // If Can't Load Language File
         plugin = Bukkit.getPluginManager().getPlugin("SteakGUI");
         File langfolder = new File(plugin.getDataFolder().toString() + File.separator + "lang");
-        File langfile = new File(langfolder.toString() + File.separator + "ko_KR.json");
+        File langfile = new File(langfolder.toString() + File.separator + ConfigHandler.getConfig("lang").toString() + ".json");
         // Write New File
         try {
             FileWriter fw = new FileWriter(langfile);
@@ -180,6 +179,7 @@ public class LanguageHandler {
         defaultlang.put("offlineplayer", "&c[&2SteakGUI&c] &c오프라인인 플레이어 입니다!");
         defaultlang.put("command.help.author", "&6소고기구이(SteakGUI) v%0%, 제작자: ITSTAKE(http://itstake.tk), 번역자: ITSTAKE(http://itstake.tk)");
         defaultlang.put("menu.noitemtask", "&c아이템 작업이 없습니다. \n&b/sg setting <메뉴 이름> &c을 이용해 수정하세요.");
+        defaultlang.put("menu.wrongsetting", "&c[&2SteakGUI&c] 아이템 작업의 설정이 올바르지 않습니다. 자세한 오류 로그는 콘솔을 확인하세요.");
         defaultlang.put("menufile.wannahelp", "&c[&2SteakGUI&c] &6파일을 직접 수정하고 싶으신가요?\n그렇다면 http://wiki.itstake.tk/index.php?title=SteakGUI/직접_설정 문서를 참고해 보세요.");
         defaultlang.put("existpermission", "&c[&2SteakGUI&c] &c이미 존재하는 펄미션입니다!");
         defaultlang.put("command.notmatchedformat", "&c[&2SteakGUI&c] &c매뉴 이름엔 한글을 사용할 수 없습니다! 일단 영어로 매뉴를 만드신 후, /sg setting 을 이용하여 매뉴 제목을 수정하세요!");
@@ -209,10 +209,38 @@ public class LanguageHandler {
                 }
                 return lang;
             } else {
-                return "Language file error! Please call admin(언어 파일 오류입니다. 관리자에게 연락해 주세요!)";
+                updateFile();
+                if(language.containsKey(path)) {
+                    String lango = (String) language.get(path);
+                    Matcher mat = Pattern.compile("%*[0-9]%").matcher(lango);
+                    String lang = lango;
+                    while (mat.find()) {
+                        String sen = mat.group();
+                        if (sen.startsWith("%") && sen.endsWith("%") && isNum(sen.replace("%", "")) && args.length > Integer.parseInt(sen.replace("%", ""))) {
+                            lang = lang.replace(mat.group(), args[Integer.parseInt(sen.replace("%", ""))]);
+                        }
+                    }
+                    return lang;
+                } else {
+                    return "Language file error! Please call admin(언어 파일 오류입니다. 관리자에게 연락해 주세요!)";
+                }
             }
         } else {
-            return "Language file error! Please call admin(언어 파일 오류입니다. 관리자에게 연락해 주세요!)";
+            makeDefaultFile();
+            if(language.containsKey(path)) {
+                String lango = (String) language.get(path);
+                Matcher mat = Pattern.compile("%*[0-9]%").matcher(lango);
+                String lang = lango;
+                while (mat.find()) {
+                    String sen = mat.group();
+                    if (sen.startsWith("%") && sen.endsWith("%") && isNum(sen.replace("%", "")) && args.length > Integer.parseInt(sen.replace("%", ""))) {
+                        lang = lang.replace(mat.group(), args[Integer.parseInt(sen.replace("%", ""))]);
+                    }
+                }
+                return lang;
+            } else {
+                return "Language file error! Please call admin(언어 파일 오류입니다. 관리자에게 연락해 주세요!)";
+            }
         }
     }
 

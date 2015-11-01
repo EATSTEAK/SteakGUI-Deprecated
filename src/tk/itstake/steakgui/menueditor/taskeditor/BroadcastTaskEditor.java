@@ -60,8 +60,12 @@ public class BroadcastTaskEditor implements Listener {
         }
         GUIItem slotItem = menu.getItemArray().get(slot);
         ItemTask edittask = slotItem.getTask(task);
+        String bcm = new String((String)edittask.getData()[0]);
+        if(bcm.equals("")) {
+            bcm = "&c메시지가 없습니다. 설정해 주세요!";
+        }
         ItemMenu setting = new ItemMenu(ChatColor.translateAlternateColorCodes('&', "&4수정:&c" + title), ItemMenu.Size.TWO_LINE, (JavaPlugin) Bukkit.getPluginManager().getPlugin("SteakGUI"));
-        setting.setItem(0, new ItemTaskItem(menu, player, task, 0, 1,  slot, SteakGUI.convertMessage("&b메시지 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b보여줄 메시지를 입력합니다.")}));
+        setting.setItem(0, new ItemTaskItem(menu, player, task, 0, 1,  slot, SteakGUI.convertMessage("&b메시지 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b보여줄 메시지를 입력합니다."), SteakGUI.convertMessage("&b현재 메시지:"), SteakGUI.convertMessage(bcm)}));
         setting.setItem(9, new ItemTaskItem(menu, player, task, 1, 1,  slot, SteakGUI.convertMessage("&b작업 종류 변경"), Material.ANVIL, new String[]{SteakGUI.convertMessage("&b작업 종류를 변경 합니다.")}));
         setting.setItem(10, new ItemTaskItem(menu, player, task, 2, 1,  slot, SteakGUI.convertMessage("&b작업 삭제"), Material.NETHER_BRICK_ITEM, new String[]{SteakGUI.convertMessage("&b작업을 삭제합니다.")}));
         setting.setItem(11, new ItemTaskItem(menu, player, task, 3, 1,  slot, SteakGUI.convertMessage("&b클릭 방식 변경"), Material.BUCKET, new String[]{SteakGUI.convertMessage("&b클릭 방식을 변경합니다.")}));
