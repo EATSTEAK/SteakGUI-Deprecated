@@ -27,17 +27,13 @@
 
 package tk.itstake.steakgui.variable;
 
-import io.netty.util.internal.StringUtil;
-import ninja.amp.ampmenus.events.ItemClickEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import tk.itstake.steakgui.SteakGUI;
 import tk.itstake.steakgui.gui.Menu;
 import tk.itstake.steakgui.util.SteakGUIPlugin;
 import tk.itstake.steakgui.util.VaultHooker;
 import tk.itstake.util.BukkitUtil;
-import tk.itstake.util.MessageHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,6 +70,11 @@ public class Variables {
     }
 
     public String convert(String var, String[] data, Menu menu, Player player) {
+        int i = 0;
+        for(String str:data) {
+            data[i] = SteakGUI.convertMessage(str, menu, player);
+            i++;
+        }
         switch(var) {
             case "player":
                 return player.getName();
