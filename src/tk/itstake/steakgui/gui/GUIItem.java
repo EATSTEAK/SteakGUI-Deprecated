@@ -29,7 +29,6 @@ package tk.itstake.steakgui.gui;
 
 import ninja.amp.ampmenus.events.ItemClickEvent;
 import ninja.amp.ampmenus.items.MenuItem;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tk.itstake.steakgui.SteakGUI;
@@ -128,7 +127,6 @@ public class GUIItem {
                     e.printStackTrace();
                 }
             }
-            MENU.open(event.getPlayer());
         }
 
         @Override

@@ -67,7 +67,7 @@ public class BuyTaskEditor implements Listener {
         setting.setItem(1, new ItemTaskItem(menu, player, task, 1, 1,  slot, SteakGUI.convertMessage("&c아이템 구매"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&b구매할 수 있는 물품을 아이템으로 설정합니다.")}));
         if(((String)edittask.getData()[0]).equals("permission")) {
             setting.setItem(9, new ItemTaskItem(menu, player, task, 2, 1,  slot, SteakGUI.convertMessage("&b펄미션 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b구매하게 될 펄미션을 입력합니다.")}));
-        } else {
+        } else if(((String)edittask.getData()[0]).equals("item")) {
             setting.setItem(9, new ItemTaskItem(menu, player, task, 3, 1,  slot, SteakGUI.convertMessage("&b아이템 선택"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b구매하게 될 아이템을 손에서 선택합니다.")}));
         }
         setting.setItem(18, new ItemTaskItem(menu, player, task, 4, 1,  slot, SteakGUI.convertMessage("&c펄미션 지불"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b아이템 구매시 펄미션을 지불합니다.")}));
@@ -77,7 +77,7 @@ public class BuyTaskEditor implements Listener {
             setting.setItem(27, new ItemTaskItem(menu, player, task, 7, 1,  slot, SteakGUI.convertMessage("&b펄미션 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b아이템 구매시 소모할 펄미션을 입력합니다.")}));
         } else if(((String)edittask.getData()[2]).equals("money")) {
             setting.setItem(27, new ItemTaskItem(menu, player, task, 8, 1,  slot, SteakGUI.convertMessage("&b돈 액수 입력"), Material.IRON_INGOT, new String[]{SteakGUI.convertMessage("&b아이템 구매시 소모할 돈 액수를 입력합니다.")}));
-        } else {
+        } else if(((String)edittask.getData()[2]).equals("item")) {
             setting.setItem(27, new ItemTaskItem(menu, player, task, 9, 1,  slot, SteakGUI.convertMessage("&b아이템 선택"), Material.EMERALD, new String[]{SteakGUI.convertMessage("&b아이템 구매시 소모할 아이템을 선택합니다.")}));
         }
         setting.setItem(36, new ItemTaskItem(menu, player, task, 10, 1,  slot, SteakGUI.convertMessage("&b구매 성공 메시지 입력"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b구매에 성공하면 표시할 메시지를 입력합니다."), SteakGUI.convertMessage("&b만약 '없음' 혹은 'none' 을 입력하면 메세지는 보이지 않습니다.")}));

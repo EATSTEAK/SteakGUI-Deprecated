@@ -1,6 +1,6 @@
 name: SteakGUI
 main: tk.itstake.steakgui.SteakGUI
-version: 1.2.7
+version: 1.2.7.1
 description: GUI Maker for Minecraft
 author: ITSTAKE
 website: http://itstake.tk/steakgui

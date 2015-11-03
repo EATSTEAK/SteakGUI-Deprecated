@@ -113,6 +113,12 @@ public class ItemTaskEditor {
                 else if(editTask.getType().equals(ItemTask.IF)) {
                     new IfTaskEditor().show(menu, player, slot, task);
                 }
+                else if(editTask.getType().equals(ItemTask.CLOSE)) {
+                    new CloseMenuTaskEditor().show(menu, player, slot, task);
+                }
+                else if(editTask.getType().equals(ItemTask.UPDATE)) {
+                    new UpdateMenuTaskEditor().show(menu, player, slot, task);
+                }
 
             }
         }

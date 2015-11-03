@@ -158,7 +158,7 @@ public class ItemEditor implements Listener {
             } else {
                 new MessageHandler().sendMessage(e.getPlayer(), "&c취소되었습니다.");
                 e.setCancelled(true);
-                new MenuSetting().show(MenuFileHandler.loadMenu(e.getPlayer().getMetadata("permSet").get(0).asString(), true), e.getPlayer());
+                new MenuSetting().show(MenuFileHandler.loadMenu((String)((Object[])e.getPlayer().getMetadata("permSet").get(0).value())[0], true), e.getPlayer());
                 e.getPlayer().removeMetadata("permSet", Bukkit.getPluginManager().getPlugin("SteakGUI"));
             }
         }

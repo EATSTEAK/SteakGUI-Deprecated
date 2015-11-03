@@ -63,6 +63,7 @@ public class NewTaskSelector {
         setting.setItem(22, new ItemTaskItem(menu, player, "broadcast", task, slot, SteakGUI.convertMessage("&b방송 하기"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b모두에게 메시지를 보냅니다.")}));
         setting.setItem(23, new ItemTaskItem(menu, player, "close", task, slot, SteakGUI.convertMessage("&b매뉴 닫기"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b해당 매뉴를 닫습니다.")}));
         setting.setItem(24, new ItemTaskItem(menu, player, "take", task, slot, SteakGUI.convertMessage("&b아이템 뺏기"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b아이템을 뺏습니다."), SteakGUI.convertMessage("&c조건문 에디터는 다음 버전에 지원될 예정입니다.")}));
+        setting.setItem(31, new ItemTaskItem(menu, player, "update", task, slot, SteakGUI.convertMessage("&b매뉴 업데이트"), Material.PAPER, new String[]{SteakGUI.convertMessage("&b매뉴를 새로운 내용으로 업데이트 합니다.")}));
         setting.open(player);
     }
 
@@ -134,6 +135,10 @@ public class NewTaskSelector {
                 ItemTask editTask = new ItemTask(tasktype, new Object[]{"",""});
                 menu.getItemArray().get(slot).setTask(task, editTask);
                 new TakeTaskEditor().show(menu, player, slot, task);
+            } else if(tasktype.equals(ItemTask.UPDATE)) {
+                ItemTask editTask = new ItemTask(tasktype, new String[]{""});
+                menu.getItemArray().get(slot).setTask(task, editTask);
+                new UpdateMenuTaskEditor().show(menu, player, slot, task);
             }
             MenuFileHandler.saveMenu(menu);
         }

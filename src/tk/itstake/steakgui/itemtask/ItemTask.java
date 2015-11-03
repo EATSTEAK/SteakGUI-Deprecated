@@ -63,6 +63,7 @@ public class ItemTask {
     public static String SOUND = "sound";
     public static String BROADCAST = "broadcast";
     public static String CLOSE = "close";
+    public static String UPDATE = "update";
     public static String IF = "if";
     String TYPE = "";
     Object[] DATA = null;
@@ -427,6 +428,14 @@ public class ItemTask {
                 }
             } else if (TYPE.equals(CLOSE)) {
                 event.setWillClose(true);
+            } else if (TYPE.equals(UPDATE)) {
+                event.setWillClose(true);
+                Bukkit.getServer().getScheduler().runTaskLater(SteakGUI.p, new Runnable() {
+                    @Override
+                    public void run() {
+                        MENU.open(event.getPlayer());
+                    }
+                }, 2);
             } else if(TYPE.equals(IF) && DATA.length == 3) {
                 String first = SteakGUI.convertMessage((String)DATA[0]);
                 if(first.equals("true")) {
