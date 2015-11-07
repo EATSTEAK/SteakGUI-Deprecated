@@ -4,16 +4,23 @@ version: 1.2.7.1
 description: GUI Maker for Minecraft
 author: ITSTAKE
 website: http://itstake.tk/steakgui
-depend: [Vault]
+softdepend: [Vault]
 commands:
   steakgui:
     description: Master Command
     aliases: [sg, steakg, sgui]
 permissions:
   steakgui.open:
-    default: true
-  steakgui.open.other:
-    default: op
-  steakgui.setting:
-    default: op
+
+
+
+
+
+
+
+
+
+
+
+
 

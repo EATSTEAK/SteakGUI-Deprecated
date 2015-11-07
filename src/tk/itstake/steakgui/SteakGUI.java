@@ -79,7 +79,12 @@ public class SteakGUI extends JavaPlugin implements Listener {
         lh.languageLoad();
         mh.sendConsoleMessage(lh.getLanguage("console.onenable", new String[]{this.getDescription().getVersion()}));
         MenuListener.getInstance().register(this);
-        VaultHooker hooker = new VaultHooker();
+        if(getServer().getPluginManager().getPlugin("Vault") != null) {
+            VaultHooker hooker = new VaultHooker();
+        } else {
+            mh.sendConsoleMessage(lh.getLanguage("novault"));
+            getPluginLoader().disablePlugin(this);
+        }
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new MenuSetting(), this);
         getServer().getPluginManager().registerEvents(new ItemEditor(), this);

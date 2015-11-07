@@ -183,6 +183,7 @@ public class LanguageHandler {
         defaultlang.put("menufile.wannahelp", "&c[&2SteakGUI&c] &6파일을 직접 수정하고 싶으신가요?\n그렇다면 http://wiki.itstake.tk/index.php?title=SteakGUI/직접_설정 문서를 참고해 보세요.");
         defaultlang.put("existpermission", "&c[&2SteakGUI&c] &c이미 존재하는 펄미션입니다!");
         defaultlang.put("command.notmatchedformat", "&c[&2SteakGUI&c] &c매뉴 이름엔 한글을 사용할 수 없습니다! 일단 영어로 매뉴를 만드신 후, /sg setting 을 이용하여 매뉴 제목을 수정하세요!");
+        defaultlang.put("novault", "&c[&2SteakGUI&c] &cVault 가 존재하지 않습니다! 플러그인을 종료합니다.");
         // TO-DO: Language Insert
         return defaultlang;
     }
